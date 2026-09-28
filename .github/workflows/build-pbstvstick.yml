@@ -1,0 +1,50 @@
+name: Build PBSTVStick Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'config/boards/pbstvstick.csc'
+      - 'userpatches/**'
+      - '.github/workflows/build-pbstvstick.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Build Armbian Image
+        run: |
+          sudo ./compile.sh docker \
+            BOARD=pbstvstick \
+            BRANCH=current \
+            BUILD_DESKTOP=no \
+            BUILD_MINIMAL=no \
+            KERNEL_BTF=no \
+            KERNEL_CONFIGURE=no \
+            RELEASE=bookworm \
+            CLEAN_LEVEL=make,cache,sources
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: armbian-pbstvstick-bookworm
+          path: output/images/*
+          retention-days: 7
