@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
-      - master
+      - build
     paths:
       - 'config/boards/pbstvstick.csc'
       - 'userpatches/**'
