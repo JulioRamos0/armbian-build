@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Armbian Image
         run: |
-          sudo ./compile.sh docker \
+          sudo ./compile.sh build \
             BOARD=pbstvstick \
             BRANCH=current \
             BUILD_DESKTOP=no \
