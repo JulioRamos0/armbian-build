@@ -6,8 +6,11 @@ on:
     branches:
       - build
     paths:
+      - '.github/workflows/build-pbstvstick.yml'
       - 'config/boards/pbstvstick.csc'
       - 'patch/kernel/archive/sunxi-6.18/'
+      - 'userpatches/'
+      - 'patch/u-boot/'
 
 jobs:
   build:
