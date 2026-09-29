@@ -7,7 +7,7 @@ on:
       - build
     paths:
       - 'config/boards/pbstvstick.csc'
-      - 'patch/kernel/archive/sunxi-6.18/*
+      - 'patch/kernel/archive/sunxi-6.18/'
 
 jobs:
   build:
