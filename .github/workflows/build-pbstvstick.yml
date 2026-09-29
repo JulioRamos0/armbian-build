@@ -29,6 +29,12 @@ jobs:
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
+      - name: Inject private credentials into customize-image.sh
+        run: |
+          sed -i "s/REPLACE_WITH_SSID/${{ secrets.WIFI_SSID }}/g" userpatches/customize-image.sh
+          sed -i "s/REPLACE_WITH_KEY/${{ secrets.WIFI_KEY }}/g" userpatches/customize-image.sh
+          sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
+
       - name: Build Armbian Image
         run: |
           sudo ./compile.sh build \
