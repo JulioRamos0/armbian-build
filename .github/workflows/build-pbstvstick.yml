@@ -7,8 +7,7 @@ on:
       - build
     paths:
       - 'config/boards/pbstvstick.csc'
-      - 'userpatches/**'
-      - '.github/workflows/build-pbstvstick.yml'
+      - 'patch/kernel/archive/sunxi-6.18/*
 
 jobs:
   build:
