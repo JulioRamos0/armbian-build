@@ -200,3 +200,14 @@ El LED principal del TV Stick está conectado físicamente al puerto **PA15**.
 - **Nota sobre el hardware:** Hemos descubierto que, aunque la arquitectura es idéntica, el fabricante soldó LEDs de distintos colores según la remesa. En las placas más antiguas (`192.168.128.124`), este pin enciende un LED **Azul**, mientras que en las nuevas (`192.168.128.117`) enciende un LED **Verde**. El circuito es exactamente el mismo.
 - Para integrarlo, hemos creado un parche en `userpatches/kernel/archive/sunxi-6.18/98-led-pbstvstick.patch` que modifica la sección `leds` del Device Tree base (`sun50i-h5-orangepi-prime.dts`).
 - Se reasigna `led-0` al pin `&pio 0 15 GPIO_ACTIVE_HIGH` con el comportamiento por defecto `default-state = "on";` para que encienda automáticamente en cuanto el Kernel arranca (sin importar de qué color sea el foquito).
+
+## 8. Inyección de Credenciales (GitHub Actions)
+**CRÍTICO PARA LA SEGURIDAD:** Nunca escribas contraseñas reales de Wi-Fi, de *root*, o tokens en texto plano dentro de tus scripts de configuración (como en `customize-image.sh`). Dado que este es un repositorio, al hacer *push* expondrás tus datos privados de manera irreversible en el historial público o privado de GitHub.
+
+**Regla de Oro para el flujo de CI/CD:**
+1. **Usa placeholders:** En tu archivo `customize-image.sh`, asegúrate de utilizar siempre textos de reemplazo (ej. `PRESET_NET_WIFI_SSID='REPLACE_WITH_SSID'`).
+2. **Usa GitHub Secrets:** Configura los valores reales directamente en la pestaña de `Settings -> Secrets` de tu repositorio de GitHub.
+3. **Inyecta al vuelo:** Deja que el motor de GitHub Actions use `sed` para sustituir la palabra clave por el secreto justo un segundo antes de compilar. 
+   `sed -i "s/REPLACE_WITH_SSID/${{ secrets.WIFI_SSID }}/g" userpatches/customize-image.sh`
+
+**Incidente de Seguridad (Leak):** Si por error comiteas y empujas (*push*) credenciales hardcodeadas a GitHub, **debes cambiar inmediatamente la contraseña en el dispositivo físico afectado** (router, módem, API, etc.). En repositorios en la nube, reescribir la historia de Git (`git push --force`) no garantiza que los datos no hayan sido cacheados o raspados por bots. ¡Cambiar la contraseña es la única solución infalible!
