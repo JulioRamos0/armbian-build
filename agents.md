@@ -172,8 +172,9 @@ Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`):
 2. **Kernel (DTS):** Para un PR oficial en Armbian, **NO debes** crear un parche en `patch/kernel/archive/...` que modifique directamente el archivo `sun50i-h5-orangepi-prime.dts`, ya que esto romperá las Orange Pi Prime originales. El parche oficial debe crear un **nuevo** archivo `.dts` dedicado para el `pbstvstick` e incluir el archivo base de la Orange Pi. (Por ahora, las pruebas locales en `userpatches/` bastan para salir del apuro).
 
 > [!NOTE]
-> **Progreso de Compilación (Parche Actual)**
-> Actualmente tenemos un parche provisional en `userpatches/kernel/sunxi-current/99-enable-emmc-pbstvstick.patch` que inyecta este nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts` para habilitar el bus `mmc2` a 8 bits:
+> **Progreso de Compilación (Parche Actual de eMMC)**
+> El parche provisional se encuentra en `userpatches/kernel/archive/sunxi-6.18/99-enable-emmc-pbstvstick.patch` (¡Es vital usar la carpeta `archive/sunxi-6.18` para que Armbian 26.11-trunk no lo ignore!). Este inyecta el nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts`.
+> **Estatus:** Validado en Hardware real. El parche detecta exitosamente una memoria de 14.6G en `mmcblk2`.
 > ```dts
 > &mmc2 {
 > 	pinctrl-names = "default";
@@ -186,3 +187,14 @@ Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`):
 > };
 > ```
 > **Para el Pull Request final hacia Armbian:** Este código deberá extraerse de ese parche temporal y colocarse dentro del archivo `.dts` nativo y exclusivo que crearemos para el TV Stick.
+
+## 6. Optimización de Memoria RAM (GPU CMA)
+Para maximizar la cantidad de RAM disponible para Linux (recordando que el dispositivo solo tiene 1GB), se debe reducir el CMA (Continuous Memory Allocator) reservado para la GPU Mali.
+- Modifica el archivo `/boot/armbianEnv.txt` y agrega el parámetro `extraargs=cma=8M`.
+- Actualmente, esto se automatiza inyectándolo a través del script `userpatches/customize-image.sh` durante la compilación.
+
+## 7. LED de Estado (Verde/Azul)
+El LED principal del TV Stick está conectado físicamente al puerto **PA15**.
+- **Nota sobre el hardware:** Hemos descubierto que, aunque la arquitectura es idéntica, el fabricante soldó LEDs de distintos colores según la remesa. En las placas más antiguas (`192.168.128.124`), este pin enciende un LED **Azul**, mientras que en las nuevas (`192.168.128.117`) enciende un LED **Verde**. El circuito es exactamente el mismo.
+- Para integrarlo, hemos creado un parche en `userpatches/kernel/archive/sunxi-6.18/98-led-pbstvstick.patch` que modifica la sección `leds` del Device Tree base (`sun50i-h5-orangepi-prime.dts`).
+- Se reasigna `led-0` al pin `&pio 0 15 GPIO_ACTIVE_HIGH` con el comportamiento por defecto `default-state = "on";` para que encienda automáticamente en cuanto el Kernel arranca (sin importar de qué color sea el foquito).
