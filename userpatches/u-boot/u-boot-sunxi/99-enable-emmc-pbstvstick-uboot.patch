@@ -1,0 +1,19 @@
+diff --git a/arch/arm/dts/sun50i-h5-orangepi-prime.dts b/arch/arm/dts/sun50i-h5-orangepi-prime.dts
+--- a/arch/arm/dts/sun50i-h5-orangepi-prime.dts
++++ b/arch/arm/dts/sun50i-h5-orangepi-prime.dts
+@@ -11,6 +11,16 @@
+ 	compatible = "xunlong,orangepi-prime", "allwinner,sun50i-h5";
+ };
+ 
++&mmc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mmc2_8bit_pins>;
++	vmmc-supply = <&reg_vcc3v3>;
++	bus-width = <8>;
++	non-removable;
++	cap-mmc-hw-reset;
++	status = "okay";
++};
++
+ &codec {
+ 	allwinner,audio-routing =
