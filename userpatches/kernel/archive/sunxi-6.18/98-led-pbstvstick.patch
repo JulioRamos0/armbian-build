@@ -1,0 +1,15 @@
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-prime.dts
+@@ -41,10 +41,10 @@
+ 	leds {
+ 		compatible = "gpio-leds";
+ 
+ 		led-0 {
+-			label = "orangepi:green:pwr";
+-			gpios = <&r_pio 0 10 GPIO_ACTIVE_HIGH>;
++			label = "pbstvstick:green:pwr";
++			gpios = <&pio 0 15 GPIO_ACTIVE_HIGH>;
+ 			default-state = "on";
+ 		};
+ 
+ 		led-1 {
