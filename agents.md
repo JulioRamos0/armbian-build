@@ -110,7 +110,14 @@ Existen diferentes vías para compilar el sistema (`pbstvstick.csc`), cada una c
 ## 1. Local (Windows) usando WSL o Nativo (Linux) [RECOMENDADO]
 Esta es la forma más rápida y estable. 
 
-* **Si usas Windows + WSL:** Clona el repositorio oficial **nativamente dentro del disco de WSL** (ej. en `/opt/armbian-build`) para evitar problemas de enlaces rotos (symlinks) de Windows que destruyen la compilación. Luego simplemente copia tus parches a esa carpeta.
+* **Si usas Windows + WSL:** Clona el repositorio oficial **nativamente dentro del disco de WSL** (ej. en `~/armbian-build` o `/opt/armbian-build`) para evitar problemas de enlaces rotos (symlinks) de Windows que destruyen la compilación. Luego simplemente copia tus parches a esa carpeta.
+
+> [!IMPORTANT]
+> **Arreglar soporte ARM64 en WSL (Error `arm64: not supported`)**
+> Si al compilar nativamente como `root` te topas con un error de `arm64: not supported on this machine/kernel` o `Failed to update binfmts`, significa que el kernel de tu WSL no tiene registrados los emuladores ARM. Para inyectarlos rápidamente (hasta el próximo reinicio de WSL), simplemente lanza este comando usando Docker antes de tu compilación:
+> ```bash
+> docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+> ```
 
 Para compilar nativamente dentro del disco virtual de WSL o en un Linux Nativo usando el contenedor oficial efímero, existen dos variaciones del comando:
 
