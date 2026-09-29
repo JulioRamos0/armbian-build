@@ -14,7 +14,7 @@ KERNEL_TEST_TARGET="current"
 MODULES="g_serial"
 SERIALCON="ttyS0,ttyGS0"
 
-function post_config_uboot_target__extra_configs_for_pbstvstick() {
+function post_config_uboot_target__pbstvstick() {
 	display_alert "$BOARD" "u-boot: DRAM tune (504/ODT) + SPI-flash boot" "info"
 	# Upstream orangepi_prime_defconfig runs DRAM at an aggressive 672; pin the
 	# Armbian-tuned 504 + ODT for stability (v2026.07 family default u-boot).
