@@ -167,13 +167,15 @@ cp output/images/Armbian_*.img /mnt/c/Users/TuUsuario/Desktop/
 *(Nota: Si usaste la Opción B desde tu repositorio actual en Windows, la carpeta `output/images/` se generará directamente en la carpeta de tu proyecto en Windows sin hacer nada).*
 
 ## 5. Soporte para Memoria eMMC interna
-Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`):
-1. **U-Boot (Listo para PR):** Añade `scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2` en el archivo `.csc` usando la función `post_config_uboot_target`.
-2. **Kernel (DTS):** Para un PR oficial en Armbian, **NO debes** crear un parche en `patch/kernel/archive/...` que modifique directamente el archivo `sun50i-h5-orangepi-prime.dts`, ya que esto romperá las Orange Pi Prime originales. El parche oficial debe crear un **nuevo** archivo `.dts` dedicado para el `pbstvstick` e incluir el archivo base de la Orange Pi. (Por ahora, las pruebas locales en `userpatches/` bastan para salir del apuro).
+Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`) y permitir el arranque exitoso tras usar `armbian-install` (evitando el error de la pantalla negra), se requieren tres piezas clave:
+
+1. **Configuración de U-Boot (.csc):** Añade `scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2` en el archivo `.csc` usando la función `post_config_uboot_target`. Esto permite que la etapa inicial (SPL) detecte el eMMC.
+2. **Device Tree de U-Boot (DTS):** **CRÍTICO PARA EVITAR LA PANTALLA NEGRA.** U-Boot utiliza su propio Device Tree interno para inicializar periféricos. Es obligatorio crear un parche idéntico al del kernel pero ubicado en la carpeta de U-Boot (ej. `userpatches/u-boot/u-boot-sunxi/99-enable-emmc-pbstvstick-uboot.patch`) apuntando a `arch/arm/dts/sun50i-h5-orangepi-prime.dts`. Sin esto, U-Boot no podrá leer el eMMC para cargar `/boot/boot.scr` ni el Kernel, lo que causa un cuelgue de pantalla negra.
+3. **Device Tree del Kernel (DTS):** Para un PR oficial en Armbian, **NO debes** crear un parche en `patch/kernel/archive/...` que modifique directamente el archivo `sun50i-h5-orangepi-prime.dts`, ya que esto romperá las Orange Pi Prime originales. El parche oficial debe crear un **nuevo** archivo `.dts` dedicado para el `pbstvstick` e incluir el archivo base de la Orange Pi. (Por ahora, las pruebas locales en `userpatches/` bastan para salir del apuro).
 
 > [!NOTE]
 > **Progreso de Compilación (Parche Actual de eMMC)**
-> El parche provisional se encuentra en `userpatches/kernel/archive/sunxi-6.18/99-enable-emmc-pbstvstick.patch` (¡Es vital usar la carpeta `archive/sunxi-6.18` para que Armbian 26.11-trunk no lo ignore!). Este inyecta el nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts`.
+> Los parches provisionales para el Kernel y U-Boot inyectan el nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts`. Para el kernel se encuentra en `userpatches/kernel/archive/sunxi-6.18/99-enable-emmc-pbstvstick.patch`.
 > **Estatus:** Validado en Hardware real. El parche detecta exitosamente una memoria de 14.6G en `mmcblk2`.
 > ```dts
 > &mmc2 {
