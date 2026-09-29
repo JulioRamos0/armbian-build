@@ -37,8 +37,9 @@ Main() {
 			;;
 	esac
 	
-	# Llamamos a tu perfil de configuracion automatico
 	AutoConfigureFirstRun
+
+	echo "extraargs=cma=8M" >> /boot/armbianEnv.txt
 } # Main
 
 AutoConfigureFirstRun() {
@@ -49,11 +50,11 @@ PRESET_NET_CHANGE_DEFAULTS=1
 
 # Configuracion WiFi
 PRESET_NET_WIFI_ENABLED=1
-PRESET_NET_WIFI_SSID='REPLACE_WITH_SSID'
-PRESET_NET_WIFI_KEY='REPLACE_WITH_KEY'
+PRESET_NET_WIFI_SSID='Ioft'
+PRESET_NET_WIFI_KEY='ioft-100'
 
 # Contrasenas
-PRESET_ROOT_PASSWORD='REPLACE_WITH_ROOT_PW'
+PRESET_ROOT_PASSWORD='toor@100'
 # ----------------------------------
 EOF
 }
