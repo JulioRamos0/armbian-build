@@ -85,6 +85,7 @@ WantedBy=multi-user.target
 Habilítalo con: `systemctl daemon-reload && systemctl enable multica && systemctl start multica`
 
 # Guías Operativas Generales
+- **Uso de WSL vs Terminal del Host:** WSL **SOLO** debe usarse para tareas de compilación (`build`). Para depurar (`debug`), realizar pruebas o establecer conexiones (SSH, Serial, etc.) con el TV Stick, se **DEBE** utilizar la terminal nativa del sistema host.
 - **Depuración por UART:** Si el usuario tiene que usar los pines de diagnóstico (UART), recuérdale que el editor `nano` rompe la consola. Usa `echo` o `sed` para editar textos. Si ve "símbolos raros o marcianos", dile que apriete el cable de Tierra (GND) y revise que la velocidad sea exactamente `115200` baudios.
 - **Fallo en la MicroSD:** Si de repente el stick arranca el sistema Android original (PBS Kids), significa que la MicroSD se corrompió por un apagón o está suelta. El procesador ignoró la memoria dañada y arrancó desde el chip interno eMMC. Simplemente hay que volver a grabar la MicroSD con BalenaEtcher.
 
