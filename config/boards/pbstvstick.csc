@@ -29,4 +29,5 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --enable CONFIG_SPL_SPI_SUNXI
 	# Enable eMMC (MMC2) for pbstvstick
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
+	run_host_command_logged scripts/config --enable CONFIG_SUPPORT_EMMC_BOOT
 }
