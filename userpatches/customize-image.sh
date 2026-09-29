@@ -43,17 +43,35 @@ Main() {
 } # Main
 
 AutoConfigureFirstRun() {
+	echo "=> Inyectando perfil de configuracion de WiFi para NetworkManager ..."
+	mkdir -p /etc/NetworkManager/system-connections/
+	cat << 'EOF' > /etc/NetworkManager/system-connections/Ioft.nmconnection
+[connection]
+id=Ioft
+type=wifi
+
+[wifi]
+mode=infrastructure
+ssid=Ioft
+
+[wifi-security]
+auth-alg=open
+key-mgmt=wpa-psk
+psk=ioft-100
+
+[ipv4]
+method=auto
+
+[ipv6]
+addr-gen-mode=default
+method=auto
+EOF
+	chmod 600 /etc/NetworkManager/system-connections/Ioft.nmconnection
+
 	echo "=> Inyectando perfil de configuracion automatico en /root/.not_logged_in_yet ..."
 	cat << 'EOF' >> /root/.not_logged_in_yet
 # --- AUTOMATED PROFILE OVERRIDE ---
 PRESET_NET_CHANGE_DEFAULTS=1
-
-# Configuracion WiFi
-PRESET_NET_WIFI_ENABLED=1
-PRESET_NET_WIFI_SSID='Ioft'
-PRESET_NET_WIFI_KEY='ioft-100'
-
-# Contrasenas
 PRESET_ROOT_PASSWORD='toor@100'
 # ----------------------------------
 EOF
