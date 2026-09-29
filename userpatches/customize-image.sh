@@ -39,7 +39,7 @@ Main() {
 	
 	AutoConfigureFirstRun
 
-	echo "extraargs=cma=8M" >> /boot/armbianEnv.txt
+	echo "extraargs=cma=16M" >> /boot/armbianEnv.txt
 } # Main
 
 AutoConfigureFirstRun() {
