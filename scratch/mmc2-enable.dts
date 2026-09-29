@@ -1,0 +1,19 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun50i-h5";
+
+	fragment@0 {
+		target = <&mmc2>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&mmc2_8bit_pins>;
+			vmmc-supply = <&reg_vcc3v3>;
+			bus-width = <8>;
+			non-removable;
+			cap-mmc-hw-reset;
+			status = "okay";
+		};
+	};
+};
