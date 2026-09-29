@@ -52,7 +52,7 @@ jobs:
             BUILD_MINIMAL=no \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
-            RELEASE=trixie \
+            RELEASE=bookworm \
             KERNEL_GIT=shallow
 
       - name: Upload Artifact
