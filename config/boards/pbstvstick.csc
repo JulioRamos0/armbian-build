@@ -14,6 +14,7 @@ KERNEL_TARGET="current,edge,legacy"
 KERNEL_TEST_TARGET="current"
 MODULES="g_serial"
 SERIALCON="ttyS0,ttyGS0"
+PACKAGE_LIST_BOARD="mmc-utils"
 
 function post_config_uboot_target__pbstvstick() {
 	display_alert "$BOARD" "u-boot: DRAM tune (504/ODT) + SPI-flash boot" "info"
