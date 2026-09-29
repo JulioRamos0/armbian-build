@@ -122,15 +122,15 @@ Esta es la forma más rápida y estable.
 Para compilar nativamente dentro del disco virtual de WSL o en un Linux Nativo usando el contenedor oficial efímero, existen dos variaciones del comando:
 
 **A) El replicable y seguro (Desde cero):**
-Este comando borra toda la caché, descarga los códigos fuente desde cero y garantiza una imagen sin errores (aunque tarda más tiempo).
+Este comando borra toda la caché, descarga los códigos fuente desde cero y garantiza una imagen sin errores (aunque tarda más tiempo). Esta es la versión confirmada que compila exitosamente el proyecto:
 ```bash
-./compile.sh docker BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no KERNEL_CONFIGURE=no RELEASE=bookworm CLEAN_LEVEL=make,cache,sources
+./compile.sh build BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no RELEASE=trixie KERNEL_CONFIGURE=no KERNEL_GIT=shallow CLEAN_LEVEL=make,cache,sources
 ```
 
 **B) El ultra rápido (Para iterar):**
-Si ya compilaste una vez y solo hiciste pequeños cambios (como ajustar un parche), usa esta versión. Al remover el `CLEAN_LEVEL` reusará la caché, y el `KERNEL_GIT=shallow` descargará una versión ligera del código fuente:
+Si ya compilaste una vez y solo hiciste pequeños cambios (como ajustar un parche), usa esta versión. Al remover el `CLEAN_LEVEL` reusará la caché:
 ```bash
-./compile.sh docker BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no KERNEL_CONFIGURE=no RELEASE=bookworm KERNEL_GIT=shallow
+./compile.sh build BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no RELEASE=trixie KERNEL_CONFIGURE=no KERNEL_GIT=shallow
 ```
 
 ## 2. Utilizando Docker Compose (Solo Windows)
