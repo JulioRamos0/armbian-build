@@ -170,3 +170,19 @@ cp output/images/Armbian_*.img /mnt/c/Users/TuUsuario/Desktop/
 Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`):
 1. **U-Boot (Listo para PR):** Añade `scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2` en el archivo `.csc` usando la función `post_config_uboot_target`.
 2. **Kernel (DTS):** Para un PR oficial en Armbian, **NO debes** crear un parche en `patch/kernel/archive/...` que modifique directamente el archivo `sun50i-h5-orangepi-prime.dts`, ya que esto romperá las Orange Pi Prime originales. El parche oficial debe crear un **nuevo** archivo `.dts` dedicado para el `pbstvstick` e incluir el archivo base de la Orange Pi. (Por ahora, las pruebas locales en `userpatches/` bastan para salir del apuro).
+
+> [!NOTE]
+> **Progreso de Compilación (Parche Actual)**
+> Actualmente tenemos un parche provisional en `userpatches/kernel/sunxi-current/99-enable-emmc-pbstvstick.patch` que inyecta este nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts` para habilitar el bus `mmc2` a 8 bits:
+> ```dts
+> &mmc2 {
+> 	pinctrl-names = "default";
+> 	pinctrl-0 = <&mmc2_8bit_pins>;
+> 	vmmc-supply = <&reg_vcc3v3>;
+> 	bus-width = <8>;
+> 	non-removable;
+> 	cap-mmc-hw-reset;
+> 	status = "okay";
+> };
+> ```
+> **Para el Pull Request final hacia Armbian:** Este código deberá extraerse de ese parche temporal y colocarse dentro del archivo `.dts` nativo y exclusivo que crearemos para el TV Stick.
