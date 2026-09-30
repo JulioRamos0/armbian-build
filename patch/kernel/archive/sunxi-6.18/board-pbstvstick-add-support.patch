@@ -41,5 +41,4 @@ new file mode 100644
 +	non-removable;
 +	cap-mmc-hw-reset;
 +	status = "okay";
-+	bootph-all;
 +};
