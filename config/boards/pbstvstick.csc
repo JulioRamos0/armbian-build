@@ -30,7 +30,7 @@ function post_config_uboot_target__pbstvstick() {
 	# Enable eMMC (MMC2) for pbstvstick
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --enable CONFIG_SUPPORT_EMMC_BOOT
-		# Inyectamos el nodo de eMMC directamente en el Device Tree de U-Boot
+	# Inyectamos el nodo de eMMC directamente en el Device Tree de U-Boot
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
 &mmc2 {
@@ -43,4 +43,16 @@ function post_config_uboot_target__pbstvstick() {
 	bootph-all;
 };
 EOF
+}
+
+
+# El Boot ROM del Allwinner H5 verifica el sector 256 (128KB offset) en la eMMC.
+# Esto permite instalar U-Boot en el User Area sin destruir la tabla de particiones GPT,
+# y sin requerir la cabecera propietaria en la partición boot0.
+function write_uboot_platform() {
+	if [[ $2 == /dev/mmcblk* ]]; then
+		dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=128 status=none || return 1
+	else
+		dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=8 status=none || return 1
+	fi
 }
