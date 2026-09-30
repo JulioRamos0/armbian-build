@@ -33,6 +33,13 @@ function post_config_uboot_target__pbstvstick() {
 	# Inyectamos el nodo de eMMC directamente en el Device Tree de U-Boot
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
+aliases {
+	/* Forzar que U-Boot vea la eMMC como mmc 1 para que bootcmd_mmc_auto la encuentre */
+	mmc0 = &mmc0;
+	mmc1 = &mmc2;
+	mmc2 = &mmc1;
+};
+
 &mmc2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&mmc2_8bit_pins>;
