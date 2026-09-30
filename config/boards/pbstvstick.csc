@@ -34,7 +34,6 @@ function post_config_uboot_target__pbstvstick() {
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
 &{/aliases} {
-	# Forzar que U-Boot vea la eMMC como mmc 1 para que bootcmd_mmc_auto la encuentre
 	mmc0 = &mmc0;
 	mmc1 = &mmc2;
 	mmc2 = &mmc1;
