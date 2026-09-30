@@ -3,7 +3,7 @@ BOARD_MAINTAINER="julioramos0"
 BOARD_NAME="PBS TV Stick"
 BOARD_VENDOR="xunlong"
 BOARDFAMILY="sun50iw2"
-BOOTCONFIG="nanopi_neo_plus2_defconfig"
+BOOTCONFIG="orangepi_prime_defconfig"
 CRUSTCONFIG="orangepi_pc2_defconfig"
 DEFAULT_CONSOLE="both"
 DEFAULT_OVERLAYS="analog-codec"
@@ -30,4 +30,17 @@ function post_config_uboot_target__pbstvstick() {
 	# Enable eMMC (MMC2) for pbstvstick
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --enable CONFIG_SUPPORT_EMMC_BOOT
+		# Inyectamos el nodo de eMMC directamente en el Device Tree de U-Boot
+	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
+
+&mmc2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_8bit_pins>;
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <8>;
+	non-removable;
+	status = "okay";
+	bootph-all;
+};
+EOF
 }
