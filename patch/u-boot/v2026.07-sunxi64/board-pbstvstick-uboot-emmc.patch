@@ -1,7 +1,12 @@
 diff --git a/arch/arm/dts/sun50i-h5-orangepi-prime.dts b/arch/arm/dts/sun50i-h5-orangepi-prime.dts
+index d7f8bad6bb..115d7ce3c7 100644
 --- a/arch/arm/dts/sun50i-h5-orangepi-prime.dts
 +++ b/arch/arm/dts/sun50i-h5-orangepi-prime.dts
-@@ -80,0 +81,10 @@
+@@ -183,3 +183,13 @@
+ &uart0 {
+ 	status = "okay";
+ };
++
 +&mmc2 {
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&mmc2_8bit_pins>;
