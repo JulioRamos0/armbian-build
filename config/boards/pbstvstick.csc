@@ -18,25 +18,19 @@ PACKAGE_LIST_BOARD="mmc-utils"
 
 function post_config_uboot_target__pbstvstick() {
 	display_alert "$BOARD" "u-boot: DRAM tune (504/ODT) + SPI-flash boot" "info"
-	# Upstream orangepi_prime_defconfig runs DRAM at an aggressive 672; pin the
-	# Armbian-tuned 504 + ODT for stability (v2026.07 family default u-boot).
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "504"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
-	# Allow booting from the on-board SPI flash (not in the upstream defconfig).
-	# Safe on H5 (the SPL_SPI A64 SPL-boot regression does not affect sun50iw2).
-	# CONFIG_MACPWR (old eth PHY power GPIO) is gone in v2026.07 - the PHY rail is
-	# now driven from the DT, so it is intentionally not re-added.
 	run_host_command_logged scripts/config --enable CONFIG_SPL_SPI_SUNXI
-	# Enable eMMC (MMC2) for pbstvstick
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
-	run_host_command_logged scripts/config --enable CONFIG_SUPPORT_EMMC_BOOT
-	# Inyectamos el nodo de eMMC directamente en el Device Tree de U-Boot
+	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
-&{/aliases} {
-	mmc0 = &mmc0;
-	mmc1 = &mmc2;
-	mmc2 = &mmc1;
+&mmc0 {
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <4>;
+	max-frequency = <25000000>;
+	no-1-8-v;
+	status = "okay";
 };
 
 &mmc2 {
@@ -50,14 +44,4 @@ function post_config_uboot_target__pbstvstick() {
 };
 EOF
 
-	# El Boot ROM del Allwinner H5 verifica el sector 256 (128KB offset) en la eMMC.
-	# Esto permite instalar U-Boot en el User Area sin destruir la tabla de particiones GPT,
-	# y sin requerir la cabecera propietaria en la partición boot0.
-	function write_uboot_platform() {
-		if [[ $2 == /dev/mmcblk* ]]; then
-			dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=128 status=none || return 1
-		else
-			dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=8 status=none || return 1
-		fi
-	}
 }
