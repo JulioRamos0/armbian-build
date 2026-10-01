@@ -3,8 +3,6 @@ name: Build PBSTVStick Image
 on:
   workflow_dispatch:
   push:
-    branches:
-      - build
 
 jobs:
   build:
