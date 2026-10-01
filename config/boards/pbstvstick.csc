@@ -26,6 +26,7 @@ function post_config_uboot_target__pbstvstick() {
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
 &mmc0 {
+	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
 	max-frequency = <25000000>;
@@ -34,12 +35,12 @@ function post_config_uboot_target__pbstvstick() {
 };
 
 &mmc2 {
+	u-boot,dm-spl;
 	pinctrl-names = "default";
 	pinctrl-0 = <&mmc2_8bit_pins>;
 	vmmc-supply = <&reg_vcc3v3>;
-	bus-width = <8>;
+	bus-width = <4>;
 	non-removable;
-	cap-mmc-hw-reset;
 	status = "okay";
 };
 EOF
