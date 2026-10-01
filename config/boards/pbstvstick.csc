@@ -20,7 +20,7 @@ function post_config_uboot_target__pbstvstick() {
 	display_alert "$BOARD" "u-boot: DRAM tune (504/ODT) + SPI-flash boot" "info"
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "504"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
-	run_host_command_logged scripts/config --enable CONFIG_SPL_SPI_SUNXI
+	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
@@ -45,14 +45,4 @@ function post_config_uboot_target__pbstvstick() {
 };
 EOF
 
-	# El Boot ROM del Allwinner H5 verifica el sector 256 (128KB offset) en la eMMC.
-	# Esto permite instalar U-Boot en el User Area sin destruir la tabla de particiones GPT,
-	# y sin requerir la cabecera propietaria en la partición boot0.
-	function write_uboot_platform() {
-		if [[ $2 == /dev/mmcblk* ]]; then
-			dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=128 status=none || return 1
-		else
-			dd if=$1/u-boot-sunxi-with-spl.bin of=$2 conv=notrunc,fsync bs=1024 seek=8 status=none || return 1
-		fi
-	}
 }
