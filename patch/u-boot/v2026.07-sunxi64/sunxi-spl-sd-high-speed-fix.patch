@@ -1,0 +1,78 @@
+diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
+index 84f4e4c2..e2a1d2a1 100644
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -67,7 +67,8 @@ static bool sunxi_mmc_can_calibrate(void)
+ static int mmc_set_mod_clk(struct sunxi_mmc_priv *priv, unsigned int hz)
+ {
+ 	unsigned int pll, pll_hz, div, n, oclk_dly, sclk_dly;
+-	bool new_mode = IS_ENABLED(CONFIG_MMC_SUNXI_HAS_NEW_MODE);
++	/* Force legacy mode everywhere because U-Boot lacks delay calibration for new_mode! */
++	bool new_mode = false;
+ 	u32 val = 0;
+ 
+ 	/* A83T support new mode only on eMMC */
+@@ -155,14 +156,15 @@ static int mmc_set_mod_clk(struct sunxi_mmc_priv *priv, unsigned int hz)
+ 	if (new_mode) {
+ 		val |= CCM_MMC_CTRL_MODE_SEL_NEW;
+ 		setbits_le32(&priv->reg->ntsr, SUNXI_MMC_NTSR_MODE_SEL_NEW);
++	} else {
++		clrbits_le32(&priv->reg->ntsr, SUNXI_MMC_NTSR_MODE_SEL_NEW);
+ 	}
+ 
+-	if (!sunxi_mmc_can_calibrate()) {
++	if (!new_mode || !sunxi_mmc_can_calibrate()) {
+ 		/*
+-		 * Use hardcoded delay values if controller doesn't support
+-		 * calibration
++		 * If we forced new_mode=false, we MUST apply the legacy delays!
+ 		 */
+-		val = CCM_MMC_CTRL_OCLK_DLY(oclk_dly) |
++		val |= CCM_MMC_CTRL_OCLK_DLY(oclk_dly) |
+ 			CCM_MMC_CTRL_SCLK_DLY(sclk_dly);
+ 	}
+ 
+@@ -289,6 +291,8 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+ 		while ((status = readl(&priv->reg->status)) & status_bit) {
+ 			if (get_timer(start) > timeout_msecs)
+ 				return -1;
++			if (readl(&priv->reg->rint) & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)
++				return -1;
+ 		}
+ 
+ 		/*
+@@ -313,12 +317,10 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+ 		 * completely full (value masked out?). Use a safe minimal
+ 		 * FIFO size in this case.
+ 		 */
+-		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
+-		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
+-			in_fifo = 32;
+-		for (; in_fifo > 0; in_fifo--)
+-			buff[i++] = readl_relaxed(&priv->reg->fifo);
+-		dmb();
++		/* Read EXACTLY one word at a time to prevent AHB deadlock! */
++		if (readl(&priv->reg->rint) & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)
++			return -1;
++		buff[i++] = readl_relaxed(&priv->reg->fifo);
+ 	}
+ 
+ 	return 0;
+@@ -584,7 +586,7 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+-	cfg->f_max = 52000000;
++	cfg->f_max = 25000000;
+ 
+ 	if (mmc_resource_init(sdc_no) != 0)
+ 		return NULL;
+@@ -691,7 +693,7 @@ static int sunxi_mmc_probe(struct udevice *dev)
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+-	cfg->f_max = 52000000;
++	cfg->f_max = 25000000;
+ 
+ 	ret = mmc_of_parse(dev, cfg);
+ 	if (ret)
