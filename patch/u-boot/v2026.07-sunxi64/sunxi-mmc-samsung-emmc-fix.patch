@@ -1,0 +1,124 @@
+diff --git a/drivers/mmc/mmc.c b/drivers/mmc/mmc.c
+index 670e92ee..ec24464e 100644
+--- a/drivers/mmc/mmc.c
++++ b/drivers/mmc/mmc.c
+@@ -839,6 +839,17 @@ static int mmc_complete_op_cond(struct mmc *mmc)
+ 
+ int mmc_send_ext_csd(struct mmc *mmc, u8 *ext_csd)
+ {
++#ifdef CONFIG_SPL_BUILD
++	/* BYPASS EXT_CSD IN SPL TO PREVENT BUS LOCKUP! */
++	memset(ext_csd, 0, 512);
++	ext_csd[EXT_CSD_REV] = 5; /* Fake MMC 5.0 */
++	ext_csd[EXT_CSD_SEC_CNT] = 0xFF; /* Fake size */
++	ext_csd[EXT_CSD_SEC_CNT + 1] = 0xFF;
++	ext_csd[EXT_CSD_SEC_CNT + 2] = 0xFF;
++	ext_csd[EXT_CSD_SEC_CNT + 3] = 0xFF;
++	return 0;
++#endif
++
+ 	struct mmc_cmd cmd;
+ 	struct mmc_data data;
+ 	int err;
+diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
+index 84f4e4c2..57edffb2 100644
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -74,6 +74,10 @@ static int mmc_set_mod_clk(struct sunxi_mmc_priv *priv, unsigned int hz)
+ 	if (IS_ENABLED(CONFIG_MACH_SUN8I_A83T) && priv->mmc_no != 2)
+ 		new_mode = false;
+ 
++	/* Disable new_mode for MMC2 everywhere because U-Boot lacks calibration for Samsung eMMC! */
++	if (priv->mmc_no == 2)
++		new_mode = false;
++
+ 	if (hz <= 24000000) {
+ 		pll = CCM_MMC_CTRL_OSCM24;
+ 		pll_hz = 24000000;
+@@ -155,14 +159,16 @@ static int mmc_set_mod_clk(struct sunxi_mmc_priv *priv, unsigned int hz)
+ 	if (new_mode) {
+ 		val |= CCM_MMC_CTRL_MODE_SEL_NEW;
+ 		setbits_le32(&priv->reg->ntsr, SUNXI_MMC_NTSR_MODE_SEL_NEW);
++	} else {
++		clrbits_le32(&priv->reg->ntsr, SUNXI_MMC_NTSR_MODE_SEL_NEW);
+ 	}
+ 
+-	if (!sunxi_mmc_can_calibrate()) {
++	if (!new_mode || !sunxi_mmc_can_calibrate()) {
+ 		/*
+-		 * Use hardcoded delay values if controller doesn't support
+-		 * calibration
++		 * If we are using legacy mode (e.g. forced in SPL), or the controller doesn't support
++		 * calibration, we MUST use the hardcoded legacy delays!
+ 		 */
+-		val = CCM_MMC_CTRL_OCLK_DLY(oclk_dly) |
++		val |= CCM_MMC_CTRL_OCLK_DLY(oclk_dly) |
+ 			CCM_MMC_CTRL_SCLK_DLY(sclk_dly);
+ 	}
+ 
+@@ -289,6 +295,8 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+ 		while ((status = readl(&priv->reg->status)) & status_bit) {
+ 			if (get_timer(start) > timeout_msecs)
+ 				return -1;
++			if (readl(&priv->reg->rint) & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)
++				return -1;
+ 		}
+ 
+ 		/*
+@@ -303,22 +311,10 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+ 			continue;
+ 		}
+ 
+-		/*
+-		 * The status register holds the current FIFO level, so we
+-		 * can be sure to collect as many words from the FIFO
+-		 * register without checking the status register after every
+-		 * read. That saves half of the costly MMIO reads, effectively
+-		 * doubling the read performance.
+-		 * Some SoCs (A20) report a level of 0 if the FIFO is
+-		 * completely full (value masked out?). Use a safe minimal
+-		 * FIFO size in this case.
+-		 */
+-		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
+-		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
+-			in_fifo = 32;
+-		for (; in_fifo > 0; in_fifo--)
+-			buff[i++] = readl_relaxed(&priv->reg->fifo);
+-		dmb();
++		/* Read EXACTLY one word at a time to prevent AHB deadlock! */
++		if (readl(&priv->reg->rint) & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)
++			return -1;
++		buff[i++] = readl_relaxed(&priv->reg->fifo);
+ 	}
+ 
+ 	return 0;
+@@ -577,14 +573,15 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+ 
+ 	if ((IS_ENABLED(CONFIG_MACH_SUN50I) || IS_ENABLED(CONFIG_MACH_SUN8I) ||
+ 	    IS_ENABLED(CONFIG_MACH_SUN9I) || IS_ENABLED(CONFIG_SUN50I_GEN_H6) ||
+-	    IS_ENABLED(CONFIG_MACH_SUN55I_A523)) && (sdc_no == 2))
+-		cfg->host_caps = MMC_MODE_8BIT;
+-
+-	cfg->host_caps |= MMC_MODE_HS_52MHz | MMC_MODE_HS;
++	    IS_ENABLED(CONFIG_MACH_SUN55I_A523)) && (sdc_no == 2)) {
++		cfg->host_caps = MMC_MODE_1BIT;
++	} else {
++		cfg->host_caps |= MMC_MODE_HS_52MHz | MMC_MODE_HS;
++	}
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+-	cfg->f_max = 52000000;
++	cfg->f_max = 25000000;
+ 
+ 	if (mmc_resource_init(sdc_no) != 0)
+ 		return NULL;
+@@ -691,7 +688,7 @@ static int sunxi_mmc_probe(struct udevice *dev)
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+-	cfg->f_max = 52000000;
++	cfg->f_max = 25000000;
+ 
+ 	ret = mmc_of_parse(dev, cfg);
+ 	if (ret)
