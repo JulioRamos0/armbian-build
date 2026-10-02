@@ -23,12 +23,13 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
+	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
 &mmc0 {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
-	bus-width = <4>;
+	bus-width = <1>;
 	max-frequency = <12000000>;
 	/delete-property/ cd-gpios;
 	broken-cd;
@@ -46,6 +47,7 @@ function post_config_uboot_target__pbstvstick() {
 	bus-width = <4>;
 	no-1-8-v;
 	non-removable;
+	cap-mmc-hw-reset;
 	status = "okay";
 };
 EOF
