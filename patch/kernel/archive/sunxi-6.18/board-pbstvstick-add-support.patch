@@ -13,7 +13,7 @@ diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-pbstvstick.dts b/arch/arm64
 new file mode 100644
 --- /dev/null
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-pbstvstick.dts
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,39 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (C) 2026
@@ -36,6 +36,8 @@ new file mode 100644
 +&mmc0 {
 +	vmmc-supply = <&reg_vcc3v3>;
 +	bus-width = <4>;
++	broken-cd;
++	disable-wp;
 +	no-1-8-v;
 +	status = "okay";
 +};

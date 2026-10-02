@@ -29,6 +29,9 @@ function post_config_uboot_target__pbstvstick() {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
+	max-frequency = <25000000>;
+	broken-cd;
+	disable-wp;
 	no-1-8-v;
 	status = "okay";
 };
