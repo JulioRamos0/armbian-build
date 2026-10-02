@@ -35,11 +35,12 @@ jobs:
             BOARD=pbstvstick \
             BRANCH=current \
             BUILD_DESKTOP=no \
-            BUILD_MINIMAL=no \
+            BUILD_MINIMAL=yes \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
-            KERNEL_GIT=shallow
+            KERNEL_GIT=shallow \ 
+            EXTRAWIFI=yes
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
