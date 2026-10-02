@@ -22,10 +22,12 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
+	
+	# Ultimate fix for SPL hangs: disable complex Device Model MMC in SPL
+	# This forces the legacy, ultra-robust 24MHz sunxi_mmc driver that ignores all advanced features
+	run_host_command_logged scripts/config --disable CONFIG_SPL_DM_MMC
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	
-	# ONLY for SPL: limit f_max to 25MHz and host_caps to 0 to prevent brownout with A2 cards
-	sed -i '/cfg->f_max = /a #ifdef CONFIG_SPL_BUILD\n\tcfg->f_max = 25000000;\n\tcfg->host_caps = 0;\n#endif' drivers/mmc/sunxi_mmc.c
 	
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
