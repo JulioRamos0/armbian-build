@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Experto Boot Armbian H5 <agent@multica.local>
+Date: Fri, 2 Oct 2026 00:00:00 +0000
+Subject: [PATCH] sunxi_mmc: Force SPL MMC frequency to 25MHz to prevent HS hangs
+
+High-speed SD cards can hang the sunxi_mmc driver in SPL on some boards
+when switching to high-speed mode. Force f_max to 25MHz in SPL to keep
+all cards in default speed mode during the critical SPL phase.
+
+---
+ drivers/mmc/sunxi_mmc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
+index a111111111..b222222222 100644
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -699,6 +699,10 @@ static int sunxi_mmc_probe(struct udevice *dev)
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
+ 
++#ifdef CONFIG_SPL_BUILD
++	cfg->f_max = 25000000;
++#endif
++
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	upriv->mmc = &priv->mmc;
