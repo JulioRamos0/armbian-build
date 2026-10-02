@@ -30,7 +30,7 @@ function post_config_uboot_target__pbstvstick() {
 	u-boot,dm-spl;
 };
 
-&mmc0_pins_a {
+&mmc0_pins {
 	u-boot,dm-spl;
 };
 
