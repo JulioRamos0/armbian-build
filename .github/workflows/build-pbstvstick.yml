@@ -39,7 +39,7 @@ jobs:
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
-            KERNEL_GIT=shallow \ 
+            KERNEL_GIT=shallow \
             EXTRAWIFI=yes
 
       - name: Upload Artifact
