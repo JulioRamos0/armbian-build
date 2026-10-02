@@ -21,7 +21,6 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "504"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
-	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
@@ -31,10 +30,6 @@ function post_config_uboot_target__pbstvstick() {
 };
 
 &mmc0_pins {
-	u-boot,dm-spl;
-};
-
-&mmc2_8bit_pins {
 	u-boot,dm-spl;
 };
 
@@ -51,7 +46,6 @@ function post_config_uboot_target__pbstvstick() {
 };
 
 &mmc2 {
-	u-boot,dm-spl;
 	pinctrl-names = "default";
 	pinctrl-0 = <&mmc2_8bit_pins>;
 	vmmc-supply = <&reg_vcc3v3>;
