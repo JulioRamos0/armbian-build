@@ -26,6 +26,18 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
+&reg_vcc3v3 {
+	u-boot,dm-spl;
+};
+
+&mmc0_pins_a {
+	u-boot,dm-spl;
+};
+
+&mmc2_8bit_pins {
+	u-boot,dm-spl;
+};
+
 &mmc0 {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
