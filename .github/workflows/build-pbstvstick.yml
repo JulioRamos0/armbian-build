@@ -29,14 +29,6 @@ jobs:
           sed -i "s/REPLACE_WITH_KEY/${{ secrets.WIFI_KEY }}/g" userpatches/customize-image.sh
           sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
 
-      - name: Cache Compiler Objects (ccache)
-        uses: actions/cache@v6
-        with:
-          path: .ccache
-          key: ${{ runner.os }}-armbian-ccache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-armbian-ccache-
-
       - name: Build Armbian Image
         run: |
           sudo ./compile.sh build \
