@@ -24,10 +24,8 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	
-	# Force maximum frequency to 25MHz in U-Boot to prevent High-Speed mode brownouts
-	sed -i 's/cfg->f_max = .*/cfg->f_max = 25000000;/' drivers/mmc/sunxi_mmc.c
-	# Strip high speed capabilities to avoid CMD6 timing mismatches
-	sed -i 's/cfg->host_caps = .*/cfg->host_caps = 0;/' drivers/mmc/sunxi_mmc.c
+	# ONLY for SPL: limit f_max to 25MHz and host_caps to 0 to prevent brownout with A2 cards
+	sed -i '/cfg->f_max = /a #ifdef CONFIG_SPL_BUILD\n\tcfg->f_max = 25000000;\n\tcfg->host_caps = 0;\n#endif' drivers/mmc/sunxi_mmc.c
 	
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 

@@ -1,0 +1,14 @@
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -700,6 +700,11 @@
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
+ 
++#ifdef CONFIG_SPL_BUILD
++	cfg->f_max = 25000000;
++	cfg->host_caps = 0; /* Clear all advanced capabilities in SPL */
++#endif
++
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	upriv->mmc = &priv->mmc;
