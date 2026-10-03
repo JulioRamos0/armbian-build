@@ -1,13 +1,10 @@
 From: Armbian Build Framework <build@armbian.com>
 Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage jump
 
-Print clear progress messages during SPL MMC initialization, block reading,
-and image jumping to aid debugging headless / UART boot failures.
-
 ---
  common/spl/spl.c     |  3 +++
- common/spl/spl_mmc.c | 16 ++++++++++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ common/spl/spl_mmc.c | 22 ++++++++++++++++++----
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
@@ -23,7 +20,7 @@ and image jumping to aid debugging headless / UART boot failures.
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -379,12 +379,13 @@
+@@ -379,20 +379,27 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -31,25 +28,33 @@ and image jumping to aid debugging headless / UART boot failures.
 -		  mmc_dev);
 +	printf("[SPL] mmc dev %d init...\n", mmc_dev);
  	if (!mmc || spl_mmc_get_mmc_devnum(mmc) != mmc_dev) {
++		printf("[SPL] calling spl_mmc_find_device(%d)\n", mmc_dev);
  		ret = spl_mmc_find_device(&mmc, mmc_dev);
 -		if (ret)
 +		if (ret) {
 +			printf("[SPL] find_device failed: %d\n", ret);
  			return ret;
+-
 +		}
- 
++		printf("[SPL] find_device ok: %s\n", mmc->cfg->name);
++
++		printf("[SPL] calling mmc_init...\n");
  		ret = mmc_init(mmc);
  		if (ret) {
-@@ -393,6 +394,8 @@
++			printf("[SPL] mmc_init failed: %d\n", ret);
+ 			mmc = NULL;
+-			printf("spl: mmc init failed with error: %d\n", ret);
  			return ret;
  		}
- 	}
-+	printf("[SPL] mmc init ok: %s (caps=0x%x, clock=%u)\n",
+-	}
++		printf("[SPL] mmc_init ok\n");
++	}
++	printf("[SPL] mmc ready: %s (caps=0x%x, clock=%u)\n",
 +	       mmc->cfg->name, mmc->cfg->host_caps, mmc->clock);
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +425,14 @@
+@@ -422,11 +429,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);
