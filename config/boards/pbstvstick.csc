@@ -32,6 +32,8 @@ function post_config_uboot_target__pbstvstick() {
 	# This absolutely eliminates the combined current spike (brownout) in SPL.
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA -1
 	
+	# HARDWARE KILL SWITCH: Force eMMC (PC14) into reset so it draws zero power during SD boot!
+	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
 	
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
