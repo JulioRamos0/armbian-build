@@ -17,14 +17,15 @@ SERIALCON="ttyS0,ttyGS0"
 PACKAGE_LIST_BOARD="mmc-utils"
 
 function post_config_uboot_target__pbstvstick() {
-	display_alert "$BOARD" "u-boot: DRAM tune (576/ODT) + SPI-flash boot" "info"
+	display_alert "$BOARD" "u-boot: DRAM tune (576/ODT) + eMMC boot" "info"
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "576"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
-	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
+	run_host_command_logged scripts/config --disable CONFIG_OF_UPSTREAM
 
+	local node_content='
 &mmc0 {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
@@ -46,6 +47,11 @@ function post_config_uboot_target__pbstvstick() {
 	cap-mmc-hw-reset;
 	status = "okay";
 };
-EOF
-
+'
+	if [ -f "arch/arm/dts/sun50i-h5-orangepi-prime.dts" ]; then
+		echo "$node_content" >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
+	fi
+	if [ -f "dts/upstream/src/arm64/allwinner/sun50i-h5-orangepi-prime.dts" ]; then
+		echo "$node_content" >> dts/upstream/src/arm64/allwinner/sun50i-h5-orangepi-prime.dts
+	fi
 }
