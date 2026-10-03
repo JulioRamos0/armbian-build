@@ -17,8 +17,8 @@ SERIALCON="ttyS0,ttyGS0"
 PACKAGE_LIST_BOARD="mmc-utils"
 
 function post_config_uboot_target__pbstvstick() {
-	display_alert "$BOARD" "u-boot: DRAM tune (504/ODT) + SPI-flash boot" "info"
-	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "504"
+	display_alert "$BOARD" "u-boot: DRAM tune (576/ODT) + SPI-flash boot" "info"
+	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "576"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
@@ -29,7 +29,8 @@ function post_config_uboot_target__pbstvstick() {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
-	max-frequency = <25000000>;
+	cap-sd-highspeed;
+	broken-cd;
 	no-1-8-v;
 	status = "okay";
 };
