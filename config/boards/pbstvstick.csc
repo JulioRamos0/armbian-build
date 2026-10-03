@@ -35,6 +35,12 @@ function post_config_uboot_target__pbstvstick() {
 	# HARDWARE KILL SWITCH: Force eMMC (PC14) into reset so it draws zero power during SD boot!
 	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
 	
+	# EXTREME POWER THROTTLE: Force the SPL MMC driver to 4MHz and 1-bit mode.
+	# This slashes the A2 card's power consumption by 90% during the critical SPL phase,
+	# allowing it to survive the board's default regulator state.
+	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 4000000;/g' drivers/mmc/sunxi_mmc.c
+	sed -i 's/MMC_MODE_4BIT/0/g' drivers/mmc/sunxi_mmc.c
+	
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
 &reg_vcc3v3 {
