@@ -2,6 +2,15 @@ name: Build PBSTVStick Image
 
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target to build (all = full image, uboot = only u-boot)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - uboot
   push:
 
 jobs:
@@ -29,21 +38,33 @@ jobs:
           sed -i "s/REPLACE_WITH_KEY/${{ secrets.WIFI_KEY }}/g" userpatches/customize-image.sh
           sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
 
-      - name: Build Armbian Image
+      - name: Build Armbian
         run: |
-          sudo ./compile.sh build \
-            BOARD=pbstvstick \
-            BRANCH=current \
-            BUILD_DESKTOP=no \
-            BUILD_MINIMAL=no \
-            KERNEL_BTF=no \
-            KERNEL_CONFIGURE=no \
-            RELEASE=bookworm \
-            KERNEL_GIT=shallow
+          TARGET="${{ github.event.inputs.target || 'all' }}"
+          if [ "$TARGET" = "uboot" ]; then
+            sudo ./compile.sh uboot \
+              BOARD=pbstvstick \
+              BRANCH=current \
+              KERNEL_GIT=shallow
+          else
+            sudo ./compile.sh build \
+              BOARD=pbstvstick \
+              BRANCH=current \
+              BUILD_DESKTOP=no \
+              BUILD_MINIMAL=no \
+              KERNEL_BTF=no \
+              KERNEL_CONFIGURE=no \
+              RELEASE=bookworm \
+              KERNEL_GIT=shallow
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: armbian-pbstvstick-bookworm
-          path: output/images/*
+          name: ${{ github.event.inputs.target == 'uboot' && 'armbian-pbstvstick-uboot' || 'armbian-pbstvstick-bookworm' }}
+          path: |
+            output/images/*
+            output/debs/linux-u-boot-*.deb
+            output/debug/uboot/*
           retention-days: 7
+
