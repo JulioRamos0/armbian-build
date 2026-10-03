@@ -28,6 +28,10 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --disable CONFIG_SPL_DM_MMC
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
 	
+	# Prevent the legacy driver from initializing the eMMC at the same time as the SD card!
+	# This absolutely eliminates the combined current spike (brownout) in SPL.
+	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA -1
+	
 	
 	cat << 'EOF' >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 
