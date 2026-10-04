@@ -24,8 +24,6 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	run_host_command_logged scripts/config --disable CONFIG_OF_UPSTREAM
-	# Diagnostics: print "Synchronous Abort"/SError in SPL instead of a silent hang
-	run_host_command_logged scripts/config --enable CONFIG_ARMV8_SPL_EXCEPTION_VECTORS
 
 	local node_content='
 &mmc0 {
