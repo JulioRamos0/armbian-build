@@ -13,15 +13,15 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	spl_perform_board_fixups(&spl_image);
  
  	os = spl_image.os;
-+	printf("[SPL] image loaded: os=%d, size=%lu, entry=0x%lx\n",
-+	       os, (unsigned long)spl_image.size, (unsigned long)spl_image.entry_point);
++	printf("[SPL] image loaded: os=%d, size=%u, entry=0x%x\n",
++	       os, (unsigned int)spl_image.size, (unsigned int)spl_image.entry_point);
  	if (os == IH_OS_U_BOOT) {
  		debug("Jumping to %s...\n", xpl_name(xpl_next_phase()));
  	} else if (CONFIG_IS_ENABLED(ATF) && os == IH_OS_ARM_TRUSTED_FIRMWARE) {
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,15 @@
+@@ -22,8 +22,17 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
@@ -29,17 +29,19 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	ulong r;
 +
-+	printf("[SPL-READ] off=0x%x size=%u buf=%p sec=%u cnt=%u\n",
-+	       (unsigned int)off, (unsigned int)size, buf, (unsigned int)sector, (unsigned int)count);
++	printf("[SPL-READ] off=0x%x size=%u buf=0x%x sec=%u cnt=%u\n",
++	       (unsigned int)off, (unsigned int)size,
++	       (unsigned int)(uintptr_t)buf,
++	       (unsigned int)sector, (unsigned int)count);
 +	*(volatile u32 *)buf = 0xa5a55a5a;
 +	printf("[SPL-READ] write ok (0x%x), calling dread...\n", *(volatile u32 *)buf);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
-+	printf("\n[SPL-READ] done: %lu bytes\n", r);
++	printf("\n[SPL-READ] done: %u bytes\n", (unsigned int)r);
 +	return r;
  }
  
  static __maybe_unused unsigned long spl_mmc_raw_uboot_offset(int part)
-@@ -379,20 +386,27 @@
+@@ -379,20 +388,27 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -73,12 +75,12 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +436,14 @@
+@@ -422,11 +438,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);
-+		printf("[SPL] loading from raw sector %lu (offset 0x%lx)...\n",
-+		       raw_sect, (raw_sect + spl_mmc_raw_uboot_offset(part)) * 512);
++		printf("[SPL] loading from raw sector %u (offset 0x%x)...\n",
++		       (unsigned int)raw_sect, (unsigned int)((raw_sect + spl_mmc_raw_uboot_offset(part)) * 512));
  
  #ifdef CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR
  		ret = mmc_load_image_raw_sector(spl_image, bootdev, mmc,
@@ -95,7 +97,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	 */
  	size = get_aligned_image_size(info, size, 0);
  	buf = board_spl_fit_buffer_addr(size, size, 1);
-+	printf("[SPL-FIT] fit_buffer=%p, size=%u\n", buf, (unsigned int)size);
++	printf("[SPL-FIT] fit_buffer=0x%x, size=%u\n", (unsigned int)(uintptr_t)buf, (unsigned int)size);
  	if (!buf) {
 -		/*
 -		 * We assume that none of the board will ever use 0x0 as a
