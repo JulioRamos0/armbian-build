@@ -212,3 +212,26 @@ El LED principal del TV Stick está conectado físicamente al puerto **PA15**.
    `sed -i "s/REPLACE_WITH_SSID/${{ secrets.WIFI_SSID }}/g" userpatches/customize-image.sh`
 
 **Incidente de Seguridad (Leak):** Si por error comiteas y empujas (*push*) credenciales hardcodeadas a GitHub, **debes cambiar inmediatamente la contraseña en el dispositivo físico afectado** (router, módem, API, etc.). En repositorios en la nube, reescribir la historia de Git (`git push --force`) no garantiza que los datos no hayan sido cacheados o raspados por bots. ¡Cambiar la contraseña es la única solución infalible!
+
+# Depuración Actual: Arranque U-Boot SPL desde eMMC (MMC2)
+
+Actualmente estamos trabajando en resolver un problema de cuelgue (hang) durante la carga de U-Boot SPL al intentar arrancar desde la memoria interna eMMC (MMC2). 
+
+## 1. Estado del Problema (Octubre 2026)
+- El sistema se cuelga en el proceso de carga del FIT (`[SPL-FIT] load_simple_fit starting (off=0xa000)`).
+- Inmediatamente después imprime un misterioso código de error o texto corrupto: `50:wtcd`.
+
+## 2. Hallazgos y Correcciones Aplicadas
+- **Fallo por Desbordamiento de Memoria (Heap Exhaustion):** Descubrimos que `board_spl_fit_buffer_addr` (en U-Boot) intentaba alojar aproximadamente 850KB usando `malloc_cache_aligned`. Esto desbordaba el limitado heap de la fase SPL, causando reinicios silenciosos o cuelgues.
+- **El Fix:** Se aplicó un parche para sobreescribir `board_spl_fit_buffer_addr` forzando que devuelva la dirección estática `CONFIG_SYS_LOAD_ADDR` (`0x42000000`) en lugar de usar `malloc`. Esto evadió el desbordamiento de memoria.
+- **Restricciones de UART:** La salida serial en la etapa SPL es extremadamente limitada. Agregar demasiados `printf` desborda el buffer serial, causando reinicios o bloqueos silenciosos.
+
+## 3. Metodología de Trabajo y Flujo
+- **Trazabilidad:** Se inyectaron comandos `printf` detallados en `common/spl/spl_mmc.c`, `common/spl/spl_fit.c` y `common/spl/spl.c` para seguir el flujo de lectura de los sectores y las asignaciones de memoria.
+- **Automatización:** Utilizamos un script en Python (`scratch/auto_build_and_deploy.py`) que interactúa con GitHub Actions para monitorear, descargar y extraer automáticamente los artefactos binarios de U-Boot generados en cada *commit*. Luego, `scratch/deploy_new_uboot.py` instala el SPL parcheado directamente en el dispositivo vía red (usando un kernel en ejecución).
+- **Herramientas de Análisis:** Se ha instalado la librería `capstone` para Python en caso de necesitar desensamblar y analizar el código binario compilado del SPL (ya que la cadena `50:wtcd` no se encuentra en el código fuente, sugiriendo una corrupción de puntero o ensamblaje parcial de string en un `printf`).
+
+## 4. Próximos Pasos (Next Steps)
+1. Rastrear el origen de la impresión `50:wtcd`. Dado que no existe en el código fuente (`grep`), es probable que un argumento `printf` esté recibiendo un puntero incorrecto o desalineado.
+2. Analizar `board_spl_fit_buffer_addr` y la subsecuente llamada a `spl_simple_fit_read` en `common/spl/spl_fit.c` para verificar si la lectura a la DRAM o la alineación son correctas.
+3. Utilizar herramientas de desensamblado (objdump / capstone) sobre los binarios SPL generados, enfocándose en las funciones de `spl_fit.c`, para ver si hay comportamiento anómalo.
