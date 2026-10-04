@@ -16,7 +16,7 @@ on:
 
 jobs:
   build-uboot:
-    name: Build U-Boot (Fast ~3min)
+    name: Build U-Boot
     if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'uboot' }}
     runs-on: ubuntu-latest
     permissions:
