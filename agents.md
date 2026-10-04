@@ -234,4 +234,5 @@ Actualmente estamos trabajando en resolver un problema de cuelgue (hang) durante
 ## 3. Metodología de Trabajo y Flujo
 - **Trazabilidad:** Logs concisos en `common/spl/spl_mmc.c` y `common/spl/spl_fit.c`.
 - **Automatización CI/CD:** El script `scratch/auto_build_and_deploy.py <commit_sha>` espera la compilación en GitHub Actions, descarga los `.deb`/`.bin`, los transfiere vía SSH/SFTP al TV Stick (`192.168.128.114`) y los graba a la eMMC (`/dev/mmcblk2`).
+- **Flujo de Pruebas Manual:** Después de realizar cambios para solventar problemas de u-boot, hay que esperar a que el build del uboot en github termine, descargarlo e instalarlo en ssh `root@192.168.128.114` usando la contraseña `toor@100`.
 

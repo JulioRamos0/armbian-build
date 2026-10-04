@@ -9,11 +9,9 @@ loop counters to avoid infinite SPL hangs during card detection.
  drivers/mmc/sunxi_mmc.c | 50 ++++++++++++++++++++++++++++++-------------------
  1 file changed, 31 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
-index e28c81a..1229a32 100644
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -188,10 +188,11 @@ static int mmc_update_clk(struct sunxi_mmc_priv *priv)
+@@ -188,10 +188,11 @@
  	cmd = SUNXI_MMC_CMD_START |
  	      SUNXI_MMC_CMD_UPCLK_ONLY |
  	      SUNXI_MMC_CMD_WAIT_PRE_OVER;
@@ -26,15 +24,16 @@ index e28c81a..1229a32 100644
  			return -1;
  	}
  
-@@ -282,44 +283,25 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+@@ -282,44 +283,25 @@
  	setbits_le32(&priv->reg->gctrl, SUNXI_MMC_GCTRL_ACCESS_BY_AHB);
  
  	start = get_timer(0);
-+	unsigned int total_loop_count = 5000000;
- 
+-
 -	for (i = 0; i < word_cnt;) {
 -		unsigned int in_fifo;
 -
++	unsigned int total_loop_count = 5000000;
++
 +	for (i = 0; i < word_cnt; i++) {
  		while ((status = readl(&priv->reg->status)) & status_bit) {
 -			if (get_timer(start) > timeout_msecs)
@@ -75,16 +74,17 @@ index e28c81a..1229a32 100644
 -		for (; in_fifo > 0; in_fifo--)
 -			buff[i++] = readl_relaxed(&priv->reg->fifo);
 -		dmb();
+-	}
 +		if (reading)
 +			buff[i] = readl_relaxed(&priv->reg->fifo);
 +		else
 +			writel(buff[i], &priv->reg->fifo);
- 	}
++	}
 +	dmb();
  
  	return 0;
  }
-@@ -329,10 +311,11 @@ static int mmc_rint_wait(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+@@ -329,10 +311,11 @@
  {
  	unsigned int status;
  	unsigned long start = get_timer(0);
@@ -97,12 +97,14 @@ index e28c81a..1229a32 100644
  		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {
  			debug("%s timeout %x\n", what,
  			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);
-@@ -384,8 +367,14 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -384,8 +367,16 @@
  		writel(data->blocks * data->blocksize, &priv->reg->bytecnt);
  	}
  
 +#ifdef CONFIG_XPL_BUILD
-+	if (cmd->cmdidx != 17 && cmd->cmdidx != 18 && cmd->cmdidx != 13) {
++	if (cmd->cmdidx == 17) {
++		printf("%x:", cmd->cmdarg);
++	} else {
 +		printf("[MMC%d] cmd%d arg=0x%x\n", priv->mmc_no, cmd->cmdidx, cmd->cmdarg);
 +	}
 +#else
@@ -112,19 +114,41 @@ index e28c81a..1229a32 100644
  	writel(cmd->cmdarg, &priv->reg->arg);
  
  	if (!data)
-@@ -416,6 +405,7 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -402,7 +393,15 @@
+ 		bytecnt = data->blocksize * data->blocks;
+ 		debug("trans data %d bytes\n", bytecnt);
+ 		writel(cmdval | cmd->cmdidx, &priv->reg->cmd);
++#ifdef CONFIG_XPL_BUILD
++		if (cmd->cmdidx == 17)
++			printf("w");
++#endif
+ 		ret = mmc_trans_data_by_cpu(priv, mmc, data);
++#ifdef CONFIG_XPL_BUILD
++		if (cmd->cmdidx == 17)
++			printf("t");
++#endif
+ 		if (ret) {
+ 			error = readl(&priv->reg->rint) &
+ 				SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT;
+@@ -415,6 +414,10 @@
+ 			      "cmd");
  	if (error)
  		goto out;
++#ifdef CONFIG_XPL_BUILD
++	if (cmd->cmdidx == 17)
++		printf("c");
++#endif
  
-+
  	if (data) {
  		timeout_msecs = 120;
- 		debug("cacl timeout %x msec\n", timeout_msecs);
-@@ -426,15 +416,17 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -426,15 +429,20 @@
  				      "data");
  		if (error)
  			goto out;
-+
++#ifdef CONFIG_XPL_BUILD
++		if (cmd->cmdidx == 17)
++			printf("d");
++#endif
  	}
  
  	if (cmd->resp_type & MMC_RSP_BUSY) {
@@ -139,7 +163,7 @@ index e28c81a..1229a32 100644
  				debug("busy timeout\n");
  				error = -ETIMEDOUT;
  				goto out;
-@@ -457,11 +449,29 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -457,11 +465,31 @@
  out:
  	if (error < 0) {
  		writel(SUNXI_MMC_GCTRL_RESET, &priv->reg->gctrl);
@@ -161,6 +185,8 @@ index e28c81a..1229a32 100644
 +	udelay(50);
 +
 +#ifdef CONFIG_XPL_BUILD
++	if (cmd->cmdidx == 17)
++		printf((cmd->cmdarg & 7) == 7 ? "\n" : " ");
 +	if (error)
 +		printf("\n[MMC%d] cmd%d err=%d rint=0x%x status=0x%x\n",
 +		       priv->mmc_no, cmd->cmdidx, error,
@@ -169,7 +195,7 @@ index e28c81a..1229a32 100644
  
  	return error;
  }
-@@ -470,15 +480,15 @@ static void sunxi_mmc_reset(void *regs)
+@@ -470,15 +498,15 @@
  {
  	/* Reset controller */
  	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
@@ -191,7 +217,7 @@ index e28c81a..1229a32 100644
  		/* Setup FIFO R/W threshold. Needed on H616. */
  		writel(SUNXI_MMC_THLDC_READ_THLD(512) |
  		       SUNXI_MMC_THLDC_WRITE_EN |
-@@ -533,6 +543,9 @@ static int sunxi_mmc_core_init(struct mmc *mmc)
+@@ -533,6 +561,9 @@
  {
  	struct sunxi_mmc_priv *priv = mmc->priv;
  
@@ -201,7 +227,7 @@ index e28c81a..1229a32 100644
  	sunxi_mmc_reset(priv->reg);
  
  	return 0;
-@@ -608,6 +621,11 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+@@ -608,9 +639,19 @@
  	/* unassert reset */
  	setbits_le32(ccm + CCU_H6_MMC_GATE_RESET, 1 << (RESET_SHIFT + sdc_no));
  #endif
@@ -213,3 +239,11 @@ index e28c81a..1229a32 100644
  	ret = mmc_set_mod_clk(priv, 24000000);
  	if (ret)
  		return NULL;
++
++#if defined(CONFIG_XPL_BUILD)
++	if (sdc_no == 2)
++		cfg->b_max = 1;
++#endif
+ 
+ 	return mmc_create(cfg, priv);
+ }
