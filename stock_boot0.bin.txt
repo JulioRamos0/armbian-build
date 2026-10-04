@@ -1,0 +1,186 @@
+eGON.BT0
+5ac5b2eb70947031a4ee8c1cbf228ee0344c9e28
+=F-#3p+F
+"FFhFI
+pGpGpGpG
+h3p+iX+N
+cl9J;` lal
+C/L+`3h#
+%FNd 7h'
+H1F*F#F
+ F9F@"'K
+j3a#h[jsa#h
+3e)K Fsc)K
+K;aYFRF|` F
+0123456789abcdef
+mmc_get_mclk
+mmc_set_mclk
+key press :
+[     %d.%d]
+HELLO! BOOT0 is starting!
+boot0 commit : %s 
+ready to burn secure bit
+eraly jump fel
+detected user input 2
+you can loosen the key to update now
+detected power key unit
+time out
+key not pressed anymore
+dram size =%d
+initializing SDRAM Fail.
+Ready to disable icache.
+Jump to secend Boot.
+rtc[%d] value = 0x%x
+system will reboot
+periph0 has been enabled
+set pll start
+set pll end
+key pressed value=0x%x
+PMU:Set DDR Vol %dV %s.
+sunxi pmu error : unable to set dcdc1
+axp read error
+PMU: AXP806
+unknow PMU
+burn finished,secure mode: %d
+set arisc reset to de-assert state
+Entry_name        = %s
+parameter
+shutdowncharge
+androidcharge
+board-cfg
+[ERROR DEBUG]: POWER SETTING ERROR!
+ZQ calibration error,check external 240 ohm resistor.
+DX0 state:%d
+DX1 state:%d
+DX2 state:%d
+DX3 state:%d
+DX%d rank0 state:%d
+DX%d rank1 state:%d
+DRAM simple test FAIL.
+%x != %x at address %x
+DRAM simple test OK.
+[ERROR DEBUG] DRAM initial error : 0!
+[ERROR DEBUG] auto scan dram rank&width fail !
+[ERROR DEBUG] auto scan dram size fail !
+DRAM STANDBY DRIVE INFO: V0.6
+DRAM BOOT DRIVE INFO: V0.6
+ic cant not match, please check...
+DRAM CLK =%d MHZ
+DRAM Type =%d (2:DDR2,3:DDR3,6:LPDDR2,7:LPDDR3)
+DRAM zq value: 0x%x
+DRAM initial error : 1 !
+DRAM SIZE =%d M
+card no is %d
+sdcard %d line count %d
+error:bad magic.
+error:bad checksum.
+Loading boot-pkg Succeed(index=%d).
+Loading boot-pkg fail(error=%d)
+[mmc]: mmc %d update clk failed
+[mmc]: 0x%x 0x%x
+[mmc]: %s: wrong clock source %d
+[mmc]: wrong freq %d at spd md %d
+[mmc]: wrong speed mode %d
+[mmc]: wrong input para: mmc %d/2, mode %d/[0,4], freq %d/[0,5]
+[mmc]: sdc0 spd mode error, %d
+[mmc]: mmc_get_timing_cfg: input para error!
+[mmc]: %s: source clock is too high, clk %d, src %d!!!
+[mmc]: mode 3 is optional for sdc0. please use mode 1.
+[mmc]: get timing para error %d
+[mmc]: timing para error %d
+[mmc]: mmc %d wrong timing mode: 0x%x
+[mmc]: mmc %d re-enable clock failed
+[mmc]: [mmc]: *** update clock failed
+[mmc]: mmc %d Found fatal err,so no send cmd
+[mmc]: mmc %d dest is not 4 byte align
+[mmc]: mmc %d transfer by cpu failed
+[mmc]: mmc %d Transfer failed
+[mmc]: mmc %d cmd %d timeout, err %x
+[mmc]: mmc %d data timeout, err %x
+[mmc]: mmc %d wait dma over err %x
+[mmc]: mmc %d busy timeout
+[mmc]: mmc %d cmd %d err %x
+[mmc]: mmc driver ver %s
+2016-07-25 12:05
+SUNXI SD/MMC
+[mmc]: Wrong mmc NO.: %d
+[mmc]: mmc %d resource init failed
+[mmc]: mmc %d register failed
+[mmc]: mmc %d Send status failed
+[mmc]: mmc %d Status Error: 0x%08X
+[mmc]: mmc %d Timeout waiting card ready
+[mmc]: MMC Device %d not found
+[mmc]: mmc %d  read blcok failed
+[mmc]: mmc %d fail to send stop cmd
+[mmc]: mmc %d blkcnt should not be 0
+[mmc]: Can not find mmc dev %d
+[mmc]: mmc %d: block number 0x%x exceeds max(0x%x)
+[mmc]: mmc %d Set block len failed
+[mmc]: mmc %d block read failed
+[mmc]: mmc %d go idle failed
+[mmc]: mmc %d send app cmd failed
+[mmc]: mmc %d send cmd41 failed
+[mmc]: mmc %d wait card init failed
+[mmc]: mmc %d spi read ocr failed
+[mmc]: mmc %d send op cond failed
+[mmc]: mmc %d wait for mmc init failed
+[mmc]: mmc %d send ext csd failed
+[mmc]: mmc %d switch failed
+[mmc]: mmc_switch: update clock failed after send cmd6
+[mmc]: mmc %d get ext csd failed
+[mmc]: retry mmc switch(cmd6)
+[mmc]: mmc %d send ext csd faild
+[mmc]: mmc %d change to hs failed
+[mmc]: mmc %d Send app cmd failed
+[mmc]: mmc %d Send scr failed
+[mmc]: mmc %d Check high speed status faild
+[mmc]: mmc %d switch to high speed failed
+[mmc]: update clock failed after send cmd6 to switch to sd high speed mode
+[mmc]: mmc %d Put the Card in Identify Mode failed
+[mmc]: mmc %d send rca failed
+[mmc]: mmc %d get csd failed
+[mmc]: Select the card failed
+[mmc]: mmc %d Change speed mode failed
+[mmc]: update clock failed
+[mmc]: mmc %d sd set bus width failed
+[mmc]: mmc %d switch bus width failed
+[mmc]: mmc %d switch bus width8 failed
+[mmc]: MMC 1.2
+[mmc]: MMC 1.4
+[mmc]: MMC 2.2
+[mmc]: MMC 3.0
+[mmc]: MMC 4.0
+[mmc]: MMC 4.1
+[mmc]: MMC 4.2
+[mmc]: MMC 4.3
+[mmc]: MMC 4.41
+[mmc]: MMC 4.5
+[mmc]: MMC 5.0
+[mmc]: MMC 5.1
+[mmc]: Unknow MMC ver
+[mmc]: %s %d bit
+[mmc]: %d Hz
+[mmc]: %d MB
+[mmc]: mmc %d send if cond failed
+[mmc]: mmc %d Has init
+[mmc]: mmc %d host init failed
+[mmc]: mmc %d reset card failed
+[mmc]: ***Try SD card %d***
+[mmc]: SD card %d Card did not respond to voltage select!
+[mmc]: ***SD/MMC %d init error!!!***
+[mmc]: ***Try MMC card %d***
+[mmc]: MMC card %d Card did not respond to voltage select!
+[mmc]: Wrong media type 0x%x
+[mmc]: mmc %d Card did not respond to voltage select!
+[mmc]: ***SD/MMC %d init OK!!!***
+DS26/SDR12
+HSSDR52/SDR25
+HSDDR52/DDR50
+HS200/SDR104
+eGON.BT0
+5ac5b2eb70947031a4ee8c1cbf228ee0344c9e28
+=F-#3p+F
+"FFhFI
+pGpGpGpG
+h3p+iX+N
+cl9J;` lal

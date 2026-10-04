@@ -1,0 +1,4887 @@
+sunxi-package
+MIE;u-boot
+IIE;parameter
+IIE;monitor
+IIE;soc-cfg
+IIE;board-cfg
+IIE;board-fex
+IIE;logo
+33dc00a87d1c5eb0fb21b0909c5502248911364f
+\xJPxJ
+/JXxJ<dJ
+X4JlyJ
+(<J$<J
+dDJ/J
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+--<<KKZZiixx
+!#%(*,.02468:<>@BDFHIKMOQRTVWY[\^_abcefhijkmnopqrstuvwwxyzz{||}}~~~
+bootcmd=nand read 50000000 boot;boota 50000000
+bootdelay=1
+baudrate=115200
+bootdelay=3
+bootcmd=run setargs_nand boot_normal
+console=ttyS0,115200
+nand_root=/dev/nandd
+mmc_root=/dev/mmcblk0p7
+init=/init
+loglevel=8
+setargs_nand=setenv bootargs console=${console} root=${nand_root}init=${init} loglevel=${loglevel} partitions=${partitions}
+setargs_mmc=setenv bootargs console=${console} root=${mmc_root}init=${init} loglevel=${loglevel} partitions=${partitions}
+boot_normal=sunxi_flash read 4007f800 boot;boota 4007f800
+boot_recovery=sunxi_flash read 4007f800 recovery;boota 4007f800
+boot_fastboot=fastboot
+0123456789ABCDEF
+cert_info
+serialNumber
+signature
+algorithm
+parameter
+algorithm
+parameter
+public_key
+extensions
+SSSSSSSSS
+USB Storage
+mmc_do_burn_boot
+mmc_set_erase_start_addr
+mmc_set_erase_end_addr
+mmc_get_boot
+mmc_bread_secure
+mmc_bwrite_secure
+mmc_berase_secure
+mmc_bwrite_mass_pro_secure
+mmc_bread_mass_pro_secure
+mmc_secure_wipe_secure
+mmc_mmc_erase_secure
+sunxi_download_boot0_atfter_ota
+mmc_mmc_trim_secure
+mmc_do_sanitize
+mmc_mmc_discard_secure
+mmc_mmc_secure_erase_secure
+mmc_mmc_secure_trim_secure
+mmc_do_secure_wipe
+mmc_secure_wipe
+sdmmc_secure_storage_read
+mmc_mmc_erase
+sdmmc_secure_storage_read_backup
+mmc_mmc_sanitize
+mmc_mmc_trim
+gen_tuning_blk_bus8
+mmc_mmc_discard
+mmc_mmc_secure_erase
+mmc_mmc_secure_trim
+gen_tuning_blk_bus4
+sunxi_mmc_tuning_init
+mmc_berase
+mmc_set_mclk
+sunxi_tuning_speed_mode
+sunxi_tuning_hs400_cmd
+mmc_calibrate_delay_unit
+write_tuning_try_freq
+sunxi_read_tuning
+sunxi_switch_to_best_bus
+mmc_send_cmd
+fdt_fixup_memory_banks
+mmc_write_info
+sunxi_sprite_mmc_phyerase
+mmc_read_blocks
+mmc_bread
+mmc_get_para_from_fex
+mmc_startup
+mmc_create
+sunxi_mmc_init
+mmc_init_boot
+mmc_init
+sunxi_verify_signature
+sunxi_verify_embed_signature
+sunxi_verify_rotpk_hash
+check_env_in_cmdline
+update_cmdline_value
+v7_dcache_inval_range
+update_bootargs_with_android_cmdline
+sunxi_sha_calc
+sunxi_rsa_calc
+set_default_env
+env_import
+clk_register_fixed_rate
+env_export
+set_interest_region
+SFTE_Set_Pixel_Sizes_i
+fb_unlock
+fb_save_para
+do_env_export
+sunxi_clk_register_factors
+do_env_import
+do_burn_from_boot
+do_read_from_boot
+do_probe_secure_storage
+sunxi_secure_storage_exit
+sunxi_secure_storage_list
+sunxi_fdt_reflush_all
+sunxi_secure_storage_read
+sunxi_secure_storage_write
+sunxi_secure_storage_erase_data_only
+sunxi_secure_storage_erase_all
+sunxi_secure_object_list
+do_bootvx_fdt
+mmc_get_mclk
+fdt_find_or_add_subnode
+__clk_enable
+__clk_set_parent
+__clk_init_parent
+__clk_init
+sunxi_pwm_pin_set_state
+clk_set_parent
+clk_set_rate
+sunxi_switch_to_best_bus
+clk_register
+of_pll_clk_config_setup
+of_periph_clk_config_setup
+of_clk_get
+card_read_boot0
+pwm_request
+check_config_fel_key
+nand_write_boot0
+card_download_boot0
+board_display_show_until_lcd_open
+_set_layer_geometry
+fdt_get_all_pin
+nftl_cache_init
+flash_use_efex_env
+zone_param_init
+nftl_start
+nftl_add
+fdt_set_all_pin
+build_nand_partition
+nftl_initialize
+nand_info_init_v1
+hal_switch_device
+mp_build_phy_partition
+hal_request_layer
+launch_build_phy_partition
+build_phy_partition
+nand_secure_storage_write_init
+before_update_nctri_interface
+is_nand_secure_storage_block
+nand_get_temp_buf
+init_nrc
+update_other_nctri_interface
+nand_secure_storage_read
+nand_secure_storage_write
+nand_secure_storage_check
+sunxi_flash_upload_boot0
+sunxi_flash_get_boot0_size
+sunxi_nand_emmc_flash_update_boot0
+sunxi_flash_update_fdt
+sunxi_deal_hdcp_key
+sunxi_efuse_write
+sunxi_efuse_read
+update_fdt_para_for_kernel
+__sunxi_burn_key
+__sunxi_read_key_by_name
+nand_info_init
+cpu_secondary_init_r
+disp_get_layer
+disp_get_layer_1
+tv_probe
+tv_get_mode
+tv_set_mode
+tv_get_video_timing_info
+tv_enable
+tv_disable
+tv_suspend
+tv_resume
+tv_mode_support
+drv_lcd_open_callback
+drv_disp_init
+drv_disp_exit
+disp_ioctl
+bootcmd=nand read 50000000 boot;boota 50000000
+bootdelay=1
+baudrate=115200
+bootdelay=3
+bootcmd=run setargs_nand boot_normal
+console=ttyS0,115200
+nand_root=/dev/nandd
+mmc_root=/dev/mmcblk0p7
+init=/init
+loglevel=8
+setargs_nand=setenv bootargs console=${console} root=${nand_root}init=${init} loglevel=${loglevel} partitions=${partitions}
+setargs_mmc=setenv bootargs console=${console} root=${mmc_root}init=${init} loglevel=${loglevel} partitions=${partitions}
+boot_normal=sunxi_flash read 4007f800 boot;boota 4007f800
+boot_recovery=sunxi_flash read 4007f800 recovery;boota 4007f800
+boot_fastboot=fastboot
+ERROR: %s - start address is not aligned - 0x%08x
+ERROR: %s - stop address is not aligned - 0x%08x
+axp_probe_power_supply_condition error
+axp_probe error
+PMU: cpux %d Mhz,AXI=%d Mhz
+PLL6=%d Mhz,AHB1=%d Mhz, APB1=%dMhz MBus=%dMhz
+secure enable bit: %d
+secure mode: with secureos
+secure mode: no secureos
+normal mode: with secure monitor
+burn_secure_mode
+version: %s
+set next mode %d
+set next system normal
+power off
+set next system status
+sunxi_board_close_source
+reset cpu
+Using machid 0x%lx from environment
+bootargs
+FDT creation failed! hanging...
+## WARNING: fixup memory failed!
+Resetting CPU ...
+pc : [<%08lx>]
+   lr : [<%08lx>]
+sp : %08lx  ip : %08lx
+ fp : %08lx
+r10: %08lx  r9 : %08lx
+ r8 : %08lx
+r7 : %08lx  r6 : %08lx
+ r5 : %08lx  r4 : %08lx
+r3 : %08lx  r2 : %08lx
+ r1 : %08lx  r0 : %08lx
+Flags: %c%c%c%c
+  IRQs %s  FIQs %s  Mode %s%s
+undefined instruction
+software interrupt
+prefetch abort
+data abort
+fast interrupt request
+resetting ...
+WARNING: Caches not enabled
+this memory range for noncachable is invalid
+fb lock for sprite cartoon fail
+sunxi cartoon error: invalid screen width or height
+screen_width = %d
+screen_height = %d
+bar x1: %d y1: %d
+bar x2: %d y2: %d
+this is for test
+sprite cartoon create fail
+screen_char
+show default screen chars
+sprite cartoon ui: create progressbar failed
+sprite_cartoon ui progressbar: invalid progressbar rate
+sprite_cartoon ui progressbar: invalid progressbar pointer
+boot ui char: not enough space to printf
+ui_char_info.word_size is %d
+boot_ui_char: open font failed
+font24.sft
+sunxi_flash
+sunxi uichar error: unable to malloc memory for sft
+Error in allocating memory
+sunxi ui_char info error : unable to open font file %s
+Error in initialising face
+Fail in destroying face. Because face is invalid
+Fail in setting pixel size %x. Because face is invalid
+[%s] %d buf_size is %d
+Error in setting pixel size. can't allocate memory
+cur_pixel_size %d pixel_size %d
+Fail in setting pixel size. the pixel size %u is not supported by the sft file.
+Fail in getting glyph of unicode %x. Because face is invalid
+Fail in getting glyph of unicode %x. Because pixel size is NOT valid.
+Error. Inlegal pixel mode %u
+current bitmap buffer size is %u and new bitmap size is %u.
+pitch abs is %u and glyph rows is %u.
+Error in getting glyph of unicode %x. can't allocate memory
+Fail in getting x advance of unicode %x. Because face is invalid
+set axp gpio failed
+FDT ERROR:%s:get property handle %s error:%s
+FDT ERROR:%s:get property by handle error
+FDT ERROR:%s:get path by nodeoffset error
+allwinner,pins
+allwinner,pname
+allwinner,function
+FDT ERROR:get function err returned %s
+allwinner,muxsel
+FDT ERROR:get muxsel err returned %s
+error:get drive err returned %s
+allwinner,drive
+FDT ERROR:get drive err returned %s
+allwinner,pull
+FDT ERROR:get pull err returned %s
+FDT ERROR:format gpio %s
+FDT ERROR: muxsel not configed
+FDT ERROR:%s:[%s]-->%s
+FDT ERROR:%s:fdt bad nodeoffset %d
+main_name is invalid 
+err: gpio count < =0 ,gpio_count is: %d 
+script parser fetch err. 
+read flash error
+softw411
+vbus not exist
+vbus exist
+no battery, limit to dc
+normal dc exist, limit to dc
+vbus dc exist, limit to dc
+vbus pc exist, limit to pc
+only battery exist, limit to dc
+sunxi_bmp_charger_display
+bat\battery_charge.bmp
+sunxi_bmp_logo_display
+bootlogo.bmp
+pre sys mode
+pre charge mode
+pre fastboot mode
+charger0
+power_start
+pmu_bat_unused
+pmu_dc_mode_used
+PowerBus = %d( %d:vBus %d:acBus other: not exist)
+dc in, will enter normal boot whitout charge mode
+dc off, will show car_poweroff logo for 3 seconds, and then shundown 
+bat\car_poweroff.bmp
+no battery exist
+pre system is charge mode,but without dc or ac, should be ShowDown
+Battery Voltage=%d, Ratio=%d
+pmu_safe_vol
+key trigger
+power trigger
+battery ratio is low without  dc or ac, should be ShowDown
+bat\low_pwr.bmp
+battery low power and vol with dc or ac, should charge longer
+bat\bempty.bmp
+fel key configed
+fel_key_max
+%s:get fel_key_max error: %s
+fel_key_min
+%s:get fel_key_min error: %s
+fel key detected
+fel key value %d is not in the range from %d to %d
+the efuse item name is empty
+try to read %s
+buffer addr=0x%x
+read efuse key [%s] failed
+read efuse key [%s] successed
+burn_key
+out of usb burn from boot: not boot mode
+out of usb burn from boot: without usb
+out of usb burn from boot: not enough energy
+sunxi secure storage is not supported
+private partition is not exist
+cant read private part
+key_burned
+key_burned_flag
+sunxi secure storage has no flag
+do not find key burned flag
+efuse_read
+read efuse key
+usage: efuse_read efusename
+/soc/serial_feature
+sunxi_serial: serial_feature is not exist
+sn_filename
+sunxi_serial: sn_filename is not exist
+load file(%s) error 
+%04x%08x%08x
+specialstr
+serial is: %s
+sunxi_serial
+error:set variable [sunxi_serial] fail
+not support enable INT with %d, %d
+not support set INT mode with %d, %d
+not support clean int pending with %d, %d
+/soc/box_standby_led
+box_standby_led no exist
+set box_stanby led
+[box_standby_led] %s gpio_request_early failed
+wakeup_src%d
+/soc/box_start_os0
+not support this wakeup_src:%s
+mul_set must to be 6
+[boot_init_gpio] %s gpio_request_early failed
+init %s:P%c%d
+[box standby] not used
+[box standby] read rtc = 0x%x
+start_type
+[box standby] get start_type failed
+irkey_used
+[box standby] get irkey_used failed
+pmukey_used
+[box standby] get pmukey_used failed
+[box standby] start_type = 0x%x
+no wakeup source,neet to shutdown
+waiting ir or power key wakeup
+[box standby] to kernel
+disp_rsl.fex
+tv_vdid.fex
+disp_para_zone
+fetch script data boot_disp.%s fail
+boot_disp.%s=%d
+Reserve0
+last television vendor id: 0x%08x
+sunxi display error: unable to malloc memory for layer
+boot_disp
+output_full
+fetch script data boot_disp.output_full fail
+screen_id =%d, screen_width =%d, screen_height =%d
+frame buffer address %x
+display resolution %d, type %d
+cvbs_channel
+hdmi_channel
+cvbs_mode
+hdmi_mode
+fdt could not find path 'boot_disp'
+fdt get prop '%s' failed
+could not get output resolution for '%s'
+display output attr: type %d, used %d, channel %d, mode %d
+auto_hpd
+hdmi_mode_check
+auto hpd result: hdmi_connect=%d, cvbs_connect=%d!
+auto hpd disable, use default output_type=%d
+read hdmi edid failed
+current vendor id=0x%08x
+vendor:0x%x, saved_vendor:0x%x
+not support mode[%d], find mode[%d] in HDMI_MODES
+not find suitable mode in HDMI_MODES either, use mode[%d]
+lcd_channel
+check what the output_type=%d
+disp%d device type(%d) enable
+init_disp
+%s: cv=%p, rects=%p
+%s: fb=%p, locked=%d
+malloc for canvas failed !
+malloc for buf_list failed !
+ARGB8888
+no support this bpp=%d
+fb_id=%d, size=%d, gd->ram_size=%ld, SUNXI_DISPLAY_FRAME_BUFFER_SIZE=%d
+SUNXI_DISPLAY_FRAME_BUFFER_ADDR=0x%x
+malloc buf_addr failed ! alloc size %d
+bad fb_cfg[w=%d,h=%d,bpp=%d,format=%d]
+somebody locked the fb%d
+%s: bad fb_id=%d
+no one locked the fb%d
+%s: fb_id[%d,%d], locked=%d
+boot_fb%d
+%p,%x,%x,%x,%x,%x,%x,%x,%x
+edid all null
+edid checksum err
+different vendor[current <-> saved]
+[%x <-> %x]
+same vendor
+fetch script data disp.%s fail. using defval=%d
+fdt_setprop_u32 %s.%s(0x%x) code:%s
+fdt_setprop_string %s.%s(%s). ret-code:%s
+hdmi hpd out, force open?
+switch device failed: sel=%d, type=%d, mode=%d
+this device can not be bounded to fb(%d)
+ERR: %s the fb_dev->screen_id[] is overflowed
+dev%d_output_type
+dev%d_screen_id
+dev%d_do_hpd
+get format[%x] for type[%d]
+dev%d_output_mode
+no found any device of disp. num=%d
+main-hpd:count=%d,sel=%d,type=%d
+ext-hpd:count=%d,sel=%d,type=%d
+def_output_dev
+hpd_dev_num=%d, id of def_output_dev is %d
+fb%d_format
+fb%d_width
+fb%d_height
+%s: get fb%d dev fail
+%s: malloc for private_data failed.
+%s: no support the bpp[%d]
+%s: fb_id=%d, handle=%p, get_fb_dev=%p
+check cpu power status
+cpu2 has poweroff
+cpu1 has poweroff
+third entry
+ready to work
+bmp compress_buf empty,quit
+bmp lzma decode err
+cpu %d enter wfi mode
+secondary entry
+no pmu exist
+SUNXI_STATE_ANDROID_CHARGE
+SUNXI_STATE_SHUTDOWN_DIRECTLY
+STATE_SHUTDOWN_DIRECTLY
+STATE_SHUTDOWN_CHARGE
+STATE_ANDROID_CHARGE
+STATE_NORMAL_BOOT
+boot logo display ok
+next work %d
+SUNXI_UPDATE_NEXT_ACTION_REBOOT
+SUNXI_UPDATE_NEXT_ACTION_SHUTDOWN
+SUNXI_UPDATE_NEXT_ACTION_REUPDATE
+SUNXI_UPDATE_NEXT_ACTION_NULL
+--------fastboot partitions--------
+mbr not exist
+-total partitions:%d-
+%-12s  %-12s  %-12s
+%-12s: %-12x  %-12x
+mmcblk0p2
+mmcblk0p1
+mmcblk0p%d
+partition_sets is too long, please reduces partition name
+partitions
+recovery_para
+[recovery] no use
+recovery_key
+[box recovery] find the key
+no option for one key recovery's mode (%d)
+bootdelay
+base bootcmd=%s
+setargs_nand
+setargs_mmc
+bootcmd set setargs_mmc
+setargs_nor
+bootcmd set setargs_nand
+[box recovery] set to one key usb recovery
+[box recovery] set to one key sprite recovery
+usb-recovery
+[ir recovery] set to ir boot recovery
+boot-recovery
+PMU : ready to enter fastboot mode
+PMU : ready to enter recovery mode
+no misc partition is found
+misc partition found
+find efex cmd
+boot-resignature
+error: find boot-resignature cmd,but this cmd not implement
+sysrecovery
+recovery detected, will sprite recovery
+sprite_recovery
+Recovery detected, will boot recovery
+Fastboot detected, will boot fastboot
+boot_fastboot
+Recovery detected, will usb recovery
+debug_mode detected ,will enter debug_mode
+to be run cmd=%s
+disable nand error: %s
+can't find valid mmc %d
+dragonboard_test
+update dtb dram start
+## error: %s : %s
+dram_clk
+dram_type
+dram_odt_en
+dram_para1
+dram_para2
+dram_mr0
+dram_mr1
+dram_mr2
+dram_mr3
+dram_tpr0
+dram_tpr1
+dram_tpr2
+dram_tpr3
+dram_tpr4
+dram_tpr5
+dram_tpr6
+dram_tpr7
+dram_tpr8
+dram_tpr9
+dram_tpr10
+dram_tpr11
+dram_tpr12
+dram_tpr13
+update dtb dram  end
+platform
+no misc partition
+error: read misc partition
+begin to update boot0 atfer ota or programmer
+update boot0 %s
+programmer
+not suppert programmer
+begin to update gpt
+update gpt %s
+boot_init_gpio
+boot_init_gpio_used
+boot0 probe pmu_type = 0x%x
+probe axp806 failed
+PMU: AXP806 found
+sun50iw2p1
+- No additional help available.
+%-*s- %s
+Unknown command '%s' - try 'help' without arguments for list of all known commands
+Unknown command '%s' - try 'help'
+'bootd' recursion detected
+Command '%s' failed: Error %d
+%s for %08lx ... %08lx ==> 
+CRC32 for %08lx ... %08lx ==> %08lx
+syntax error
+ ** Abort
+## Error: "%s" not defined
+ERROR : memory not allocated
+ERROR: There is a global environment variable with the same name.
+%s: readonly variable
+HUSH_NO_EVAL
+Unknown command '%s' - try 'help' or use 'run' command
+exit not allowed from main input shell.
+<INTERRUPT>
+HUSH_VERSION
+print local hushshell variables
+    - print values of all hushshell variables
+showvar name ...
+    - print value of hushshell variable 'name'
+** Too many args (max. %d) **
+## Command too long!
+bootsecure
+## Error: Secure boot command not specified
+## Error: "%s" returned (code %d)
+xyzModem - %s mode, %d(SOH)/%d(STX)/%d(CAN) packets, %d retries
+Unknown error
+Block sequence error
+CRC/checksum error
+Invalid framing
+Cancelled
+End of file
+Timed out
+Sorry, zModem not available yet
+Can't access file
+Hit any key to stop autoboot: %2d 
+inter uboot shell
+load-environment
+loadaddr
+try to burn key
+hdmi_hdcp_enable
+hdcp is closed by sys config.
+sunxi init secure storage failed
+probe hdcp key failed
+ssk encrypt failed
+push hdcp key failed
+load hdcpkey success.
+error:p_spin_lock_uart is NULL: %s %d
+error:p_spin_lock_heap is NULL: %s %d
+power on cpu1
+power on cpu2
+Relocation Offset is: %08lx
+fdt addr: 0x%lx
+gd->fdt_size: 0x%lx
+uboot commit : %s 
+fdt header check error
+pmbus:   %s
+baudrate
+## Starting application at 0x%08lX ...
+## Application terminated, rc = 0x%lX
+Perform RESET of the CPU
+start application at address 'addr'
+addr [arg ...]
+    - start application at address 'addr'
+      passing 'arg' as arguments
+Trying to execute a command out of order
+autostart
+Automatic boot of image at addr 0x%08lX ...
+boot default, i.e., run 'bootcmd'
+boot application image from memory
+Ramdisk image is corrupt or invalid
+fdt_high
+0xffffffff
+## Booting kernel from Legacy Image at %08lx ...
+Bad Magic Number
+Bad Header Checksum
+   Verifying Checksum ... 
+Bad Data CRC
+Unsupported Architecture 0x%x
+Wrong Image Type for %s command
+## Booting Android Image at 0x%08lx ...
+Wrong Image Format for %s command
+ERROR: can't get kernel image!
+ERROR: unknown image format type!
+Could not find kernel entry point!
+   XIP %s ... 
+   Loading %s ... 
+   Uncompressing %s ... 
+GUNZIP: uncompress, out-of-mem or overwrite error - must RESET board to recover
+LZMA: uncompress or overwrite error %d - must RESET board to recover
+Unimplemented compression type %d
+WARNING: legacy format multi component image overwritten
+ERROR: new format image overwritten - must RESET the board to recover
+initrd_start
+initrd_end
+ERROR: booting os '%s' (%d) is not supported
+subcommand not supported
+## Transferring control to RTEMS (at address %08lx) ...
+confaddr
+## Transferring control to Plan 9 (at address %08lx) ...
+filesize
+## Transferring control to NetBSD stage-2 loader (at address %08lx) ...
+## ERROR: %s : %s
+## Starting vxWorks at 0x%08lx, device tree at 0x%08lx ...
+## vxWorks terminated
+alias for 'help'
+print command description/usage
+- print brief description of all commands
+help command ...
+- print detailed usage of 'command'
+arm-linux-gnueabi-gcc (crosstool-NG linaro-1.13.1-2012.02-20120222 - Linaro GCC 2012.02) 4.6.3 20120201 (prerelease)
+GNU ld (crosstool-NG linaro-1.13.1-2012.02-20120222 - Linaro GCC 2012.02) 2.22
+print monitor, compiler and linker version
+(fake run for tracing)
+prepare for kernel
+Starting kernel ...%s
+fdt header check error befor boot
+run setargs_mmc boot_normal
+run setargs_nand boot_normal
+only in boot normal mode, pass charger para to kernel
+ androidboot.mode=charger
+androidboot.serialno
+ androidboot.serialno=%s
+ boot_type=%d
+ androidboot.hardware=%s
+boota: bad boot image magic, maybe not a boot.img?
+total_len=%d
+AW_CERT!
+No cert image embeded, image %s
+boota: verify the %s failed
+ready to boot
+Boot linux failed, control return to monitor
+boota   - boot android bootimg from memory
+    - boot application image stored in memory
+'addr' should be the address of boot image which is kernel+ramdisk.img
+cant find part named %s
+read partition: boot or recovery
+read all error: flash start block =%x, dest buffer addr=%lx
+ANDROID!
+try to read partition(%s) all
+sunxi flash read :offset %x, %d bytes %s
+write uboot nand emmc
+write boot0 nand
+write boot0 emmc
+sunxi flash write :offset %x, %d bytes %s
+log_read
+read logical
+sunxi flash log_read :offset %x, %d sectors %s
+phy_read
+read physical
+sunxi flash phy_read :offset %x, %d sectors %s
+sunxi_flash sub-system
+read command parmeters : 
+parmeters 0 : addr to load(hex only)
+parmeters 1 : the name of the part to be load or the flash offset
+[parmeters 2] : the number of bytes to be load(hex only)
+if [parmeters 2] not exist, the number of bytes to be load is the size of the part indecated on partemeter 1
+write command parmeters : 
+parmeters 0 : addr to save(hex only)
+parmeters 1 : the name of the part to be write or the flash offset
+[parmeters 2] : the number of bytes to be write(hex only)
+if [parmeters 2] not exist, the number of bytes to be write is the size of the part indecated on partemeter 1
+run usb efex_test
+sunxi usb test: invalid usb device
+run usb mass
+run usb fastboot
+work mode=0x%x
+run usb efex
+run card sprite
+run usb debug
+run sprite recovery
+efex_test
+do a usb efex test
+mass_test
+do a usb mass test
+fastboot_test
+do a sprite test
+sprite_test
+this is timer test
+delay 1000ms
+delay test end
+can not test timer 1 now
+can not test timer 0 now
+timer_test1
+do a timer and int test
+[delay time]
+timer_test
+delay_test
+do a delay test
+## jump to efex ...
+run to efex
+no parameters
+shutdown
+shutdown the system
+power off the power supply
+sysconf(_SC_PAGE_SIZE) not supported; using pagesize of 8192
+Usage: %s [-p physaddrbase] <mem>[B|K|M|G] [loops]
+memtester version 4.2.1 (%d-bit)
+Copyright (C) 2010 Charles Cazabon.
+Licensed under the GNU General Public License version 2 (only).
+pagesizemask is 0x%x
+need memory argument, in MB
+This system can only address %d MB.
+bytes %d < pagesize %d -- memory argument too large?
+want %uMB (%u bytes)
+got  %lluMB (%llu bytes), start addr: 0x%lx
+Loop %lu
+  %-20s: 
+Stuck Address
+memtester
+memtester size[M] loop
+Random Value
+Compare XOR
+Compare SUB
+Compare MUL
+Compare DIV
+Compare OR
+Compare AND
+Sequential Increment
+Solid Bits
+Block Sequential
+Checkerboard
+Bit Spread
+Bit Flip
+Walking Ones
+Walking Zeroes
+sunxi bmp info error : unable to open bmp file %s
+this is not a bmp picture
+Image size    : %d x %d
+Bits per pixel: %d
+[boot disp] can not find the partition %s
+sunxi bmp info error : unable to open logo file %s
+cv=%p, base= %p
+no support %dbit bmp picture on %dbit fb
+no support big size bmp[%dx%d] on fb[%dx%d]
+memset full fb
+memset top fb
+memset bottom fb
+no support bmp picture without bpix 24 or 32
+sunxi bmp display error : set frame buffer error
+advert.crc
+advert-group
+advert magic not equal,%s
+advert length=%d to big or to short
+err: sum=%x; src_sum=%x
+advert.bmp
+bmp_name=%s
+show bmp on fb failed !
+show default logo
+sunxi_bmp_show
+manipulate BMP image data
+sunxi_bmp_display addr [de addr]
+parameters 1 : the address where the bmp stored
+parameters 2 : option para, the address where the bmp display
+sunxi_bmp_info
+only one para : the address where the bmp stored
+%s secure storage init err
+private data %s is not exist
+private data:
+erase secure storage failed
+erase key_burned_flag failed
+out of usb burn from boot without usb
+usb burn fail: not support burn private data
+%s usb init fail
+usb prepare ok
+usb sof ok
+usb probe ok
+usb setup ok
+overtime
+%s usb : no usb exist
+%s usb : have no handshake
+exit usb burn from boot
+read data from secure storageerase flag in secure storage
+pst read|erase [name]
+pst read,  then dump all data
+pst read name,  then dump the dedicate data
+pst erase,  then erase all secure storage data
+pst erase key_burned_flag,  then erase the dedicate data
+read data from private data
+pread [name]NULL
+do a burn from boot
+pburn [mode]NULL
+.callbacks:callbacks,.flags:flags,baudrate:baudrate,bootfile:bootfile,loadaddr:loadaddr,stdin:console,stdout:console,stderr:console,
+.callbacks
+serial#:so,
+## Warning: Unknown environment variable type '%c'
+## Warning: Unknown environment variable access method '%c'
+Warning: Non-standard access flags. (0x%x)
+## Error: flags type check failure for "%s" <= "%s" (type: %c)
+## Error: Can't delete "%s"
+## Error: Can't overwrite "%s"
+oldval: %s  defval: %s
+## Error: Can't create "%s"
+ERROR: Environment import failed: errno = %d
+at %s:%d/%s()
+common/env_sunxi_flash.c
+fail to find part named %s
+saveenv storage_type = %d
+## No elf image at address 0x%08lx
+## Not a 32-bit elf image at address 0x%08lx
+## Ethernet MAC address not copied to NV RAM
+bootaddr
+eth(0,0)
+bootfile
+%s:file 
+serverip
+hostname
+## Not an ELF image, assuming binary
+## Using bootline (@ 0x%lx): %s
+## Starting vxWorks at 0x%08lx ...
+## Starting application at 0x%08lx ...
+## Application terminated, rc = 0x%lx
+Boot vxWorks from an ELF image
+ [address] - load address of vxWorks ELF image.
+Boot from an ELF image in memory
+[-p|-s] [address]
+- load ELF image at [address] via program headers (-p)
+  or via section headers (-s)
+exit script
+usage: fatinfo <interface> [<dev[:part]>]
+** Unable to use %s %d:%d for fatinfo **
+no the part:%s
+do_aw_fat_fsload: unable to open file %s
+print information about filesystem
+<interface> [<dev[:part]>]
+    - print information about filesystem from 'dev' on 'interface'
+list files in a directory (default /)
+<interface> [<dev[:part]>] [directory]
+    - list files from 'dev' on 'interface' in a 'directory'
+aw_fatload
+load binary file from a dos filesystem
+<interface> [<dev[:part]>]  <addr> <filename> [bytes [pos]]
+    - Load binary file 'filename' from 'dev' on 'interface'
+      to address 'addr' from dos filesystem.
+      'pos' gives the file position to start loading from.
+      If 'pos' is omitted, 0 is used. 'pos' requires 'bytes'.
+      'bytes' gives the size to load. If 'bytes' is 0 or omitted,
+      the load stops on end of file.
+      If either 'pos' or 'bytes' are not aligned to
+      ARCH_DMA_MINALIGN then a misaligned buffer warning will
+      be printed and performance will suffer for the load.
+#address-cells
+#size-cells
+%s: %s: %s
+fdt_initrd: %s
+linux,initrd-start
+WARNING: could not set linux,initrd-start %s.
+linux,initrd-end
+WARNING: could not set linux,initrd-end %s.
+fdt_chosen: %s
+WARNING: could not set bootargs %s.
+Unable to update property %s:%s, err=%s
+%s: num banks %d exceeds hardcoded limit %d. Recompile with higher MEMORY_BANKS_MAX?
+device_type
+WARNING: could not set %s %s.
+/aliases
+usbethaddr
+ethernet%d
+eth%daddr
+local-mac-address
+%s: Bad cell count for %s
+linux,phandle
+Can't set phandle %u: %s
+disabled
+Invalid fdt status: %x
+Warning: device tree alias '%s' points to invalid node %s.
+Warning: device tree node '%s' has no address.
+Warning: U-Boot configured device %s at address %llx,
+ but the device tree has it address %llx.
+add new node ok
+fdt_path_offset returned %s
+set prop  vaule test
+hello world
+prop_u32
+prop_u64
+prop_str
+prop_arr
+get property %s ok, value is 0x%x
+get property %s ok, value is 0x%llx
+get property %s ok, value is %s
+get property %s ok, values is <
+The address of the fdt is invalid (NULL).
+libfdt fdt_check_header(): %s
+ - too old, fdt %d < %d
+ - too new, fdt %d > %d
+* 0x%p [0x%08x]
+0x%08x%s
+fdt write result %d
+/* NULL pointer error */
+The address of the fdt is %#08lx
+New length %d < existing length %d, ignoring.
+libfdt fdt_open_into(): %s
+No FDT memory address configured. Please configure
+the FDT address via "fdt addr <address>" command.
+Aborting!
+New length 0x%X < existing length 0x%X, aborting.
+libfdt fdt_path_offset() returned %s
+libfdt fdt_add_subnode(): %s
+Sorry, I could not convert "%s"
+Unexpected character '%c'
+libfdt fdt_setprop(): %s
+libfdt node not found
+error: unprintable value
+libfdt fdt_getprop(): %s
+Nested too deep, aborting.
+%s/* NOP */
+Unknown tag 0x%08X
+libfdt fdt_delprop():  %s
+libfdt fdt_del_node():  %s
+totalsize:
+0x%x (%d)
+off_dt_struct:
+off_dt_strings:
+off_mem_rsvmap:
+version:
+last_comp_version:
+boot_cpuid_phys:
+size_dt_strings:
+size_dt_struct:
+number mem_rsv:
+   start
+    size
+------------------------------------------------
+libfdt fdt_get_mem_rsv():  %s
+%08x%08x
+%08x%08x
+libfdt fdt_add_mem_rsv():  %s
+libfdt fdt_del_mem_rsv():  %s
+fdt_test
+fdt function test just in root directly
+fdt_test node
+flattened device tree utility commands
+memcpy test start
+memcpy test end
+memcpy_test
+do a memcpy test
+print information about IRQs
+enable or disable interrupts
+[on, off]
+Base Address: 0x%08lx
+double word
+halfword
+%s at 0x%08lx (%#0*lx) != %s at 0x%08lx (%#0*lx)
+Total of %ld %s(s) were the same
+Zero length ???
+infinite loop on address range
+[.b, .w, .l] address number_of_objects
+print or set address offset
+    - print address offset for memory commands
+base off
+    - set address offset for memory commands to 'off'
+checksum calculation
+address count [addr]
+    - compute CRC32 checksum [save at addr]
+memory compare
+[.b, .w, .l] addr1 addr2 count
+memory copy
+[.b, .w, .l] source target count
+memory write (fill)
+[.b, .w, .l] address value [count]
+memory modify (constant address)
+[.b, .w, .l] address
+memory modify (auto-incrementing address)
+memory display
+[.b, .w, .l] address [# of objects]
+No MMC device available
+no mmc device at slot %x
+Device: %s
+Manufacturer ID: %x
+Name: %c%c%c%c%c 
+Tran Speed: %d
+Rd Block Len: %d
+%s version %d.%d
+High Capacity: %s
+Capacity: 
+Bus Width: %d-bit
+#part_num shouldn't be larger than %d
+mmc%d is current device
+mmc%d(part %d) is current device
+get mmc type error!
+MMC erase: dev # %d, block # %d, count %d ... 
+Error: card is write protected!
+%d blocks erased: %s
+MMC write: dev # %d, block # %d, count %d ... 
+%d blocks written: %s
+MMC read: dev # %d, block # %d, count %d ... 
+%d blocks read: %s
+OK, force rescan
+set dsr %s
+card0 has inited
+fail to find card0
+card0 init failed
+sunxi_card0_probe
+probe sunxi card0 device
+display MMC info
+- display info of the current MMC device
+MMC sub system
+info - display info of the current MMC device
+mmc read addr blk# cnt
+mmc write addr blk# cnt
+mmc erase blk# cnt
+mmc rescan
+mmc part - lists available partition on current mmc device
+mmc dev [dev] [part] - show or set current mmc device [partition]
+mmc list - lists available devices
+mmc setdsr <value> - set DSR register value
+do nothing, successfully
+do nothing, unsuccessfully
+minimal test like /bin/sh
+[args..]
+sunxi_verify_signature err: calc hash failed
+show hash of file
+find cert name %s
+%s error: cant verify the content certif
+show hash in certif
+hash compare is not correct
+>>>>>>>hash of file<<<<<<<<<<
+>>>>>>>hash in certif<<<<<<<<<<
+cant find a certif belong to %s
+fail to create root certif
+find %s key stored in root certif
+%s key n is incompatible
+>>>>>>>key in rootcertif<<<<<<<<<<
+>>>>>>>key in certif<<<<<<<<<<
+%s key e is incompatible
+check rootpk[%s] in rootcert fail
+the input hash is not equal to 32 bytes
+fail to create a certif
+fail to probe the public key
+sunxi_sha_calc: calc  pubkey sha256 with hardware err
+fail to check the public key hash against efuse
+show hash of publickey in certif
+%s error: cant get the content certif publickey hash
+>>>>>>>hash of certif<<<<<<<<<<
+>>>>>>>hash of user input<<<<<<<<<<
+the hash of input data and toc are equal
+test the rotpk key
+usage: rotpk_test
+usb fastboot fail: not support sunxi fastboot
+fastboot - enter USB Fastboot protocol
+## Error: cannot export environment
+Environment size: %d/%ld bytes
+## Warning: defaulting to text format
+## Error: external checksum format must pass size
+## Info: input data size = %zu = 0x%zX
+## Error: bad CRC, import failed
+common/cmd_nvedit.c
+## %s: only one of "-b", "-c" or "-t" allowed
+## Warning: Input data exceeds %d bytes - truncated
+## Resetting to default environment
+Saving Environment to %s...
+## Error: illegal character '='in variable name "%s"
+## Can't malloc %d bytes
+## Error inserting "%s" variable, errno=%d
+ERROR: Cannot export environment: errno = %d
+at %s:%d/%s()
+env_buf [%d bytes] too small for value of "%s"
+run commands in an environment variable
+var [...]
+    - run the commands in the environment variable(s) 'var'
+set environment variables
+[-f] name value ...
+    - [forcibly] set environment variable 'name' to 'value ...'
+setenv [-f] name
+    - [forcibly] delete environment variable 'name'
+printenv
+print environment variables
+    - print [all] values of all environment variables
+printenv name ...
+    - print value of environment variable 'name'
+environment handling commands
+save environment variables to persistent storage
+*** Warning - %s, using default environment
+Using default environment
+common/env_common.c
+!bad CRC
+ERROR: Cannot import environment: errno = %d
+at %s:%d/%s()
+!import failed
+[%7u.%03u]
+[%7u.%03u]%s
+No input devices available!
+No output devices available!
+No error devices available!
+bootm_low
+bootm_size
+bootm_mapsize
+%d Bytes = 
+Unknown OS
+Unknown Architecture
+Unknown Image
+Unknown Compression
+%sImage Name:   %.*s
+%sImage Type:   
+%s %s %s (%s)
+%sData Size:    
+%sLoad Address: %08x
+%sEntry Point:  %08x
+%sContents:
+%s   Image %d: 
+%s    Offset = 0x%08lx
+## Loading init Ramdisk from Legacy Image at %08lx ...
+No Linux %s Ramdisk Image
+Wrong Ramdisk Image Format
+## Loading init Ramdisk from multi component Legacy Image at %08lx ...
+initrd_high
+ramdisk - allocation error
+   Loading Ramdisk to %08lx, end %08lx ... 
+ERROR with allocation of cmdline
+Invalid OS
+Enea OSE
+Invalid ARCH
+Intel x86
+microblaze
+MicroBlaze
+MIPS 64 Bit
+IBM S390
+SPARC 64 Bit
+blackfin
+Blackfin
+OpenRISC 1000
+aisimage
+Davinci AIS image
+Filesystem Image
+firmware
+Firmware
+Flat Device Tree
+TI Keystone SPL Image
+Kernel Image
+kernel_noload
+Kernel Image (no loading done)
+kwbimage
+Kirkwood Boot Image
+imximage
+Freescale i.MX Boot Image
+Invalid Image
+Multi-File Image
+omapimage
+TI OMAP SPL With GP CH
+pblimage
+Freescale PBL Boot Image
+RAMDisk Image
+standalone
+Standalone Program
+ublimage
+Davinci UBL image
+mxsimage
+Freescale MXS Boot Image
+atmelimage
+ATMEL ROM-Boot Image
+uncompressed
+bzip2 compressed
+gzip compressed
+lzma compressed
+lzo compressed
+In %s : malloc fail
+Android's image name: %s
+Kernel load addr 0x%08x size %u KiB
+Kernel command line: %s, use it to update bootargs
+RAM disk load addr 0x%08x size %u KiB
+ - must RESET the board to recover.
+   reserving fdt memory region: addr=%llx size=%llx
+image is not a fdt
+Failed using fdt_high value for Device Tree
+device tree - allocation error
+   Using Device Tree in place at %p, end %p
+   Loading Device Tree to %p, end %p ... 
+fdt move failed
+## Flattened Device Tree from Legacy Image at %08lx
+fdt header checksum invalid
+fdt checksum invalid
+uImage is not a fdt
+uImage is compressed
+uImage data is not a fdt
+fdt overwritten
+## Flattened Device Tree blob at %08lx
+ERROR: Did not find a cmdline Flattened Device Tree
+   Booting using the fdt blob at %#08lx
+## Flattened Device Tree from multi component Image at %08lX
+   Booting using the fdt at 0x%p
+fdt size != image size
+ERROR: /chosen node create failed
+input arg error: should bigger than 0
+align arg error: align at least 4 byte.
+malloc return NULL! size = %d
+aes ssk encrypt fail
+ssk encrypt data:
+aes ssk decrypt fail
+ssk decrypt data:
+aes cbc encrypt fail
+aes cbc encrypt data:
+aes cbc decrypt fail
+aes cbc decrypt data:
+argc is %d
+smc params is error
+smc call start:fid = %lx 
+smc call end
+x0 = %lx
+x1 = %lx
+x2 = %lx
+x3 = %lx
+sunxi_aes
+do a aes test
+sunxi_aes 
+sunxi_smc
+do a smc test
+sunxi_smc fid [para1,para2]
+user_data_list
+have not data
+the part isn't exist
+Also save user data %s to secure storage
+secure storage init fail
+error: <command>
+save data to private
+error: the name (data) is null
+the data size is large then %d, cant write
+init the (user) private space
+Saving Environment to 
+real_crc32 = %08x
+orignal crc32 = %08x
+save_userdata:crc32 failed
+wrong usage format
+old_way: save_userdata key_name key_value
+new_way: save_userdata key_name key_value flash/efuse crc32
+no item need to burn efuse,this is for future
+no enough memory to malloc 
+sunxi_sprite_erase_private_key err: write flash from 0x%x, sectors 0x%x failed
+erase_private_data success
+read private data
+private maybe empty
+cann't get the boot_base from the env
+mac_addr
+update %s = %s
+check user data form private
+the user data'magic is bad
+updataed %s = %s
+not the user data to updata
+the %s part isn't exist
+erase_userdata
+check user data
+check_userdata
+save_userdata
+save user data
+<name> <data>
+loglevel
+earlyprintk
+ion_reserve
+enforcing
+initcall_debug
+<commond>
+(%d:%d) Vendor: %s Prod.: %s Rev: %s
+Model: %s Firm: %s Ser#: %s
+Vendor: %s Rev: %s Prod: %s
+device type DOC
+device type unknown
+Unhandled device type: %i
+            Type: 
+Removable 
+Hard Disk
+Optical Device
+# %02X #
+            Capacity: %ld.%ld MB = %ld.%ld GB (%ld x %ld)
+            Capacity: not available
+Partition Map for 
+ device %d  --   Partition Type: %s
+## Unknown partition table
+** Bad device specification %s %s **
+** Bad HW partition specification %s %s **
+** Bad device %s %s **
+Sandbox host
+bootdevice
+** No device specified **
+** Bad partition specification %s %s **
+** Bad device size - %s %s **
+** No partition table - %s %s **
+Whole Disk
+** Invalid partition %d **
+** No valid partitions found **
+** Invalid partition type "%.32s" (expect "U-Boot")
+** Can't read partition table on %d:%d **
+bad MBR sector signature 0x%02x%02x
+%08x-%02x
+%02x%s%s
+usbd%c%d
+docd%c%d
+Start Sector
+Num Sectors
+raw event store full
+ir_irq_service: Rx FIFO Overflow
+/soc/s_cir
+pinctrl-0
+[ir_boot_para] ir gpio failed
+Repeat last key
+NEC checksum error: received 0x%08x
+scancode key down 0x%06x
+ir boot recovery detect
+ir boot recovery not detect, code=0x%x, coded=0x%x
+ir boot recovery not detect
+ir_boot_recovery
+ir_boot_recovery_used
+ir boot recovery not used
+ir_recovery_key_code%d
+node %s get failed!
+ir_addr_code%d
+%s lcd open flow is NULL! LCD enable fail!
+fdt_path_offset %s fail
+fdt_getprop_u32 %s.%s fail
+lcd_used
+fatal err: cannot support lcd with resolution(%d*%d) larger than %d*%d, the system will shut down!
+unable to map de registers
+unable to map timing controller %d registers
+irq_of_parse_and_map irq %d fail for lcd%d
+fail to get clk for de
+fail to get clk for timing controller%d
+%s finish
+%s, display not init yet
+para err in disp_ioctl, cmd = 0x%x,screen id = %d
+cmd:0x%x,%ld,%ld
+tasklet_init, para is NULL, tasklet=0x%p, func=0x%p
+tasklet_schedule, para is NULL, tasklet=0x%p
+lcd0_suspend
+enable power %s, ret=%d
+disable power %s, ret=%d
+get mgr%d fail
+attched ok, mgr%d<-->device%d, type=%d
+attched ok, mgr%d<-->device%d, type=%d, mode=%d
+get device%d fail
+something error, can't find device(%d) for manager %d
+'tv set hpd is fail!
+get lcd%d fail
+NULL hdl!
+param is NULL!
+lcd_panel_fun[%d].cfg_close_flow is NULL
+lcd_panel_fun[%d].cfg_open_flow is NULL
+lcd_bl_en
+lcd_bl_en_power
+lcd_fix_power
+lcd_fix_power%d
+lcd_power
+lcd_power%d
+lcd_gpio_%d
+lcd_gpio_scl
+lcd_gpio_sda
+lcd_gpio_power%d
+lcd_pin_power
+lcd_pin_power%d
+lcd_bl_0_percent
+lcd_bl_100_percent
+lcd_backlight
+lcd_width
+lcd_height
+lcd_dclk_freq
+lcd_pwm_used
+lcd_pwm_ch
+lcd_pwm_freq
+lcd_pwm_pol
+lcd_hv_if
+lcd_vspw
+lcd_hspw
+lcd_lvds_if
+lcd_lvds_mode
+lcd_lvds_colordepth
+lcd_lvds_io_polarity
+lcd_cpu_if
+lcd_cpu_te
+lcd_dsi_if
+lcd_dsi_lane
+lcd_dsi_format
+lcd_dsi_eotp
+lcd_dsi_te
+lcd_edp_rate
+lcd_edp_lane
+lcd_edp_colordepth
+lcd_edp_fps
+lcd_hv_clk_phase
+lcd_hv_sync_polarity
+lcd_hv_srgb_seq
+lcd_rb_swap
+lcd_hv_syuv_seq
+lcd_hv_syuv_fdly
+lcd_gamma_en
+lcd_cmap_en
+lcd_xtal_freq
+lcd_size
+lcd_model_name
+lcd%d.lcd_pwm_freq is ZERO
+disp %d, clk: pll(%ld),clk(%ld),dclk(%ld) dsi_rate(%ld)
+     clk real:pll(%ld),clk(%ld),dclk(%ld) dsi_rate(%ld)
+fail enable lcd's clock!
+fail enable lvds's clock!
+fail enable dsi's clock0!
+dsi's clock0 is NULL!
+fail enable dsi's clock1!
+fail enable edp's clock!
+lcd_driver_name
+mgr is NULL!
+pwm device hdl is NULL
+lcd_panel_fun[%d].cfg_panel_info is NULL
+malloc memory(%d bytes) fail!
+ch[%1d] 
+lyr[%1d] 
+prem[%1s] 
+fmt[%3d] 
+fb[%4d,%4d;%4d,%4d;%4d,%4d] 
+crop[%4d,%4d,%4d,%4d] 
+frame[%4d,%4d,%4d,%4d] 
+addr[%8llx,%8llx,%8llx] 
+flags[0x%8x] trd[%1d,%1d]
+get mgr %d's priv fail!!
+fail enable mgr's clock!
+disp %d is out of range %d
+%s (%d,%d,%d) fail
+get layer(%d,%d,%d) fail
+disp %d out of range
+malloc memory fail!
+malloc memory fail! size=0x%x x %d
+malloc memory fail! size=0x%x
+mgr%d chn%d lyr%d
+pre_m[%1s] 
+alpha[%5s %3d] 
+size[%4d,%4d;%4d,%4d;%4d,%4d] 
+flag[0x%8x] 
+smart_backlight %d: %s, window<%d,%d,%d,%d>, backlight=%d, save_power=%d percent
+enhance %d: %s, %s
+enhance0
+enhance1
+enhance2
+hdmi set func null  hdl!
+video info is null
+hdmi%d's mgr is NULL
+hdmi%d is already disable
+hdmi clk init null hdl!
+hdmi_get_video_timing_info func is null
+hdmi%d is already enable
+fail enable hdmi's clock!
+hdmi_open is NULL
+hdmi or hdmip is hdl!
+hdmi init null hdl!
+hdmi_set_mode is null!
+disp %d not support HDMI output
+tv set func null  hdl!
+in  disp_set_tv_func,point  ptv = %p, point  ptvp = %p
+tv init null hdl!
+[DISP_TV] ptv | ptvp is wrong
+tv%d's mgr is NULL
+tv%d is already open
+tv_get_video_timing_info func is null
+tv_enable is NULL
+ ptv | ptvp is null
+fail to enable tv's clock
+tv request irq failed!
+tv private is null!
+tv set_enhance_mode is null!
+tv_set_mode is null!
+ptv is null.
+disp_init_tv_para is NULL
+tv set phd  null!
+tv%d is already closed
+tv_func.tv_disable is NULL
+screen %d don't support TV!
+TV get status err.
+interface
+TV get interface err.
+vdevice_get_video_timing_info func is null
+get_interface_para func is null
+%s%d's mgr is NULL
+%s%d is already closed
+pclk=%ld, cur=%ld
+%s%d is already enabled
+vdevice_set_mode is null!
+%s%d is already disabled
+vdevice_disable is NULL
+vdevice_enable is NULL
+device %d not support vdevice!
+null hdl
+malloc uscaler[%d][%d] memory fail! size=0x%x
+panel is NULL
+cant find clk info for lcd_if %d
+lcd cfg fail!
+sel %d out of range
+malloc rtmx global memory fail! size=0x%x
+malloc video overlay memory fail! size=0x%x
+malloc ui overlay memory fail! size=0x%x
+malloc blending memory fail! size=0x%x
+malloc vscaler[%d][%d] memory fail! size=0x%x
+alloc Ccsc[%d][%d] mm fail!size=0x%x
+kmalloc fail!
+malloc Ccsc[%d] mm fail! size=0x%x
+clk %d not foundis not initializd
+unsupported video mode %d when set display mode
+[HDMI]can't find vic for mode(%d)
+hdmi_used
+fetch hdmi err.
+unable to map hdmi registers
+fail to get clk for hdmi
+fail to get clk for hdmi ddc
+hdmi_io_%d
+enable hdmi clk fail
+enable hdmi ddc clk fail
+fail to enable hdmi clk
+hdmi_power
+fail to enable hdmi power %s
+hdmi_cts_compatibility
+hdmi_hpd_mask
+hdmi_cec_support
+hdmi_skip_bootedid
+can't find the video timing parameters
+un-support sample_rate,value=%d
+unkonwn video format when configure audio
+set hdmi video error!
+ unkonwn hdmi state, set to idle
+*****************is_exp*****************
+fail to enable tve%d's clk!
+pinctrl-1
+not find suitable parent rate, set max rate.
+fail to set rate(%ld) fo tve%d's pclk!
+fail to set rate(%ld) fo tve%d's clock!
+tv have no mode(%d)!
+%s, sel(%d) is out of range
+no report hpd work,you need support the switch class!
+fail to enable tve's top clk!
+fetch tv%d err.
+fail to get addr for tv%d!
+fail to get clk for tve%d's!
+dac_src%d
+dac_type%d
+tv%d have no type%d
+/dvfs_table
+[ARISC ERROR] :get [allwinner,dvfs_table] device node error
+vf_table_count
+[ARISC] :%s: support only one vf_table
+/vf_table
+[ARISC] :%s: vf table type [%d=%s]
+[ARISC ERROR] :get [%s] device node error
+lv_count
+[ARISC ERROR] :parse system config dvfs_table size fail
+lv%d_freq
+[ARISC] :%s: freq [%s-%d=%d]
+lv%d_volt
+[ARISC] :%s: volt [%s-%d=%d]
+[ARISC] :arisc initialize
+/soc/arisc_space
+[ARISC ERROR] :get [allwinner,arisc_space] device node error
+[ARISC ERROR] :get arisc_space space4 error
+[ARISC] :arisc_space space4 msgpool_dst:0x%p, msgpool_offset:0x%p, msgpool_size:0x%zx, 
+/soc/msgbox
+[ARISC ERROR] :get [allwinner,msgbox] device node error
+[ARISC ERROR] :get msgbox reg error
+[ARISC] :msgbox base:0x%p, size:0x%zx, status:%u
+/soc/hwspinlock
+[ARISC ERROR] :get [allwinner,sunxi-hwspinlock] device node error
+[ARISC ERROR] :get sunxi-hwspinlock reg error
+[ARISC] :hwspinlock base:0x%p, size:0x%zx, status:%u
+[ARISC] :arisc para ok
+[ARISC ERROR] :sunxi-arisc driver startup failed
+[ARISC] :sunxi-arisc driver startup succeeded
+clk %s wait lock timeout
+invaid pll lock mode:%u
+clk %s is already disable.
+clk set rate failed!
+%s: could not allocate factors clk
+%s: clk is null.
+%s: this is a null clk!
+%s: clk %s already initialized
+%s: %s must implement .round_rate & .recalc_rate
+%s: %s must implement .get_parent & .set_parent
+%s: invalid NULL in %s's .parent_names
+%s: multi-parent clocks must implement .get_parent
+%s: clk->enable_count = %d
+%s: clock %s is not a possible parent of clock %s
+%s: %s has NULL parent
+%s: could not allocate clk
+%s: error:child_clk: 0x%x or parent_handle:0x%x is error
+%s: error:get property by handle error
+clock-output-names
+%s: clock-output-names is null
+%s: get clk is null
+%s: error:set parent is error. ret = %d
+assigned-clock-parents
+%s: of_pll_clk_config_setup error.
+assigned-clock-rates
+%s: clk_set_rate is error. ret = %d
+%s:%d:error:get property handle %s error:%s
+%s: clk_list malloc error!
+%s:%d: error:get property by handle error
+%s: clk_list[%d]->name = %s
+%s: %d: of_pll_clk_config_setup is error.
+%s: error:fdt err returned %s
+%s: error:get property handle %s error:%s
+%s: index is error,reset it.
+%s: get clock name error.
+%s: could not allocate fixed rate clk
+cpurpll_peri0
+cpurcpus
+cpurahbs
+cpurapbs
+losc_out
+pll_periphahb0
+sdmmc0_mod
+sdmmc0_bus
+sdmmc0_rst
+sdmmc1_mod
+sdmmc1_bus
+sdmmc1_rst
+sdmmc2_mod
+sdmmc2_bus
+sdmmc2_rst
+usbohci0
+usbohci1
+usbohci2
+usbohci3
+deinterlace
+csi_misc
+hdmi_slow
+usbehci0
+usbehci1
+usbehci2
+usbehci3
+hwspinlock_rst
+hwspinlock_bus
+pll_audio
+pll_video
+pll_periph0
+pll_periph1
+pll_periph0d2
+pll_periph0x2
+pll_periph1x2
+pll_audiox8
+pll_audiox4
+pll_audiox2
+GIC parameter config error, only support %d irqs < %d(spec define)!!
+default_isr():  called from IRQ %d
+irq NO.(%d) > GIC_IRQ_NUM(%d) !!
+spurious irq !!
+SGI irq %d coming... 
+PPI irq %d coming... 
+Interrupt-Information:
+Nr(Max)  Routine   Arg
+%d(%d)  0x%08lx  0x%08lx
+gic: sec monitor mode
+gic: normal mode
+i2c: secure monitor exist
+without secure monitor
+/soc/key_detect_en
+keyen_flag
+key pressed value=0x%x
+warnning: not support,please set keyen_flag=1 in sys_config.fex
+ press a key:
+key_test
+Test the key value
+Not defined
+0%%-10%% life time used
+10%%-20%% life time used
+20%%-30%% life time used
+30%%-40%% life time used
+40%%-50%% life time used
+50%%-60%% life time used
+60%%-70%% life time used
+70%%-80%% life time used
+80%%-90%% life time used
+90%%-100%% life time used
+Exceeded its max estimated life time
+[mmc]: EOL Info(Rev blks): 
+Warning, consumed 80%% of rev blocks
+Urgent!!
+Reserved
+Not Defined or Reserved
+[mmc]: Wear out(type A): 
+[mmc]: Wear out(type B): 
+[mmc]: Runtime Bad Blk: 
+[mmc]: Factory Bad Blk: 
+[mmc]: go idle failed
+[mmc]: mmc send if cond failed
+[mmc]: send app cmd failed
+[mmc]: send cmd41 failed
+[mmc]: wait card init failed
+[mmc]: read op condition failed
+[mmc]: Status Error: 0x%08X
+[mmc]: Timeout waiting card ready
+[mmc]: Fail to switch to expected mode by SWITCH cmd
+[mmc]: Address out of range !!
+[mmc]: mmc fail to send manual stop cmd
+[mmc]: MMC Device %d not found
+[mmc]: blkcnt should not be 0
+[mmc]: Can not find mmc dev
+[mmc]: MMC: block number 0x%lx exceeds max(0x%lx)
+[mmc]: Set block len failed
+[mmc]: read block failed, %s %d
+[mmc]: mmc fail to send stop cmd
+[mmc]: block read failed, %s %d
+[mmc]: mmc send op cond failed
+[mmc]: wait for mmc init failed
+[mmc]: mmc send ext csd failed
+[mmc]: unrecognised EXT_CSD revision %d, maybe ver5.2 or later version!
+[mmc]: mmc switch failed
+[mmc]: update clock failed after send switch cmd
+[mmc]: mmc swtich status error
+[mmc]: already at DS26_SDR12 mode
+[mmc]: host not support ds
+[mmc]: mmc get ext csd failed
+[mmc]: mmc not support ds
+[mmc]: mmc change to ds failed
+[mmc]: already at HSSDR52_SDR25 mode
+[mmc]: host not support hs
+[mmc]: mmc not support hs
+[mmc]: mmc change to hs failed
+[mmc]: already at HS200_SDR104 mode
+[mmc]: host not support hs200
+[mmc]: mmc not support hs200
+[mmc]: mmc change to hs200 failed
+[mmc]: already at HS400 mode
+[mmc]: host not support hs400
+[mmc]: mmc not support hs400
+[mmc]: mmc change to hs400 failed
+[mmc]: error speed mode %d
+error bus width %d!
+[mmc]: wrong bus width(%d) for current speed mode
+[mmc]: mmc switch bus width failed
+[mmc]: switch speed mode fail
+[mmc]: switch bus width fail
+[mmc]: Put the Card in Identify Mode failed
+[mmc]: send rca failed
+[mmc]: get csd failed
+MMC: SET_DSR failed
+[mmc]: Select the card failed
+[mmc]: Invalid ext_csd revision %d
+[mmc]: %s: set capcacity error
+[mmc]: send scr failed
+[mmc]: check high speed status faild
+[mmc]: switch to high speed failed
+[mmc]: update clock failed
+[mmc]: mmc don't support HS400
+[mmc]: mmc don't support HS200
+[mmc]: mmc don't support HSDDR
+[mmc]: retry mmc switch(cmd6)
+[mmc]: send ext csd faild
+[mmc]: change speed mode failed
+[mmc]: host caps: 0x%x
+[mmc]: sd set bus width failed
+[mmc]: mmc switch bus width to ddr8 failed
+[mmc]: mmc switch bus width8 failed
+[mmc]: mmc 4 bit bus ddr!!!!!! 
+[mmc]: mmc switch bus width to ddr4 failed
+MID %02x PSN %08x
+PNM %c%c%c%c%c
+PRV %d.%d
+MID %06x PSN %04x%04x
+PNM %c%c%c%c%c%c
+[mmc]: %s
+[mmc]: %s -- 0x%02x-%02x-%02x-%02x-%02x
+[mmc]: MDT m-%d y-%d
+[mmc]: MMC v1.2
+[mmc]: MMC v1.4
+[mmc]: MMC v2.2
+[mmc]: MMC v3.0
+[mmc]: MMC v4.0
+[mmc]: MMC v4.1
+[mmc]: MMC v4.2
+[mmc]: MMC v4.3
+[mmc]: MMC v4.41
+[mmc]: MMC v4.5
+[mmc]: MMC v5.0
+[mmc]: MMC v5.1
+[mmc]: MMC v5.2 or later version
+[mmc]: Unknow MMC ver
+[mmc]: speed mode     : %s 
+[mmc]: clock          : %d Hz
+[mmc]: bus_width      : %d bit
+[mmc]: user capacity  : %lu MB
+[mmc]: boot capacity  : %lld KB
+[mmc]: rpmb capacity  : %lld KB
+[mmc]: ************SD/MMC %d init OK!!!************
+[mmc]: can not find mmc device
+[mmc]: switch bus cond failed
+[mmc]: send ext csd failed
+[mmc]: Set boot bus cond failed,now bus con is 0x%x
+[mmc]: switch boot partd failed
+[mmc]: switch boot part failed,now part conf is 0x%x
+[mmc]: mmc switch part failed
+[mmc]: switch boot part failed,now bus con is 0x%x
+Card doesn't support part_switch
+%s is deprecated! use mmc_create() instead.
+[mmc]: %s: input error
+[mmc]: %s: request memory error
+MMC: no card present
+[mmc]: Has init
+[mmc]: mmc->init error
+[mmc]: mmc go idle error
+[mmc]: media type 0x%x
+[mmc]: ************Try SD card %d************
+SD Card did not respond to voltage select!
+[mmc]: ************SD/MMC %d init error!!!************
+[mmc]: ************Try MMC card %d************
+MMC Card did not respond to voltage select!
+[mmc]: Wrong media type 0x%x
+/soc/card2_boot_para
+[mmc]: get card2_boot_para para fail --- 0
+sdc_ex_dly_used
+[mmc]: update card2_boot_para:dtb sdc_ex_dly_used, %d
+[mmc]: can't find node "%s" 
+mmc-hs400-1_8v
+[mmc]: delete mmc-hs400-1_8v from dtb
+[mmc]: no mmc-hs400-1_8v!
+[mmc]: update dtb fail, delete mmc-hs400-1_8v fail
+mmc-hs200-1_8v
+[mmc]: delete mmc-hs200-1_8v from dtb
+[mmc]: no mmc-hs200-1_8v!
+[mmc]: update dtb fail, delete mmc-hs200-1_8v fail
+mmc-ddr-1_8v
+[mmc]: delete mmc-ddr-1_8v from dtb
+[mmc]: no mmc-ddr-1_8v!
+[mmc]: update dtb fail, delete mmc-ddr-1_8v fail
+max-frequency
+[mmc]: delete max-frequency from dtb
+[mmc]: no max-frequency!
+[mmc]: update dtb fail, delete max-frequency fail
+[mmc]: can't find node "%s",will add new node
+sdc_tm4_sm0_freq0
+[mmc]: update dtb fail, sdc_tm4_sm0_freq0, %d
+sdc_tm4_sm0_freq1
+[mmc]: update dtb fail, sdc_tm4_sm0_freq1, %d
+sdc_tm4_sm1_freq0
+[mmc]: update dtb fail, sdc_tm4_sm1_freq0, %d
+sdc_tm4_sm1_freq1
+[mmc]: update dtb fail, sdc_tm4_sm1_freq1, %d
+sdc_tm4_sm2_freq0
+[mmc]: update dtb fail, sdc_tm4_sm2_freq0, %d
+sdc_tm4_sm2_freq1
+[mmc]: update dtb fail, sdc_tm4_sm2_freq1, %d
+sdc_tm4_sm3_freq0
+[mmc]: update dtb fail, sdc_tm4_sm3_freq0, %d
+sdc_tm4_sm3_freq1
+[mmc]: update dtb fail, sdc_tm4_sm3_freq1, %d
+sdc_tm4_sm4_freq0
+[mmc]: update dtb fail, sdc_tm4_sm4_freq0, %d
+sdc_tm4_sm4_freq1
+[mmc]: update dtb fail, sdc_tm4_sm4_freq1, %d
+[mmc]: hsddr %d-%d
+[mmc]: hs200 %d-%d
+[mmc]: hs400 %d-%d
+[mmc]: get max-frequency fail %d
+[mmc]: get max-frequency ok %d Hz
+[mmc]: %d %d %d: %d %d %d
+[mmc]: update dtb fail, max-frequency, %d
+[mmc]: update max-frequency compare err!
+[mmc]: fdt err returned %s
+[mmc]: %s: mmc int fail
+[mmc]: %s: tuning procedure is executed!
+[mmc]: %s: start tuning ...
+[mmc]: %s: init tuning failed
+[mmc]: %s: write pattern failed
+[mmc]: %s: bus tuning fail, err %d
+[mmc]: %s: switch to best speed mode fail
+[mmc]: erase_grp_size      : 0x%xWrBlk*0x%x=0x%x Byte
+[mmc]: secure_feature      : 0x%x
+[mmc]: secure_removal_type : 0x%x
+[mmc]: ************SD/MMC %d init error!************
+[mmc]: init tuning failed
+[mmc]: Write pattern failed
+[mmc]: bus tuning fail, err %d
+[mmc]: exit tuning failed
+[mmc]: switch to best speed mode fail
+[mmc]: Card did not respond to voltage select!
+[mmc]: %s: mmc init fail, err %d
+[mmc]: mmc %d not find, so not exit
+[mmc]: mmc exit start
+[mmc]: mmc %d exit failed
+[mmc]: sd card did not respond to ocr!
+[mmc]: mmc card did not respond to voltage select!
+[mmc]: mmc %d exit ok
+*******mmc:not support platform !!!
+[mmc]: %s: send erase start addr failed
+[mmc]: %s: send erase end addr failed
+[mmc]: send ext_csd failed
+[mmc]: decode ext_csd failed
+[mmc]: invalid trim_discard_timeout is %d
+[mmc]: invalid erase_timeout is %d
+[mmc]: invalid secure_erase_timeout is %d
+[mmc]: invalid secure_trim_timeout is %d
+[mmc]: Unknown erase argument 0x%x
+[mmc]: set erase start addr failed
+[mmc]: set erase end addr failed
+[mmc]: launch erase failed
+[mmc]: calculate timeout failed
+[mmc]: after adjust start addr, no more space need to erase!!
+[mmc]: after adjust nr, no more space need to erase!!
+[mmc]: No space need to be erased !
+[mmc]: Unknown erase type!
+[mmc]: Erase addr is not erase group alignment!
+[mmc]: erase from: %d, to: %d, cnt: %d, erase_group: %d
+[mmc]: Do erase failed!
+[mmc]: Do secure trim step 2 failed!
+[mmc]: Don't support to erase SD card
+[mmc]: %s: start emmc sanitize...
+[mmc]: %s end emmc sanitzie, ret %d
+[mmc]: after align erase group, no space need to erase, erase failed
+[mmc]: erase failed, range %d - %d 
+[mmc]: +++%s
+[mmc]: %s: on space need to erase, nr %d
+[mmc]: %s: no mmc, do nothing
+[mmc]: secure trim failed, range %d - %d 
+[mmc]: trim failed, range %d - %d 
+[mmc]: no method to wipe data (emmc <= v4.41)!
+[mmc]: do sanitize failed!!
+[mmc]: no method to wipe data for current (emmc >v4.5)!
+[mmc]: Unknown mmc version 0x%x
+[mmc]: ---%s ret %d
+[mmc]: ========start %s
+[mmc]: driver do not support secure wipe operation
+[mmc]: erase failed!!!!!!
+[mmc]: do not erase!!!!!!
+[mmc]: skip some space when align erase group, need to write zeros.
+[mmc]: erase ok
+[mmc]: ========end %s %d
+[mmc]: %s: sd card don't support erase
+[mmc]: %s: driver don't support erase
+[mmc]: %s: no space need to erase, from:%d nr:%d
+[mmc]: %s: input lenght error!!!
+[mmc]: %s: after clip, from: %d, nr: %d
+[mmc]: %s: erase emmc fail!
+[mmc]: %s: some sectors in emmc are ignored!
+[mmc]: --%d: from%d  nr%d 
+[mmc]: %s: emmc sanitize fail. ignore this error and continue...
+[mmc]: %s: driver don't support sanitize
+[mmc]: %s: sanitize fail!
+[mmc]: %s: sd card don't support trim
+[mmc]: trim failed, range %d - %d
+[mmc]: %s: don't support trim!
+[mmc]: %s: sd card don't support discard
+[mmc]: %s: don't support discard!
+[mmc]: %s: sd card don't support secure erase!
+[mmc]: %s: don't support secure erase!
+[mmc]: %s: sd card don't support secure trim!
+[mmc]: secure trim failed, range %d - %d
+[mmc]: %s: don't support secure trim!
+[mmc]: can not found device
+[mmc]: mmc write failed
+[mmc]: write block failed
+%s: malloc failed
+[mmc]: %s: blk %ld ~ %ld
+[mmc]: %s: erase failed
+[mmc]: intput buf is NULL 
+[mmc]: item exceed %d
+[mmc]: block count exceed %d
+[mmc]: Write first backup failed
+[mmc]: Write second backup failed
+[mmc]: intput buf is NULL
+[mmc]: malloc buff failed in fun %s line %d
+[mmc]: read first backup failed in fun %s line %d
+[mmc]: read second backup failed fun %s line %d
+[mmc]: first and second bak compare failed fun %s line %d
+[mmc]: %s: request memory fail
+[mmc]: %s: write boot0 fail
+[mmc]: %s: check boot0 fail
+[mmc]: Should not w/r secure area in fun %s,line,%d in start %d,end %d
+[mmc]: Should not w/r secure area in fun %s,line,%d in start %ld,end %ld
+[mmc]: mmc switch boot bus condition failed
+[mmc]: mmc configure boot partition failed
+[mmc]: switch to boot1 partition failed
+[mmc]: burn boot to emmc boot1 partition failed%lx
+[mmc]: switch back to user partition failed
+[mmc]: mmc disable boot mode failed
+[mmc]: burn boot to user partition failed,%lu
+[mmc]: %s: get boot0 from user part err
+[mmc]: %s: switch to boot1 part failed
+[mmc]: %s: get boot0 from boot part err
+[mmc]: %s: switch back to user part failed,it maybe still in boot part!!!
+[%d-%d|%d] 
+[mmc]: %s: total blk %d
+[mmc]: %s: request memory for buf_bus8 fail
+[mmc]: %s: request memory for buf_bus4 fail
+[mmc]: freq_index error %d
+[mmc]: select ext freq point: %d-%d MHz
+[mmc]: speed_md error %d
+[mmc]: need retry next clk %d
+[mmc]: %s: request memory for rcv_pattern fail
+[mmc]: %s: request memory for std_pattern fail
+[mmc]: Don't support 1 bit tuning now
+[mmc]: write failed
+[mmc]: send stop
+[mmc]: write_tuning_try_freq: write ok
+[mmc]: read failed
+[mmc]: Send stop
+[mmc]: pattern compare fail
+[mmc]: Pattern compare ok
+[mmc]: Write tuning pattern ok
+[mmc]:  Write tuning pattern failded
+[mmc]: Don't support tuning
+[mmc]: switch to %s fail
+[mmc]: don't spport %s for sd card
+[mmc]: freq: %d-%d
+[mmc]: skip freq %d
+[mmc]: speed mode: %s
+[mmc]: ---%dHz: 
+[mmc]: --best %d
+[mmc]: invalid freq, switch to 6MHz
+[mmc]: tuning hs400 cmd line fail
+[mmc]: request memory for rcv_pat fail
+[mmc]: Not support 1 bit tuning now
+[mmc]: can not find mmc dev
+[mmc]: try next freq...%d
+[mmc]: invalid freq, switch to %d
+[mmc]: tuning for %s fail
+[mmc]: %s: 0x%08x 0x%08x
+[mmc]: ================== HSSDR52_SDR25...
+[mmc]: tuning fail at HSSDR52_SDR25
+[mmc]: ================== HS200_SDR104...
+[mmc]: tuning fail at HS200_SDR104
+[mmc]: ================== HSDDR52_DDR50...
+[mmc]: tuning fail at HSDDR52_DDR50
+[mmc]: ================== HS400...
+[mmc]: tuning fail at HS400
+[mmc]: switch back to HSDDR52_DDR50 8bit fail
+[mmc]: switch back to HSSDR52_SDR25 8bit fail
+[mmc]: %s: err timing mode %d
+[mmc]: use default speed mode: %d-%s, ifreq: %d
+[mmc]: ========best spd md: %d-%s, freq: %d-%d
+[mmc]: %s: err freq %d-%d
+[mmc]: mmc request udpate boot0
+[mmc]: %s:Can not find mmc
+[mmc]: size of tuning_sdly over %d
+[mmc]: write mmc info ok
+DS26/SDR12
+HSSDR52/SDR25
+HSDDR52/DDR50
+HS200/SDR104
+[mmc]: Get next samply point %d at spd_md %d freq_id %d
+[mmc]: Beyond the retry times
+[mmc]: Current spd_md %d freq_id %d sldy %d
+[mmc]: mmc %d update clk failed
+[mmc]: %s: wrong clock source %d
+[mmc]: %s: source clock is too high, clk %d, src %d!!!
+[mmc]: %d MHz...
+[mmc]: %s: mmc %d wrong timing mode: 0x%x
+[mmc]: sample: %d - %d(ps)
+[mmc]: %s: cal sample delay fail
+[mmc]: ds: %d - %d(ps)
+[mmc]: %s: cal data strobe delay fail
+[mmc]: mmc %d wrong timing mode: 0x%x
+[mmc]: mmc %d re-enable clock failed
+[mmc]: [mmc]: mmc %d update clock failed
+[mmc]: smc %d err, cmd %d, %s%s%s%s%s%s%s%s%s%s%s
+[mmc]: mmc %d Found fatal err,so no send cmd
+[mmc]: mmc %d dest is not 4 byte align: 0x%08lx
+[mmc]: transfer by cpu failed
+[mmc]: mmc %d Transfer failed
+[mmc]: mmc %d cmd %d timeout, err %x
+[mmc]: mmc %d data timeout %x
+[mmc]: mmc %d data timeout %x -----------err
+[mmc]: mmc %d busy timeout
+[mmc]: %s: cmd %d wait rsp busy 0x%x us 
+[mmc]: Read remain data
+[mmc]: Read remain data timeout
+[mmc]: mmc %d close bus gating and reset
+[mmc]: mmc %d mmc cmd %d err 0x%08x
+[mmc]: mmc driver ver %s
+2016-08-01 13:45:00
+[mmc]: sdc_on error, %d
+SUNXI SD/MMC
+[mmc]: %s: get mem for descriptor failed
+/soc/card0_boot_para
+[mmc]: get card0 para fail
+[mmc]: set card0 pin fail
+sdc_wipe
+[mmc]: disable driver secure wipe operation.
+[mmc]: disable emmc sanitize feature.
+[mmc]: disable emmc secure purge feature.
+[mmc]: disable emmc trim feature.
+sdc_erase
+[mmc]: disable emmc erase.
+[mmc]: enable emmc sanitize when erase.
+sdc_boot
+[mmc]: don't burn boot0 to user part.
+[mmc]: burn boot0 to emmc boot part.
+sdc_odly_50M
+[mmc]: get sdc0 sdc_odly_50M %d.
+sdc_sdly_50M
+[mmc]: get sdc0 sdc_sdly_50M %d.
+sdc_odly_50M_ddr
+[mmc]: get sdc0 sdc_odly_50M_ddr %d.
+sdc_sdly_50M_ddr
+[mmc]: get sdc0 sdc_sdly_50M_ddr %d.
+sdc_freq
+[mmc]: get sdc0 sdc_freq %d.%d
+[mmc]: get sdc0 sdc_b0p %d.
+[mmc]: get sdc_ex_dly_used %d, use manual sdly in fex
+[mmc]: undefined value %d, use default dly
+sdc_odly_%d_%d
+[mmc]: get sdc0 %s 0x%x for %d-%s %d.
+sdc_sdly_%d_%d
+[mmc]: get sdc_ex_dly_used %d, use auto tuning sdly
+[mmc]: current is product mode, it will tune sdly later
+[mmc]: get sdly from uboot header fail
+sdc_force_boot_tuning
+[mmc]: card2 force to execute tuning during boot.
+sdc_io_1v8
+[mmc]: card2 io is 1.8V.
+[mmc]: get sdc2 sdc_odly_50M %d.
+[mmc]: get sdc2 sdc_sdly_50M %d.
+[mmc]: get sdc2 sdc_odly_50M_ddr %d.
+[mmc]: get sdc2 sdc_sdly_50M_ddr %d.
+[mmc]: get sdc2 sdc_freq %d.%d
+[mmc]: get sdc2 sdc_b0p %d.
+sdc_tm4_win_th
+[mmc]: get sdc2 sdc_tm4_win_th %d.
+sdc_tm4_r_cycle
+[mmc]: get sdc2 sdc_tm4_r_cycle %d.
+sdc_tm4_hs200_max_freq
+[mmc]: get sdc2 sdc_tm4_hs200_max_freq %d.
+sdc_tm4_hs400_max_freq
+[mmc]: get sdc2 sdc_tm4_hs400_max_freq %d.
+sdc_tm4_ext_freq_%d
+[mmc]: get sdc2 %s 0x%x.
+[mmc]: invalid freq %d MHz, discard this ext freq point
+[mmc]: get sdc2 %s 0x%x for %d-%s %d.
+sdc_dis_host_caps
+[mmc]: get sdc2 sdc_dis_host_caps 0x%x.
+sdc_kernel_no_limit
+[mmc]: get sdc2 sdc_kernel_no_limit 0x%x, limit 0x%x.
+[mmc]: don't support auto sample
+[mmc]: update auto sample timing para fail!
+[mmc]: sdc %d timing mode %d error --1
+[mmc]: sdc %d timing mode %d error --2
+[mmc]: mmc_get_dly_manual_sample: error sdc_no %d
+[mmc]: mmc_update_timing_para: error sdc_no %d
+[mmc]: Wrong mmc number %d
+[mmc]: %s: register mmc %d failed
+[mmc]: update manual sample timing para fail!
+[mmc]: %s: input sdc_no error: %d
+axp: get node[%s] error
+pmu_pwron_vol
+set power on vol to default
+pmu_pwroff_vol
+set power off vol to default
+factory mode detect
+factory mode release
+factory mode: try to poweroff without power key
+factory mode: try to poweroff without power in
+pmu_ac_vol
+pmu_ac_cur
+pmu_usbpc_vol
+pmu_usbpc_cur
+pmu_runtime_chgcur
+pmu_suspend_chgcur
+find power_sply to end
+%s = %d, onoff=%d
+axp set %s to %d failed
+slave power
+slave_power_sply
+find slave power sply to end
+unable to find slave pmu
+regulator0
+regulator_count
+unable to get ldo_count  from [%s] 
+regulator%d
+unable to get subkey %s from [%s]
+unable to find regulator %s from [pmu1_regu] or [pmu2_regu] 
+error: supply regelator %s=id, pmu_type=%s_%s onoff=%d fail
+axp read error
+PMU: AXP806
+sunxi pmu error : unable to set dcdc1
+sunxi pmu error : unable to onoff dcdc1
+sunxi pmu error : unable to set dcdc2
+sunxi pmu error : unable to onoff dcdc2
+sunxi pmu error : unable to set dcdc3
+sunxi pmu error : unable to onoff dcdc3
+sunxi pmu error : unable to set dcdc4
+sunxi pmu error : unable to onoff dcdc4
+sunxi pmu error : unable to set dcdc5
+sunxi pmu error : unable to onoff dcdc5
+sunxi pmu error : unable to set aldo1
+sunxi pmu error : unable to onoff aldo1
+sunxi pmu error : unable to set aldo2
+sunxi pmu error : unable to onoff aldo2
+sunxi pmu error : unable to set aldo3
+sunxi pmu error : unable to onoff aldo3
+sunxi pmu error : unable to set bldo1
+sunxi pmu error : unable to onoff bldo1
+sunxi pmu error : unable to set bldo2
+sunxi pmu error : unable to onoff bldo2
+sunxi pmu error : unable to set bldo3
+sunxi pmu error : unable to onoff bldo3
+sunxi pmu error : unable to set bldo4
+sunxi pmu error : unable to onoff bldo4
+sunxi pmu error : unable to set cldo1
+sunxi pmu error : unable to onoff cldo1
+sunxi pmu error : unable to set cldo2
+sunxi pmu error : unable to onoff cldo2
+sunxi pmu error : unable to set cldo3
+sunxi pmu error : unable to onoff cldo3
+disp_sys_set_state, size of mian_name is out of range
+%s, fdt_set_all_pin, ret=%d
+%s: err:this pwm has been requested!
+pwm-base
+pwm-number
+%s:pwm number = %d
+the pwm id is wrong,none pwm in dts.
+%s: error:pwm chip malloc failed!
+reg_base
+%s: err: get reg-base err.
+%s: reg = 0x%x. pwm = %d.
+reg_enable_offset
+failed to get reg_enable_offset! err=%d
+reg_enable_shift
+failed to get reg_enable_shift! err=%d
+reg_clk_gating_offset
+failed to get reg_clk_gating_offset! err=%d
+reg_clk_gating_shift
+failed to get reg_clk_gating_shift! err=%d
+reg_bypass_offset
+failed to get reg_bypass_offset! err=%d
+reg_bypass_shift
+failed to get reg_bypass_shift! err=%d
+reg_polarity_offset
+failed to get reg_polarity_offset! err=%d
+reg_polarity_shift
+failed to get reg_polarity_shift! err=%d
+reg_period_offset
+failed to get reg_period_offset! err=%d
+reg_period_shift
+failed to get reg_period_shift! err=%d
+reg_period_width
+failed to get reg_period_width! err=%d
+reg_active_offset
+failed to get reg_duty_offset! err=%d
+reg_active_shift
+failed to get reg_duty_shift! err=%d
+reg_active_width
+failed to get reg_duty_width! err=%d
+reg_prescal_offset
+reg_prescal_shift
+reg_prescal_width
+request pwm success, pwm = %d.
+Cannot find console
+## Baudrate %d bps not supported
+## Switch baudrate to %d bps and press ENTER ...
+## Baudrate may not be deleted
+smc_efuse_readl is just a interface,you must override it
+smc_efuse_writel is just a interface,you must override it
+smc tee probe share memory base failed
+smc tee encrypt with ssk failed
+smc tee decrypt with ssk failed
+encrypt=%d
+write_protect=%d
+******************
+SS %s fail 0x%x
+sunxi flash error: cant get part %d offset
+sunxi flash init ok
+try emmc fail
+try nand fail
+try spinor fail
+workmode = %d,storage type = %d
+boot package size: 0x%x
+toc1 magic error
+read uboot from flash: ret %d
+%s:not support storage type %d
+%s: get boot0 head fail
+%s: get boot size error
+boot0 size %d
+%s:alloc memory fail
+%s:upload boot0 fail
+%s:update boot0 for ota fail
+%s: malloc fail
+Entry_name        = %s
+%s: fdt header is error
+fdt size is too large
+error:can't find dtb
+%s: @nr is 0, erase from @from to end
+%s: @nr is 0, wipe from @from to end
+fail to find one useful mmc card
+MMC init failed
+try card 2 
+fail to find one useful mmc card2
+MMC sprite init failed
+mmc init ok
+%s: call fail
+nand init fail
+nand found
+this is only for test, timer number=%d
+timer err: there is no timer cound be used
+[%8d.%3d]
+[%8d.%3d] %s %d
+** Unrecognized filesystem type **
+** Unable to read file %s **
+** Unable to write file %s **
+** No boot file defined **
+%d bytes read in %lu ms
+%d bytes written in %lu ms
+FAT32   
+FAT12   
+FAT16   
+FAT: Misaligned buffer address (%p)
+Invalid FAT entry
+** Partition %d not valid on device %d **
+Error: FAT sector size mismatch (fs=%hu, dev=%lu)
+            %s%c
+ %8ld   %s%c
+%d file(s), %d dir(s)
+Error reading cluster
+No current device
+Interface:  
+  Device %d: 
+No valid FAT fs found
+Filesystem: %s "%s"
+reading %s
+Can't list files without a filesystem!
+Can't load file without a filesystem!
+invalid distance too far back
+invalid distance code
+invalid literal/length code
+incorrect header check
+unknown compression method
+invalid window size
+unknown header flags set
+header crc mismatch
+invalid block type
+invalid stored block lengths
+too many length or distance symbols
+invalid code lengths set
+invalid bit length repeat
+invalid literal/lengths set
+invalid distances set
+incorrect data check
+incorrect length check
+need dictionary
+stream end
+file error
+stream error
+data error
+insufficient memory
+buffer error
+incompatible version
+No valid FDT found - please append one to U-Boot binary, use u-boot-dtb.bin or define CONFIG_OF_EMBED. For sandbox, use -d <file.dtb>
+nvidia,tegra20-ehci
+nvidia,tegra30-ehci
+nvidia,tegra114-ehci
+nvidia,tegra114-i2c
+nvidia,tegra20-i2c
+nvidia,tegra20-i2c-dvc
+nvidia,tegra20-emc
+nvidia,tegra20-emc-table
+nvidia,tegra20-kbc
+nvidia,tegra20-nand
+nvidia,tegra20-pwm
+nvidia,tegra20-dc
+nvidia,tegra124-sdhci
+nvidia,tegra30-sdhci
+nvidia,tegra20-sdhci
+nvidia,tegra20-sflash
+nvidia,tegra20-slink
+nvidia,tegra114-spi
+smsc,lan9215
+samsung,exynos-sromc
+samsung,s3c2440-i2c
+samsung,exynos-sound
+wolfson,wm8994-codec
+samsung,exynos-spi
+google,cros-ec
+google,cros-ec-keyb
+samsung,exynos-ehci
+samsung,exynos5250-xhci
+samsung,exynos-usb-phy
+samsung,exynos5250-usb3-phy
+samsung,exynos-tmu
+samsung,exynos-fimd
+samsung,exynos-mipi-dsi
+samsung,exynos5-dp
+samsung,exynos-dwmmc
+samsung,exynos-mmc
+samsung,exynos4210-uart
+maxim,max77686_pmic
+spi-flash
+maxim,max98095-codec
+infineon,slb9635-tpm
+infineon,slb9645-tpm
+samsung,exynos5-hsi2c
+sandbox,host-emulation
+sandbox,lcd-sdl
+ti,tps65090
+nxp,ptn3460
+Error: inflateInit2() returned %d
+Error: inflate() returned %d
+Error: Bad gzipped data
+Error: gunzip out of data in header
+initcall sequence %p failed at call %p
+ERROR: Failed to allocate 0x%lx bytes below 0x%lx.
+## ERROR: unsupported match method: 0x%02x
+Env export buffer too small: %zu, but need %zu
+himport_r: can't insert "%s=%s" into hash table
+WARNING: '%s' neither in running nor in imported env!
+WARNING: '%s' not in imported env, deleting it!
+%llu Bytes%s
+### ERROR ### Please RESET the board ###
+%s:%u: %s: Assertion `%s' failed.
+compatible
+%s:disp_fdt_nodeoffset %s fail
+fdt_setprop_u32 %s.%s(0x%x) fail.err code:%s
+<valid offset/length>
+<no error>
+<unknown error>
+FDT_ERR_NOTFOUND
+FDT_ERR_EXISTS
+FDT_ERR_NOSPACE
+FDT_ERR_BADOFFSET
+FDT_ERR_BADPATH
+FDT_ERR_BADSTATE
+FDT_ERR_TRUNCATED
+FDT_ERR_BADMAGIC
+FDT_ERR_BADVERSION
+FDT_ERR_BADSTRUCTURE
+FDT_ERR_BADLAYOUT
+lib/openssl/objects/obj_dat.c
+OBJ_obj2name err: not enough buffer to store name
+undefined
+rsaEncryption
+Netscape
+Netscape Communications Corp.
+nsCertExt
+Netscape Certificate Extension
+nsCertType
+Netscape Cert Type
+samyang7
+samyang6
+samyang5
+samyang4
+samyang3
+samyang2
+samyang1
+samyang8
+Samyang_comment
+ALLWINNER  EXTENSION
+awcomment1
+allwinner comment1
+RSA Data Security, Inc. PKCS
+md5WithRSAEncryption
+RSA-SHA256
+sha256WithRSAEncryption
+RSA-SHA384
+sha384WithRSAEncryption
+RSA-SHA512
+sha512WithRSAEncryption
+RSA-SHA224
+sha224WithRSAEncryption
+RSA-SHA1
+sha1WithRSAEncryption
+lib/openssl/asn1/a_int.c
+lib/openssl/asn1/asn1_get_field_ptr.c
+lib/openssl/asn1/asn1_item_ex_new.c
+lib/openssl/asn1/asn1_put_object.c
+lib/openssl/asn1/asn1_string.c
+lib/openssl/asn1/d2i_pu.c
+lib/openssl/asn1/d2i_rsapublikey.c
+ASN1_INTEGER
+ASN1_OBJECT
+ASN1_OCTET_STRING
+ASN1_ANY
+ASN1_BIT_STRING
+ASN1_IA5STRING
+ASN1_BOOLEAN
+lib/openssl/asn1/EVP_pkey.c
+0123456789ABCDEF
+lib/openssl/asn1/i2d_pu.c
+X509_PUBKEY
+public_key
+X509_CINF
+serialNumber
+extensions
+cert_info
+lib/openssl/asn1/stk.c
+X509_EXTENSION
+X509_ALGOR
+critical
+algorithm
+parameter
+lib/openssl/bn/bn_word.c
+lib/openssl/bn/bn_print.c
+lib/openssl/bio/bio.c
+lib/openssl/bio/b_print.c
+0123456789abcdef
+lib/openssl/bio/bio_s_mem.c
+memory buffer
+lib/openssl/bio/bio_read.c
+lib/openssl/lhash/lh_retrieve.c
+lib/openssl/rsa/rsa.c
+Eric Young's PKCS#1 RSA
+len_bytes(%d) is 0 or larger than 4, cant be probe
+sample_atoi err: ch 0x%02x is not a digit or hex ch
+x509_create: cant get a certif
+SERIANL NUMBER: 0x%x
+SERIANL NUMBER: Unknown
+Version: 0x%0x
+cant find the public key %s %d
+lib/openssl/external/openssl_ext.c
+The public key is invalid
+publickey_dipatch err: head is not a sequence
+publickey_dipatch err: step 2
+publickey_dipatch err: step 3
+get public failed
+bytes merge failed, the dst buffer is too short
+get extersion %d fail
+get extersion obj %d fail
+extersion %d name length is 0
+extersion %d value length is 0
+__merge_extension_value err: head is not a sequence
+__merge_extension_value err: the data source len is too short
+__merge_extension_value err1: in sunxi_bytes_merge
+__merge_extension_value err2: in sunxi_bytes_merge
+get extension value failed
+sunxi_rsa_calc: probe extension failed
+fail to probe the sign value
+certif_decode err: head is not a sequence
+certif_decode err: step 1
+sign data len (0x%x) is longer then buffer size (0x%x)
+certif_probe_signdata err
+sunxi_sha_calc: calc sha256 with hardware err
+sunxi_rsa_calc: calc rsa2048 with hardware err
+certif verify failed
+FAILURE: not support physical address
+FAILURE: 0x%08lx != 0x%08lx at offset 0x%08lx.
+           
+setting %3u
+testing %3u
+FAILURE: not support address line at physical
+FAILURE: possible bad address line at offset 0x%08lx.
+Skipping to next test...
+           
+wrong nand id: %d
+_change_ndfc_clk error, wrong nand index: %d
+close_ndfc_clk error, wrong nand index: %d
+open ahb gate and reset, wrong nand index: %d
+close ahb gate and reset, wrong nand index: %d
+NAND_PIORequest, nand_index: 0x%x
+Reg 0x01c20848: 0x%x
+Reg 0x01c2084c: 0x%x
+Reg 0x01c20850: 0x%x
+_cfg_ndfc_gpio_v1, wrong nand index %d
+NAND_ClkRequest, wrong nand index %d for ndfc version %d
+NAND_ClkRequest, set dclk failed!
+NAND_Clkrelease, wrong nand index %d for ndfc version %d
+NAND_SetClk, change ndfc clock failed
+NAND_GetClk, failed!
+nand0: get node offset error
+NAND_PIORequest, failed!
+NAND_PIOFuncChange_EnDQScREc: invalid ndfc version!
+NAND_Malloc size=0!
+NAND_Malloc fail!
+NAND_AllocMemoryForDMADescs(): alloc dma des failed
+NAND_AllocMemoryForDMADescs(): cpu: 0x%x  physic: 0x%x
+uboot nand_request_dma: request genernal dma failed!
+uboot nand_request_dma: reqest genernal dma for nand success, 0x%x
+nand release dma:%x
+uboot: sunxi_dma_setting for nand faild!
+uboot: sunxi_dma_start for nand faild!
+NAND GetNandExtPara: wrong para num: %d
+nand0_para
+nand0_para, %d, nand type err! %d
+nand0_id_number_ctl
+nand : get id number_ctl fail, %x
+nand : get id number_ctl from script:0x%x
+nand0_capacity_level
+nand: get CapacityLevel fail, %x
+nand: get CapacityLevel from script, %x
+uboot: nand version: %x %x %x %x 
+call null __NAND_UpdatePhyArch()!!!
+NB1 : enter phy init
+NB1 : nand phy init fail
+NB1 : nand phy init ok
+NB1 : enter phy Exit
+NB1: enter NAND_LogicInit
+NB1: nand phy init fail
+burn nand partition table! mbr tbl: 0x%x, part_count:%d
+not burn nand partition table!
+NB1: nand_info_init fail
+NB1: nftl num: %d 
+NB1: nftl num: %d error 
+init nftl: %d
+NB1: nftl_build_all fail
+NB1: NAND_LogicInit ok, result = 0x%x
+NB1: NAND_LogicExit
+NAND_build_all_partition fail 1
+NAND_build_all_partition fail 2 %d
+ init nftl: %d 
+NAND_build_all_partition fail 3 %d %d
+uboot_start_block %d uboot_next_block %d.
+check nand version start.
+Current nand driver version is %x %x %x %x 
+malloc memory for boot0 read operation fail
+block %u is bad block %x.
+Media version is valid in block %u, version info is %x %x %x %x 
+nand driver version match ok in block %u.
+nand driver version match fail in block %u.
+Media version is invalid in block %uversion info is %x %x %x %x 
+can't find valid version info in boot blocks. 
+has cleared the boot blocks.
+NAND_UbootInit start
+NAND_UbootInit end: 0x%x
+NAND_UbootExit 
+NAND_UbootProbe start
+NAND_UbootProbe end: 0x%x
+erase by flag %d
+nand version = %x
+nand version check fail,please select erase nand flash
+NAND_Uboot_Erase
+force erase
+sunxi flash: force flash init to begin hardware scanning
+sunxi flash: hardware scan finish
+NAND_GetParam_store 0x%x 0x%x 0x%x 0x%x 0x%x
+total part: %d
+%s %d, %x, %x
+NAND_UbootInit
+nand already init
+nand not opened
+NAND_UbootExit
+nand not need closed
+%s: the para is invaild 
+force download boot0 or sboot 
+force download uboot error : the para is invaild 
+force download uboot 
+initqueue: queue element is null
+create buffer memory failed
+destroyqueue: queue element is null
+malloc memory for sunxi queue failed
+RFSFAT16
+sunxi sprite error: open part %s failed
+sunxi sprite error: fetch part len %s failed
+partdata hi 0x%x
+partdata lo 0x%x
+sunxi sprite: data size 0x%x is larger than part %s size 0x%x
+sunxi sprite err : cant get part data imgfile_start %s
+sunxi sprite error : read sdcard block %d, total %d failed
+sunxi sprite error: download rawdata error %s
+sunxi sprite error: download rawdata error %s, start 0x%x, sectors 0x%x
+sunxi sprite error: download sparse error %s
+sunxi sprite error : read sdcard block 0x%x, total 0x%x failed
+successed in writting part %s
+sprite update warning: open part %s failed
+sprite update warning: fail to read data from %s
+origin_verify value = %x, active_verify value = %x
+origin checksum=%x, active checksum=%x
+sunxi sprite: part %s verify error
+sunxi sprite err: part %s unablt to find verify file
+successed in verify part %s
+sunxi sprite err: part %s not need to verify
+12345678
+1234567890DLINFO
+sunxi sprite error : read dl map failed
+1234567890___MBR
+sunxi sprite error : read mbr failed
+sunxi sprite: no part need to write
+sunxi sprite err: init flash err
+sunxi sprite err: unable to malloc memory for sunxi_sprite_deal_part
+begin to download part %s
+download UDISK: the data length of udisk is too small, ignore it
+sunxi sprite error: download_udisk, the flash size is invalid(0)
+the flash size is %d MB
+UDISK low is 0x%x Sectors
+UDISK high is 0x%x Sectors
+sunxi sprite error: __download_udisk, close udisk image failed
+sunxi sprite err: sunxi_sprite_deal_part, download_udisk failed
+do NOT need download UDISK
+sunxi sprite err: sunxi_sprite_deal_part, download sysrecovery failed
+NEED down private part
+sunxi sprite err: sunxi_sprite_deal_part, download private failed
+sunxi sprite err: sunxi_sprite_deal_part, download normal failed
+successed in download part %s
+UBOOT_0000000000
+BOOTPKG-00000000
+BOOTPKG-NOR00000
+TOC1_00000000000
+sprite update error: fail to open uboot item
+sprite update error: fail to get uboot item size
+update error: fail to read data from for uboot
+update error: fail to write uboot
+sunxi_sprite_deal_uboot ok
+BOOT    
+BOOT0_0000000000
+1234567890BNOR_0
+1234567890BOOT_0
+TOC0_00000000000
+sprite update error: fail to open boot0 item
+sprite update error: fail to get boot0 item size
+update error: fail to read data from for boot0
+update error: fail to write boot0
+successed in downloading uboot
+sunxi_sprite_deal_recorvery_boot ok
+%s: malloc %d byte memory fail
+card2 download boot0 
+%s: write boot0 from %d fail
+read standard mbr failed
+mbrst->end_flag=0x%x
+write standard mbr %d failed
+write standard mbr 0 failed
+card erase fail: unable to malloc memory for card erase
+erase boot0, size:32k, write 0x00
+erase %s part
+write zeros-%d: from 0x%x to 0x%x
+card erase fail in erasing part %s
+erase prat's head from sector 0x%x to 0x%x
+erase part's tail from sector 0x%x to 0x%x
+card erase all
+probe mmc0 if exist
+fail to find mmc0
+try to init mmc0
+MMC0 init failed
+read mmc boot0 failed
+eGON.BT0
+boot0_head->boot_head.magic   == %s 
+src_sum = %x 
+boot0_head->boot_head.length  =  %d 
+boot0 addsum error
+write mmc boot0 failed
+env part do not need to rewrite
+THIS_IMG_SELF_00 do not need to rewrite
+UDISK do not need to rewrite
+private do not need to rewrite
+sparse: bad magic
+sparse: incompatible format
+sparse: chunk head data is not enough
+chunk %d(%d)
+sparse: bad chunk size for chunk %d, type Raw
+spase : bad chunk size for chunk ,type FILL 
+sparse: bogus DONT CARE chunk
+sparse: unknown chunk ID %x
+sparse: flash write failed
+data is not sector align 0
+data is not sector align 1
+sparse: unknown status
+dram para[%d] = %x
+the mbr size is bad
+sunxi sprite init fail when downlaod mbr
+begin to write standard mbr
+write standard mbr err
+successed to write standard mbr
+sunxi sprite exit fail when downlaod mbr
+uboot magic %s
+sunxi sprite: uboot magic is error
+uboot_pkg magic 0x%x
+toc magic 0x%x
+sunxi sprite: toc magic is error
+uboot size = 0x%x
+work_mode_boot 
+spinor down uboot
+mmc down uboot
+sunxi sprite: boot0 magic is error
+sunxi sprite: boot0 checksum is error
+add sdmmc2 private info fail!
+add sdmmc3 private info fail!
+TOC0.GLH
+sunxi sprite: toc0 magic is error
+sunxi sprite: toc0 checksum is error
+add sdmmc2 gpio info fail!
+add sdmmc3 gpio info fail!
+skip memcpy dram para for work_mode recovery
+%s: update mmc private info fail!
+%s: update sdmmc2 gpio info fail!
+sunxi sprite err: unable to malloc memory for verify
+sunxi sprite: read flash error when verify
+the %d mbr table is bad
+the %d mbr table is ok
+*************MBR DUMP***************
+total mbr part %d
+part[%d] name      :%s
+part[%d] classname :%s
+part[%d] addrlo    :0x%x
+part[%d] lenlo     :0x%x
+part[%d] user_type :%d
+part[%d] keydata   :%d
+part[%d] ro        :%d
+downlaod map is bad
+sunxi sprite error: unable to get firmware start position
+sunxi sprite error: fail to malloc memory for img head
+sunxi sprite error: read iamge head fail
+IMAGEWTY
+sunxi sprite error: iamge magic is bad
+sunxi sprite error: fail to malloc memory for item table
+sunxi sprite error: read iamge item table fail
+sunxi sprite error : hImage is NULL
+sunxi sprite error : cannot malloc memory for item
+sunxi sprite error : cannot find item %s %s
+sunxi sprite error : item is NULL
+sunxi sprite error : the item too big
+sunxi sprite error : buffer is smaller than data size
+sunxi sprite error : read item data failed
+sunxi sprite error : item is null when close it
+sunxi sprite error : imghead is null when close it
+part name %s
+keydata = 0x%x
+find keypart %s
+keypart read start: 0x%x, sectors 0x%x
+sprite protect private data fail: cant malloc memory for part %s, sectors 0x%x
+sunxi sprite error : read private data error
+keypart part %s read end: 0x%x, sectors 0x%x
+there is no keypart part on local flash
+origin sectors 0x%x, new part sectors 0x%x
+fix it, only store less sectors
+keypart write start: 0x%x, sectors 0x%x
+sunxi sprite error : write private data error
+keypart write end: 0x%x, sectors 0x%x
+there is no private part need rewrite
+private part exist
+private part is not exit 
+erase private key successed 
+*************DOWNLOAD MAP DUMP************
+total download part %d
+download part[%d] name          :%s
+download part[%d] download file :%s
+download part[%d] verify file   :%s
+download part[%d] lenlo         :0x%x
+download part[%d] addrlo        :0x%x
+download part[%d] encrypt       :0x%x
+download part[%d] verify        :0x%x
+part[%d] user_type :0x%x
+part[%d] keydata   :0x%x
+part[%d] backup_flag   :0x%x
+part[%d] ro        :0x%x
+sunxi sprite begin
+sunxi sprite firmware probe fail
+firmware probe ok
+fetch download map
+sunxi sprite error : fetch download map error
+fetch mbr
+sunxi sprite error : fetch mbr error
+begin to erase flash
+sunxi sprite error: erase flash err
+successed in erasing flash
+sunxi sprite error: download mbr err
+begin to download part
+sunxi sprite error : download part error
+successed in downloading part
+sunxi sprite error : download uboot error
+sunxi sprite error : download boot0 error
+sprite success 
+/soc/card_boot
+get card_boot para fail
+next_work
+try to earse boot0 head :
+sunxi_sprite_error : read boot0 head failed
+=====check_sum======%x 
+sunxi_sprite_error : can not write boot0 head into card 
+flash already erased
+eraseflag
+do need erase flash
+not need erase flash
+force erase flash
+no part need to protect user data
+read local mbr on flash failed
+the mbr on flash is bad
+begin to store data
+need_erase_flag = %d
+begin to erase
+finish erase
+flash exit
+sunxi sprite pre init fail
+erase private key fail 
+erase key success 
+sprite update error: no %s found
+sprite update error: no udisk partition
+sprite erase error: fail to get memory for tmpdata
+data part size=%d
+begin erase part %s
+finish erase part
+sprite update error: read image start error
+part start = %d
+sprite update error: fail to open img
+sprite update error: fail to erase data
+sprite update error: fail to erase cache
+Reserve1
+Reserve2
+sprite update error: fail to get memory for download map
+sunxi sprite error: donn't download dl_map
+recovery error : download uboot or boot0 error!
+successed in downloading uboot and boot0
+sprite update error: current card sprite failed
+now hold the machine
+sprite_gpio0
+sprite_work_delay
+try sprite_led_gpio config
+reuqest gpio for led failed
+sprite_led_gpio start
+sprite_err_delay
+post cmd out of memory
+smc load sst out of memory
+begin to enter smc
+after smc
+sst_cmd_binding_store out of memory
+ command procedure error 0x%x
+ cmd response fail:0x%x error
+ cmd status:0x%x error
+ bind error in Swd:
+len = 0x%x , response type =0x%x 
+ update error in Swd:
+len = 0x%x , response type =0x%x 
+set name[%s] to encrypt list
+Widevine
+read Widevine secure object fail
+so name %s
+smc load sst encrypt fail
+Encrypt Widevine data: 
+smc_load sst decrypt fail
+Item0 (Map) magic is bad
+Item0 (Map) crc is fail [0x%x]
+Input object magic fail [0x%x]
+Input object crc fail [0x%x]
+name in map %s
+read item%d copy0
+workmode=%d is err
+the secure storage item0 copy0 is good
+the secure storage item0 copy0 is bad
+the secure storage item0 copy 0 crc fail, the data is bad
+read item%d copy1
+the secure storage item0 copy1 is good
+the secure storage item0 copy0 == copy1, the data is good
+the secure storage item0 copy0 != copy1, the data is bad
+the secure storage item0 copy 1 crc fail, the data is bad
+unknown error happen in item 0 read
+the secure storage item%d copy0 is good
+the secure storage item%d copy0 is bad
+the secure storage item%d copy1 is good
+the secure storage item%d copy1 is bad
+sunxi_secstorage_read fail
+get secure storage map err
+the secure storage map is empty
+%s err: secure storage has not been inited
+write secure storage map
+get secure storage index %d err
+the secure storage index %d is empty
+%d data:
+no item name %s in the map
+read secure storage block %d name %s err
+erase secure storage block %d name %s err
+erase secure storage: %d data only ok
+There is the same name in the secure storage, try to erase it
+the length is not match with key has store in secure storage
+Erase item %s fail
+write secure storage block %d name %s err
+write secure storage: %d ok
+write secure storage block %d name %s overrage
+erase secure storage: %d ok
+erase secure storage block 0 err
+erase secure storage: 0 ok
+clean whole secure store
+clearn %d done
+clean secure store %d
+sunxi storage read fail
+Input length not equal secure object size 0x%x
+secure object is encrypt by chip
+read map fail
+name in map %s, len 0x%x
+wrong argc
+secure storage exit fail
+set name[%s] to write_protect list
+Input length larger then secure object payload size
+wrap fail before secure storage write
+the input key is too long!
+secure storage write fail
+secure storage read fail
+widevine
+key install finish
+key install fail
+Warnning:Widevine key install fail !!!
+sunxi_so
+sunxi_so sub-system
+sunxi_so <cmd> 
+ Allwinner secure object storage 
+sunxi usb error: received bytes 0x%x is not equal cbw struct size 0x%lx
+sunxi usb error: the cbw signature 0x%x is bad, need 0x%x
+sunxi flash read err: start,0x%x sectors 0x%x
+sunxi flash write err: start,0x%x sectors 0x%x
+set address 0x%x
+sunxi usb err: string line %d is not supported
+err: unkown wValue(%d)
+err: invalid wValue, (0, %d)
+err: invalid wIndex and wValue, (0, %d), (0, %d)
+sunxi mass error: standard req is not supported
+sunxi usb err: unknown ep0 req in mass
+sunxi usb err: unknown non standard ep0 req
+sunxi usb mass err: unable to malloc memory for mass receive
+sunxi usb mass err: unable to malloc memory for mass send
+AWUSBFEX
+FEX_CMD_fes_trans: no data need to send or receive
+usb run addr      = %s
+usb run paras max = %d
+usb run paras[%d] = 0x%x
+usb get result = %d
+flash read err: start 0x%x, sectors 0x%x
+FEX_CMD_fes_verify_value, start 0x%x, size high 0x%x:low 0x%x
+FEX_CMD_fes_verify_value 0x%x
+FEX_CMD_fes_verify_status
+FEX_CMD_fes_verify last err=%d
+flash sectors: 0x%x
+sunxi_efex_next_action=%d
+there is no memory to load unsequence data
+FEX_CMD_fes_force_erase
+FEX_CMD_fes_force_erase last err=%d
+FEX_CMD_fes_force_erase_key 
+FEX_CMD_fes_force_erase_key last err = %d 
+bootfile_mode=%ld
+not supported command 0x%x now
+SUNXI_EFEX_MBR_TAG
+mbr size = 0x%x
+SUNXI_EFEX_BOOT1_TAG
+boot1 size = 0x%x
+SUNXI_EFEX_BOOT0_TAG
+boot0 size = 0x%x
+SUNXI_EFEX_ERASE_TAG
+erase_flag = 0x%x
+begin to load data to unsequency memory
+begin to set address to unsequency memory
+sunxi usb error: the cmd signature 0x%x is bad, need 0x%x
+sunxi usb error: received bytes 0x%x is not equal cbw struct size 0x%zx or new cmd size 0x%x
+APPS: SUNXI_USB_EFEX_APPS_IDLE: the send data length is 0
+APPS: SUNXI_USB_EFEX_APPS_IDLE: INVALID direction
+sunxi usb efex app cmd err: usb transfer direction is receive only
+APPS: SUNXI_USB_EFEX_APPS_DATA: the send data length is 0
+APPS: SUNXI_USB_EFEX_APPS_STATUS: INVALID direction
+sunxi usb efex app status err: usb transfer direction is transmit only
+sunxi usb efex err: received cmd size 0x%x is not equal to CBW_MAX_CMD_SIZE 0x%x
+sunxi usb efex err: write flash from 0x%x, sectors 0x%x failed
+efex queue error: buf_queue_write_all_page fail
+sunxi usb cmd error: 0x%x
+sunxi usb trans error: the request data length is 0
+sunxi usb next status set error:0x%x
+sunxi efex queue: buf_queue_write_one_page() err
+efex queue not enough space...
+sunxi efex error: standard req is not supported
+sunxi usb efex err: unable to malloc memory for cmd
+sunxi usb efex err: unable to malloc memory for efex receive
+sunxi usb efex err: unable to malloc memory for efex send
+sunxi usb err: unknown ep0 req in efex
+dma int for usb tx occur
+dma int for usb rx occur
+the system is secure
+secure mode,fastboot limited used
+FAIL:secure mode,fastboot limited used
+SUNXI_USB_FASTBOOT_SETUP
+fastboot command = %s
+reboot-bootloader
+reboot-bootloader
+in lock state, sunxi fastboot erase is disabled
+sunxi fastboot erase FAIL: partition %s does not exist
+FAILerase: partition %s does not exist
+sunxi fastboot erase FAIL: failed to erase partition %s 
+FAILerase: failed to erase partition %s
+sunxi fastboot: partition '%s' erased
+ready to download bytes 0x%x
+sunxi fastboot: successed in downloading uboot package
+sunxi fastboot: fail in downloading uboot package
+sunxi fastboot: successed in downloading boot0
+sunxi fastboot: fail in downloading boot0
+in lock state, sunxi fastboot flash is disabled
+sunxi fastboot download FAIL: partition %s does not exist
+probe it as a dram address
+sunxi fatboot download FAIL: it is not a dram address
+FAILdownload: partition %s does not exist
+ready to move data to 0x%x, bytes 0x%x
+sunxi fastboot download FAIL: failed to write partition %s 
+FAILdownload: write partition %s err
+sunxi fastboot download FAIL: partition %s size 0x%x is smaller than data size 0x%x
+FAILdownload: partition size < data size
+sunxi fastboot: successed in downloading partition '%s'
+download:
+download
+Starting download of %d BYTES
+Starting download of %d MB
+FAILdownload: data size is 0
+FAILdownload: data > buffer
+DATA%08x
+download response: %s
+start addr %s
+Booting kernel..
+Image has cmdline:
+Booting raw image..
+ERROR : bootting failed
+You should reset the board
+FAILinvalid boot image
+Android Fastboot
+20080411
+downloadsize
+max-download-size
+not supported
+oem operations
+not implement yet 
+continue
+not supported fastboot cmd
+SUNXI_USB_FASTBOOT_SEND_DATA
+fastboot transfer finish
+sunxi fastboot error: standard req is not supported
+sunxi_fastboot_exit
+sunxi_fastboot_init
+sunxi usb fastboot err: unable to malloc memory for fastboot send
+recv addr 0x%lx
+send addr 0x%lx
+USB Developer
+Android Bootloader Interface
+sunxi pburn error: standard req is not supported
+sunxi usb pburn err: unable to malloc memory for pburn receive
+sunxi usb pburn err: unable to malloc memory for pburn send
+sunxi usb err: unknown ep0 req in pburn
+call weak fun: %s
+key-group-db
+key data magic unmatch, err
+key_count=%d
+%s secure storage init failed
+^^^^^^^^^^^^^^^^^^^
+key index=%d
+key name=%s
+key type=%d
+key len=%d
+key if_burn=%d
+key if_replace=%d
+key if_crypt=%d
+key data:
+###################
+offset=%d
+ready to burn rootkey
+verity the rootkey failed, stop burn it
+sunxi deal with hdcp key failed
+sunxi deal with widevine key failed
+write key to secure storage
+write key to secure storage failed
+write key to private partition
+write key to private failed
+the fuck thing had happened
+sunxi_secure_storage_exit err
+the memory input or output is NULL
+efuse read %s err
+read key form securestorage
+read %s form securestorage failed
+read key form private
+read %s form private failed
+erase securestorage success
+erase private data failed
+save burned flag to securestorage failed
+save burned flag to securestorage success
+partition %s is not exist
+sunxi burn: part %s verify error
+usbburnpart
+the burn data size 0x%x is large then 0x%x
+part info check success
+part_info->lenhi=%d
+part_info->lenlo=%d
+part magic %s need equal usbburnpart
+sunxi usb error: received bytes 0x%x is not equal cbw struct size 0x%x
+usb command = %d
+usb_burn_handshake
+malloc memory
+there is no memory to store all user key data
+recv_size=%d
+usb_burn_success
+usb_burn_error
+usb_burn_finish
+usb_burn_saved
+sunxi burn flag failed
+smc_create_huk failed
+read key success
+read key failed
+read_len=%d
+the send data:
+sunxi erase key failed
+usb_erase_failed
+usb_erase_success
+sunxi erase all key success
+start=%d, sectors=%d
+send size=%d
+save burned flag err
+usb command = %d not support
+SUNXI_USB_SEND_DATA=%d
+SUNXI_USB_PBURN_EXIT
+Device will shutdown in 3 Secends...
+SUNXI_USB_PBURN_RECEIVE_PART_INFO
+SUNXI_USB_PBURN_RECEIVE_PART_VERIFY
+burn_part_bytes=%lld
+data verify success
+data verify failed
+sunxi efex queue error: already init
+buf queue page size = %d
+sunxi usb efex queue error: malloc memory fail size 0x%x
+sunxi usb efex queue error: malloc memory fail size 0x%zu
+efex queue init fail:make sure buf_queue_init function has be called
+efex_queue_init error: malloc memory size=0x%x fail
+efex_queue_write_one_page error: write flash from 0x%x, sectors 0x%x failed
+efex queue error: free space not enough
+hdcp_key_parse: hdcp file is bad, size: %d
+hdcp_key_parse: hdcp magic is bad
+hdcp_key_parse: hdcp crc is bad
+sunxi_aes_decrypt: failed
+hdcp_key_parse failed
+sunxi secure storage write failed
+err: ep0 fifo_count %d is not 8
+ERR: handle_ep0: ep0 stall
+sunxi usb err: read_request failed
+set address 0x%x ok
+sunxi usb err: unknown usb out request to device
+non standard req
+err: unkown bmRequestType(%d)
+sunxi ubs read error: usb rx ep is busy already
+sunxi usb err: fail to init usb device
+sunxi usb err : USBC_open_otg failed
+delay time %d
+sunxi usb err : unable to request dma for usb send data
+sunxi usb err : unable to request dma for usb receive data
+sunxi usb err: fail to malloc memory for rx command buffer
+usb init ok
+exit usb
+usb dma %d is overrange
+usb dma %d is not used
+raise: Signal # %d caught
+[NE]free list: 
+[NE]block NO:%4d; erase:%3d; 
+count:%4d; 
+info:0x%x
+[NE]invalid_page_count list: 
+count:%4d; invalid:%3d;
+[NE]block_used_count list: 
+[NE]block NO: %d 
+[NE]block_used_count: %d 
+[NE]add free_list error !
+[NE]add invalid_list error !
+[NE]invalid_page_count more than pages per blk 0 %d %d!!
+[NE]invalid_page_count more than pages per blk 1!!
+[NE]read a page: %d READ_RECLAIM!
+[NE]no free block
+[NE]do_write_error erase error!
+[NE]last block can not used to logic page %d!!
+[NE]last block can not used to power down page %d!!
+[NE]write_phy_data_to_current_block write error %d!
+[NE]do_write_error error
+[NE]invalid_page_count more than pages_per_blk at write logic data to current block:%d!!
+[NE]write_phy_data_to_current_block error2
+[NE]write phy data to current block error2
+[NE]write logic data to current block error
+[ND]swl: new_cur_blk->alloc ok(max_ec): block_no = %d; ec = %d; 
+[NE]no free block!!!!
+[NE]new_block_init_for_write erase error!
+[NE]get_new_current_block error3!
+[NE]get_new_current_block error4!
+[NE]logic_page_map_temp NULL!!
+[NE]invaild_page num error:[%d] [%d]  used_page:[%d]!!
+[NE]write_phy_data_to_current_block error1
+[NE]write_phy_page_map_to_current_block error!
+[NE]get_new_current_block error1!
+[NE]get_new_current_block error2!
+[NE]do after write error1!
+[NE]do_before_write error!
+[NE]write data to page error!
+[NE]do after write error2!
+[NE]error nand_write_logic_page_no_gc
+[ND]swl: static WL need to do(%d : %d)
+[ND]swl: min_ec_blk_no = %d,
+[ND]swl: zone->blocks = %d)
+[NE]garbage_collect_first none!!
+[NE]garbage_collect_first wrong!!
+[NE]garbage_collect_first cannot find PHY_MAPPING_PAGE %d %d %d %d!!
+[NE]garbage_collect_first cannot find PHY_MAPPING_PAGE %x %x %x %x !!
+[NE]garbage_collect_first cannot find PHY_MAPPING_PAGE %x %x %x %x %x!!
+[NE]garbage_collect_first rebuild %d,%d!!
+[NE]garbage_collect_first PHY_MAPPING_PAGE ecc err block:%d !!
+[NE]garbage_collect_first invaild_page num error!!
+[NE]garbage_collect_first read a logic page error %d %d %d %d!!
+[NE]%x %x %x %x %x !!
+[NE]%x %x %x %x %x!!
+[NE]nand_write_logic_page_no_gc gc fail!!
+[NE]erase ecc error block
+[NE]gc_one ok!
+[NE]gc_one error!
+[NE] gc_win_block gc_one error 
+[NE]gc all end
+[NE]garbage_collect phy_block null
+[ND]garbage too frequency! %d:%d
+[NE]garbage_collect_first wrong! %d
+[ND]swl: the block(%d) for static WL is not in invalid_list
+[ND]swl: done_static_wear_leveling(min_ec) block:%d, erase_count:%d
+[NE]swl: garbage_collect_first fail:%d
+[NE]swl: last->check fail:%d
+[ND]no block to prio gc
+[ND]no need gc:%d, type:%d
+[NE]do_prio_gc garbage_collect_first fail:%d, type:%d
+[ND]prio gc fail1:%d, type:%d
+[ND]prio gc fail2:%d, type:%d
+[NE]not power on gc %d!
+[ND]emergency power on gc %d !
+[ND]power on gc %d!
+[NE]%s:malloc fail for cache_node!
+[NE]%s:malloc fail for cache_page_buf!
+[NE]nand_cache_read error  NULL!
+[NE]error1 node %d,%d,%d!
+[NE]paramter error!
+[NE]write sector:0x%x,len:0x%x
+[NE]read sector:0x%x,len:0x%x
+[NE]flush write cache to nand no cache!
+[NE]ECC_LIMIT happened 10! page:%d cache: %d!
+[NE]flush write cache to nand error!
+[NE]nand_cache_write error  NULL!
+[NE]error1 bitmap %x!
+[NE]ECC_LIMIT happened 12! page:%d!
+[NE]error1 flush write cache to nand
+[NE]error2 flush write cache to nand
+[NE]ECC_LIMIT happened 11! page:%d!
+[NE]nand_flush_write_cache write error
+[ND]flush cache %d %d!
+[NE]nand_discard paramter error!
+[NE]dicard sector:0x%x,len:0x%x
+%4d:<%4d %3d><%d>
+[NE]%s:malloc fail for cache_buf!
+[NE]nand_sector_cache_read 1!
+[NE]nand_sector_cache_write 1!
+[NE]nand_sector_cache_write 2!
+[NE]%s:malloc fail for logic_page_map %d
+[NE]%s: malloc fail for logic_page_map %d
+[NE] zone_param_init malloc_logic_page_map error %d
+[NE]%s:malloc fail for temp_page_buf
+[NE]%s:malloc fail for logic_page_buf
+[NE] zone_param_init error2
+[NE]%s:malloc fail for current_block.user_info.buf
+[NE]%s:malloc fail for assist_block.user_info.buf
+[NE]%s:malloc fail for zone_phy_page_map_for_gc.buf
+[ND]before second %d %d.
+[NE]this zone not enough data block!!
+[NE]this zone not enough free block %d , %d!!
+[NE]recover_phy_page_mapping no used page %d!!
+[NE]recover_phy_page_mapping invalid page data!!
+[NE]power_down page %d!!
+[NE]recover_phy_page_mapping unkown page data %d!!
+[NE]recover_phy_page_mapping ecc error block:%d;page:%d!!
+[NE]recover_block_phy_page_mapping error page %d %d!!
+[NE]invalid_page_count more than pages_per_blk! :%d
+[NE]invalid_page data block:%d page:%d,logic_page 0x%x!!
+[NE]build invalid_page_count more than pages_per_blk!!
+[NE]NAND EVENT:do_write_error erase error1!
+[NE]NAND EVENT:do_write_error erase error2!
+[NE]%s:malloc fail for nrc!
+[NE]%s:malloc fail for nrc %d!
+[NE]erase_block block %d!
+[NE]erase_block block fail %d!
+[NE] ftl end block! %d!
+[NE]READ_RECLAIM!
+[NE]do nothing
+[NE]unkown page 0 spare data %x,%x,%x,%x,%x,%x,%x!!
+[ND]  bad block: %d
+[NE]first page ecc error ! %d!
+[NE]last page ok ! %d!
+[NE]last page blank ! %d!
+[NE]last page unkown ! %d!
+[NE]first page last page ecc error ! %d!
+[ND]bad block: %d
+[ND]build_zone_list_first.
+[NE]no block %d
+[NE]mtd size changed !
+[NE]get_used_page_num ecc error block:%d page:%d!
+[NE]get_used_page_num used %d %d!
+[NE]%x %x %x %x %x 
+[ND]cross_talk_rebuild_current_block fail 1
+[ND]cross_talk_rebuild_current_block!! %d,%d,%d!
+[ND]cross_talk_rebuild_current_block fail 2
+[ND]cross_talk_rebuild_current_block!! %d,%d,%d,%d,%d,%d!
+[ND]cross_talk_rebuild_current_block fail 3
+[ND]corss talk rebuild 1 %d %d %d!
+[ND]corss talk rebuild 2 %d %d %d!
+[NE] get free block fail!
+[NE]something is error here 14!
+[NE]page lost %d %d
+[NE]get_used_page_num_no_crosstalk ecc error block:%d page:%d!
+[NE]cross talk block:%d total_good_num %d good_page_num: %d!
+[ND]no_cross_talk_rebuild_current_block!! %d,%d,%d!
+[ND]no_cross_talk_rebuild_current_block fail 2
+[ND]no_cross_talk_rebuild_current_block!! %d,%d,%d,%d,%d,%d!
+[ND]no_cross_talk_rebuild_current_block fail 4
+[NE]no_cross_talk_rebuild_current_block erase block fail %d!
+[NE]current_block_ecc_error no free block!!!
+[NE]something is error here 16!
+[NE]do current_block_ecc_error %d!!
+[NE]current_block_ecc ok page %d %d!!
+[NE]current_block_ecc_error page %d!!
+[NE]current_block_ecc_error invalid page data %d!!
+[NE]current_block_ecc_error unkown page data %d!!
+[NE]do current_block_ecc_error end %d %d!!
+[NE]current_block ecc error %d!
+[NE]error! no free block!
+[ND]recover %d %d
+[NE]error!!
+[NE]new_block_init_for_write error here!
+[NE]something is error here 10!
+[NE]something is error here 11!
+[NE]something is error here 12 %d,%d!
+[NE]something is error here 17 %d,%d!
+[ND]get a new free block
+[NE]no free block to use!
+[NE]NAND_EVENT: 2 current used block found %d,%d!
+[NE]no crosstalk:2 block used count diff %d,%d %d,%d !
+[NE]NAND_EVENT: muti current used block found1 %d %d!
+[NE]NAND_EVENT: muti current used block found2 %d %d!
+[NE]NAND_EVENT: muti current used block found3 %d %d!
+[NE]NAND_EVENT: last page spare data %x,%x,%x,%x,%x,%x,%x!!
+[NE]last page unkown ecc ok %d,%d!!
+[NE]last page ecc error %d,%d!!
+[ND]something strange %d,%d!!
+[ND]all block full!!
+[ND]corss talk rebuild 0 %d %d!!
+[NE]muti current used block 1st %d %d!
+[NE]muti current used block 2nd %d %d!
+[NE]something is error here 7!
+[NE]p_phy_block_info_last %d %d!
+[NE]muti current used block 1 %d %d!
+[NE]muti current used block 2 %d %d!
+[NE]get_current_used_block fail!
+[ND]free block nums is %d !
+[NE]do block_last_page_ecc_error!!
+[NE]%s:malloc fail 1!
+[NE]%s:malloc fail 2!
+[NE]current_block_ecc_error invalid page data!!
+[NE]current_block_ecc_error unkown page data!!
+[NE]do block_last_page_ecc_error end!!
+[NE]adjust free list fail!!
+[ND]adjust free list: %d %d!!
+[ND]nand3.x 
+[ND]zone->nand_chip->blk_per_chip: %d 
+[ND]zone->nand_chip->bytes_per_page: %d 
+[ND]zone->nand_chip->pages_per_blk: %d 
+[ND]zone->nand_chip->max_erase_times: %d 
+[ND]zone->nand_chip->support_read_reclaim: %d 
+[ND]zone->test: %d 
+[ND]zone->zone_no: %d 
+[ND]zone->zone_attr: %d 
+[ND]zone->blocks: %d 
+[ND]zone->bad_block: %d 
+[ND]zone->logic_cap_in_sects: %d 
+[ND]zone->backup_cap_in_sects: %d 
+[ND]zone->free_block_num: %d 
+[ND]zone->gc_strategy.start_gc_free_blocks: %d 
+[ND]zone->gc_strategy.stop_gc_free_blocks: %d 
+[ND]zone->gc_strategy.gc_page: %d 
+[ND]zone->gc_strategy.process: %d 
+[ND]zone->prio_gc.prio_type : %d 
+[ND]zone->zone_start_phy_block->phy_block.Block_NO: %d 
+[ND]zone->zone_end_phy_block->phy_block.Block_NO: %d 
+[ND]zone->zone_phy_page_map_for_gc: %x 
+[ND]zone->current_block.user_info: %x 
+[ND]zone->current_block.block_info: %x 
+[ND]zone->current_block.block_info->phy_block.Block_NO: %d 
+[ND]zone->current_block.page_used: %d 
+[ND]zone->current_block.block_info->block_used_count: %d 
+[NE] zone->recv_free_block: %d %d!!
+[ND]zone->assist_block.user_info: %x 
+[ND]zone->assist_block.block_info: %x 
+[ND]zone->assist_block.block_info->phy_block.Block_NO: %d 
+[ND]zone->assist_block.page_used: %d 
+[ND]zone->assist_block.block_info->block_used_count: %d 
+[ND]zone->read_reclaim_complete: %x 
+[ND]zone->temp_page_buf: %x 
+[ND]zone->max_erase_num: %d 
+[ND]zone->cache.cache_totals: %x 
+[ND]zone->wl_gc_count: %d 
+[ND]zone->wl_gc_page_num: %d 
+[ND]zone->cfg->nftl_dont_use_cache: %x 
+[ND]zone->cfg->nftl_use_cache_sort: %x 
+[ND]zone->cfg->nftl_support_gc_read_reclaim: %x 
+[ND]zone->cfg->nftl_support_wear_leveling: %x 
+[ND]zone->cfg->nftl_need_erase: %x 
+[ND]zone->cfg->nftl_min_free_block_num: %x 
+[ND]zone->cfg->nftl_gc_threshold_free_block_num: %x 
+[ND]zone->cfg->nftl_min_free_block: %x 
+[ND]zone->cfg->nftl_gc_threshold_ratio_numerator: %x 
+[ND]zone->cfg->nftl_gc_threshold_ratio_denominator: %x 
+[ND]zone->cfg->nftl_max_cache_num: %d 
+[ND]zone->cfg->nftl_max_cache_write_num: %d 
+[ND]zone->cfg->nftl_cross_talk: %x 
+[ND]zone->cfg->nftl_read_claim_interval: %d 
+[ND]first
+[NE]init_zone_after_first_scan error
+[NE]second_scan_all_blocks error
+[ND]nftl ok!
+[NE]%s:malloc 4096 fail!
+buf:%x %x %x %x %x 
+%x %x %x %x %x %x!!
+[NE]%s:malloc 8192 fail!
+zoneNO:%d total_pages: %d
+MEMSET bytes: %d
+build_zone_list start
+nftl_cache_init start
+=================================2=======================================
+nand_find_zone_table end
+[NE]%s:malloc 512 fail!
+[ND]==========================
+[NE]%s: malloc fail for zone
+[NE]%s: malloc fail for nand_chip
+[NE]%s: malloc fail for nand_block_info
+[NE]not enough blocks %d!
+[ND]nftl start:%d,%d
+[NE] zone_param_init fail!
+[NE] build_zone_list_first fail!
+[NE] build_zone_list fail!
+try again
+[NE]smart->version:%x;
+[NE]smart->total_recv_read_sectors:%lld;
+[NE]smart->total_recv_write_sectors:%lld;
+[NE]smart->total_real_read_pages:%lld;
+[NE]smart->total_real_write_pages:%lld;
+[NE]smart->total_recv_discard_sectors:%lld;
+[NE]smart->total_real_discard_sectors:%lld;
+[NE]smart->total_recv_read_claim_pages:%d;
+[NE]smart->total_gc_times:%d;
+[NE]smart->total_gc_pages:%d;
+[NE]smart->total_wl_times:%d;
+[NE]smart->total_wl_gc_times:%d;
+[NE]smart->total_real_read_error_pages:%d;
+[NE]smart->total_real_write_error_pages:%d;
+[NE]smart->total_normal_power_cycles:%x;
+[NE]smart->total_unusual_power_cycles:%x;
+[NE]smart->max_block_erase_times:%d;
+[NE]smart->min_block_erase_times:%d;
+[NE]smart->max_block_used_counter:%d;
+[NE]smart->min_block_used_counter:%d;
+[NE]smart->read_reclaim_utc:%d;
+[NE]smart->cross_talk_times:%d;
+[NE]smart->read_reclaim_zone_no:%d;
+[NE]smart->read_reclaim_page_no:%d;
+[NE]malloc size too large %d!
+[NE]%s:malloc fail for nftl_cfg
+[ND]max_erase_times = %i
+[NE]%s:malloc fail for nftl_blk
+[NE]nftl_initialize failed
+[ND]nftl_add ok
+[NE]nftl_build_all error!
+[ND]cap: 0x%08x.
+[NE]parameter error %d,%d !
+[NE]%s:malloc fail for partition
+nand_partition0
+[NE]Too much new bad block
+[NE]too much bad block
+[ND]phy_partition->PartitionNO :%d
+[ND]phy_partition->SectorNumsPerPage :%d
+[ND]phy_partition->PageNumsPerBlk :%d
+[ND]phy_partition->TotalBlkNum :%d
+[ND]phy_partition->FullBitmapPerPage :%d
+[ND]phy_partition->FreeBlock :%d
+[ND]phy_partition->TotalSectors :%d
+[ND]phy_partition->StartBlock.Chip_NO :%d
+[ND]phy_partition->StartBlock.Block_NO :%d
+[ND]phy_partition->EndBlock.Chip_NO :%d
+[ND]phy_partition->EndBlock.Block_NO :%d
+[ND]phy_partition->next_phy_partition :%d
+[ND]phy_partition->PartitionNO %d  FACTORY BAD BLOCK:
+[ND]BAD Chip:%d;Block:%d.
+[ND]phy_partition->PartitionNO %d  NEW BAD BLOCK:
+[NE]:malloc fail for phy_partition
+[NE]no block
+[NE]%s:malloc fail for factory_bad_block
+[NE]%s:malloc fail for new_bad_block
+[NE]too much bad block %d
+[ND]factory bad block:%d,%d PartitionNO:%d
+[NE]too much factory bad block %d
+[ND]new bad block:%d,%d PartitionNO:%d
+[NE]too much new bad block %d
+[NE]erase_whole_phy_partition start! %d %d %d
+[NE]erase_whole_phy_partition error %d %d
+[NE]erase_last_phy_partition error 1
+[NE]erase_last_phy_partition error 2
+[NE]mbr_block_addr erase error?!
+[ND]write_mbr!
+[NE]mbr_block_addr write error?!
+[NE]bad_block_addr erase error?!
+[NE]write_factory_block_table!
+[NE]bad_block_addr write error %d %d?!
+[ND]factory bad block:%d %d!
+[NE]new_bad_block_addr erase error?!
+[NE]write_new_bad_block_table %d,%d!
+[NE]bad_block_addr write error?!
+[NE]write_no_use_block erase error?!
+[ND]write_no_use_block!
+[NE]write_no_use_block write error?!
+[ND]ok get a new bad table!
+[ND]new bad block last first use page:%d
+[NE]read new_bad_block table error:%d!
+[ND]new bad block:%d %d!
+[ND]nand_info->type :%d
+[ND]nand_info->SectorNumsPerPage :%d
+[ND]nand_info->BytesUserData :%d
+[ND]nand_info->PageNumsPerBlk :%d
+[ND]nand_info->BlkPerChip :%d
+[ND]nand_info->FirstBuild :%d
+[ND]nand_info->FullBitmap :%d
+[ND]nand_info->bad_block_addr.Chip_NO :%d
+[ND]nand_info->bad_block_addr.Block_NO :%d
+[ND]nand_info->mbr_block_addr.Chip_NO :%d
+[ND]nand_info->mbr_block_addr.Block_NO :%d
+[ND]nand_info->no_used_block_addr.Chip_NO :%d
+[ND]nand_info->no_used_block_addr.Block_NO :%d
+[ND]nand_info->new_bad_block_addr.Chip_NO :%d
+[ND]nand_info->new_bad_block_addr.Block_NO :%d
+[ND]nand_info->new_bad_page_addr :%d
+[ND]nand_info->partition_nums :%d
+[ND]nand_info->SectorNumsPerPage :0x%x
+[ND]nand_info->PageNumsPerBlk :0x%x
+[ND]nand_info->BlkPerChip :0x%x
+[ND]nand_info->ChipNum :0x%x
+[ND]get phy_partition %s size :0x%x
+[ND]partition: %d,%d,%d
+[ND]user_type:%d
+[ND]get last phy_partition
+[NE]build_phy_partition %d error!
+[ND]build %d phy_partition !
+[NE]no mbr_data table %d !!!!!!!
+[NE]read mbr_data table error2 %d %x %x
+[NE]can not find mbr table !!
+[ND]ok  get factory_bad_block table!
+[NE]no factory_bad_block table!!!!!!!
+[NE]read factory_bad_block table error2
+[NE]can not find factory_bad_block table !!
+[NE]init new_bad_block table error!!
+[NE]can not find new_bad_block table!!
+[NE]can not find no use block %d!
+[NE]can not find no_used_block!!
+[ND]build_all_phy_partition start!
+[NE]%s(): build_all_phy_partition() fail!
+[ND]block:%d page:%d spare: %x %x %x %x %x %x %x %x %x %x
+[ND]=============chip %d============================
+[ND]=================end========================
+[ND]partition->size :%d
+[ND]partition->cross_talk :%d
+[ND]partition->attribute :%d
+[ND]partition->start.Chip_NO :%d
+[ND]partition->start.Block_NO :%d
+[ND]partition->end.Chip_NO :%d
+[ND]partition->end.Block_NO :%d
+[ND]partition->nand_disk[%d].size :%d
+[ND]partition->nand_disk[%d].type :%d
+[NE]%s:malloc fail for phy_partition
+[ND]not enough block:%d,%d!
+[ND]not enough block:%d,%d!!
+[NE]no block2 %d
+[NE]phy_partition Attribute %d
+[ND]boot :0x%x
+[ND]boot->magic :0x%x
+[ND]boot->len :0x%x
+[ND]boot->no_use_block :0x%x
+[ND]boot->uboot_start_block :0x%x
+[ND]boot->uboot_next_block :0x%x
+[ND]boot->logic_start_block :0x%x
+[ND]mbr len :%d
+[ND]_PARTITION len :%d
+[ND]_NAND_STORAGE_INFO len :%d
+[ND]_FACTORY_BLOCK len :%d
+[NE]1 can not find no use block !!
+[ND]new write mbr %d!
+[NE]mbr_block_addr write error %d %d!
+[ND]new write mbr end!
+[NE]mbr read %d
+[NE]mbr read ok!
+[NE]mbr read end!
+[NE]len1: 0x%x len2: 0x%x!
+j 0x%x k 0x%x!
+[ND]write partition %d!
+[ND]write partition end!
+[NE]mbr partition start!
+[NE]mbr partition ok!
+[NE]mbr partition end!
+[NE]write_factory_block_table_v2!
+[ND]factory bad block num:%d!
+[ND]ok get factory_bad_block table!  %d 
+[NE]read factory_bad_block table error2 %d 
+[NE]write_new_bad_block_table new format %d!
+[NE]bad_block_addr write error,page:%d!
+[ND] new bad block table old format!
+[ND]new bad block table old format(free block)
+[NE]new_bad_block table new format!
+[NE]write_new_bad_block_table new format first build %d!
+[NE]new_write no_use_block erase error?!
+[ND]new_write_no use_block!
+[NE]new_write no_use_block write error?!
+[ND]sizeof partition:%d
+[ND]nand_info->partition:%d:
+[ND]size:0x%x
+[ND]cross_talk:0x%x
+[ND]attribute:0x%x
+[ND]start: chip:%d block:%d
+[ND]end  : chip:%d block:%d
+[NE]print partition %d !
+[NE]partition_num: %x,size :0x%x,cross_talk %x
+[NE]part %s size: 0x%x type: %x
+[NE]build phy partition %d error!
+[NE]not erase MP!!!
+[NE]not erase MP but mbr not the same v2!
+[NE]erase MP!!!
+[NE]1 can not find mbr table !!
+[NE]get mbr_data table
+[ND]build all_phy partition start!
+[NE]read partition partition fail!
+[NE]build all phy partition fail!
+[ND]factory FirstBuild %d
+[ND]erase factory FirstBuild
+[NE]get partition v3 fail!!
+[ND]old not erase factory FirstBuild
+[NE]not erase MP but no mbr!
+[NE]not erase MP but mbr not the same 1!
+[ND]new not erase factory FirstBuild
+[NE]not erase MP but mbr not the same 2!
+[ND]boot start 
+[NE]boot but not data!
+[NE]boot rebuild data!
+[NE]cannot find mbr!
+[NE]%s: malloc fail for temp_page_buf!
+[NE]%s: malloc fail for factory_bad_block!
+[NE]%s: malloc fail for new_bad_block!
+[NE]%s: malloc fail for mbr_data!
+[ND]use old nand info init!
+[NE]not find mbr table!!!!
+[ND]old nand info init!!
+[ND]new nand info init!!
+[NE]boot not find mbr table!!!!
+[NE]mbr->PartCount: %d!
+part: %d!
+[NE]part->name: %s !
+[NE]part->addr: 0x%x !
+[NE]part->len: 0x%x !
+[NE]part->user_type: 0x%x !
+[NE]part->keydata: %d !
+[NE]part->ro: %d !
+ ====invalid nctri=====
+==============show_nctri======================
+channel_id:            %d
+type:                  %d
+chip_cnt:              %d
+chip_connect_info:     %d
+rb_connect_info:       %d
+dma_type:              %d
+dma_addr:              %d
+write_wait_rb_before:  %d
+write_wait_rb_mode:    %d
+rb_ready_flag:         %d
+dma_ready_flag:        %d
+timing ctl: 
+==============show_nctri end======================
+ invalid nci
+==============show_nci======================
+chip_no:                   %d
+nctri_chip_no:             %d
+driver_no:                 %d
+blk_cnt_per_chip:          %d
+sector_cnt_per_page:       %d
+page_cnt_per_blk:          %d
+page_offset_for_next_blk:  %d
+randomizer:                %d
+read_retry:                %d
+interface_type:            %d
+timing_mode:               %d
+support_change_onfi_timing_mode:  %d
+support_ddr2_specific_cfg:        %d
+support_io_driver_strength:       %d
+support_vendor_specific_cfg:      %d
+support_onfi_sync_reset:   %d
+support_toggle_only:       %d
+frequency:                 %d
+ecc_mode:                  %d
+max_erase_times:           %d
+page_addr_bytes:           %d
+sdata_bytes_per_page:      %d
+nsci chip_no:              0x%08x
+nctri channel_id:          0x%08x
+multi_plane_read_cmd0:     0x%08x
+multi_plane_read_cmd1:     0x%08x
+multi_plane_write_cmd0:    0x%08x
+multi_plane_write_cmd1:    0x%08x
+bad_block_flag_position:   0x%08x
+multi_plane_block_offset:  0x%08x
+id_number:                 0x%08x
+ invalid nsci
+=================show_nsci===================
+chip_no:                       %d
+blk_cnt_per_super_chip:        %d
+sector_cnt_per_super_page:     %d
+page_cnt_per_super_blk:        %d
+page_offset_for_next_super_blk:%d
+spare_bytes:                   %d
+two_plane:                     %d
+channel_num:                   %d
+vertical_interleave:           %d
+dual_channel:                  %d
+driver_no:                     %d
+nci_first:                     %d %d
+v_intl_nci_1:              %d %d
+v_intl_nci_2:              %d %d
+d_channel_nci_1:              %d %d
+d_channel_nci_2:              %d %d
+================show_nsi====================
+================show_nssi====================
+super_chip_cnt:      %d
+super_block_nums:    %d
+support_two_plane:   %d
+support_v_interleave:%d
+support_dual_channel:%d
+==========================uboot========================================
+ecc error chip0 block :%d page :0x%x 
+block:%d page:%d spare:0x%2x  0x%2x%2x%2x%2x   0x%2x%2x  0x%2x%2x%2x%2x
+==========================all page 0========================================
+ecc error chip0 block :%d page :0 
+block:%d page:0 spare:0x%2x    0x%2x 0x%2x 0x%2x 0x%2x   0x%2x%2x  0x%2x%2x%2x%2x
+==========================all page========================================
+block:%d page:0 spare:0x%2x   0x%2x 0x%2x 0x%2x 0x%2x  0x%x%x  0x%x%x%x%x
+block:%d page:%d spare:0x%2x   0x%2x 0x%2x 0x%2x 0x%2x  0x%x%x  0x%x%x%x%x
+show data: 0x%x %d
+block:%d page:%d special_data:%x,erase_count:%x,block_used_count:%x
+nand super page_test chip:0x%x block:0x%x page:0x%x 
+data error chip:0x%x block:0x%x page:0x%x 
+spare error chip:0x%x block:0x%x page:0x%x 
+nand phy page_test chip:0x%x block:0x%x page:0x%x 
+nand phy page_test !chip:0x%x block:0x%x
+nand phy page_test bad block
+data error chip:0x%x block:0x%x page:0x%x offset:0x%x data:0x%x
+spare error chip:0x%x block:0x%x spare:0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 
+nand phy block erase test !chip:0x%x block:0x%x
+data error chip:0x%x block:0x%x page:0x%x data:%x %x %x %x
+erase chip: %d block: %d
+nand phy check all start
+mark chip: %d block: %d
+nand phy check all end
+nand_phy_read_block_test !chip:0x%x block:0x%x
+block error! chip:%d block:%d page:%d ret:%d
+nand update end !
+nand_physic_init error %d
+NandHwInit end
+NandHwSuperStandby start
+NandHwSuperResume start
+NandHwSuperResume end
+NandHwNormalStandby start
+NandHwNormalResume start
+NandHwShutDown start
+burn boot0 normal mode!
+read boot0 normal mode!
+read boot0 one fail %d!
+read boot0 fail!
+no boot0 ok!
+recover boot0 %d!
+burn uboot in one block!
+get flash driver version error!
+uboot length check error!
+Fail in erasing block %d!
+uboot info: page %d in block %d.
+Warning. Fail in writing page %d in block %d.
+burn uboot in many block %d!
+write uboot many block %d!
+read uboot in one block %d!
+Warning. Fail in read page %d in block %d 
+get uboot flash driver version error!
+read uboot in many block %d!
+read uboot many block %d!
+error read page: %d in block %d 
+read uboot one %d!
+read uboot!
+set ddrtype 0, freq 30Mhz
+set ddrtype 0
+set ddrtype 3, freq 30Mhz
+nand get param end 0x%x
+uboot_start_block:    %x
+uboot_next_block:   %x
+logic_start_block:%x
+nand_specialinfo_page:%x
+nand_specialinfo_offset:    %x
+physic_block_reserved:    %x
+NAND UpdatePhyArch
+script support_two_plane %d
+script support_v_interleave %d
+script support_dual_channel %d
+nand has valid data!!
+nand is blank!!
+not slc program
+find a bad block %d %d
+this is nand struct block %d
+this is old nand struct block %d
+this is hynix otp data save block %d
+Warning. Fail in read page %d in block %d.
+oob data error
+change_uboot_start_block error!!!! 
+uboot->use_lsb_page %d 
+uboot->copys %d 
+uboot->uboot_len %d 
+uboot->total_len %d 
+uboot->uboot_pages %d 
+uboot->total_pages %d 
+uboot->blocks_per_total %d 
+uboot->page_offset_for_nand_info %d 
+uboot->uboot_block:
+init_phyinfo_buf malloc fail
+physic_info_get_offset start!!
+uboot_buf malloc fail
+ecc err:chip %d block %d page %d
+physic_info_get_one_copy start!!
+tempbuf malloc fail
+bad block:chip %d block %d
+clean physic info uboot
+burn uboot one!
+boot magic error %x
+first boot flag
+recover uboot data
+recover1  uboot %d.
+recover2  uboot %d.
+recover3  uboot %d.
+recover4  uboot %d.
+no uboot ok
+physic_info_add_to_uboot_tail start2 %x!!
+physic_info_read start!!
+physic_info_read already!!
+physic info copy is ok
+physic info copy is bad
+not uboot: %d
+no memory for nand_init_temp_buf 16K
+no memory for nand_init_temp_buf 32K
+no memory for nand_init_temp_buf 64K
+nand_physic_init, init nctri error
+nand_physic_init
+nand_physic_init init_parameter error
+nand_physic_init nand_build_nsi error
+nand_physic_init check_nctri error
+nand_physic_init update_nctri error
+nand_physic_init nand_build_nssi error
+nand_physic_init end
+nand_physic_exit
+get memory :%d. 
+%s:malloc fail
+get memory fail %d. 
+free memory fail %d. 
+%s:malloc fail for mbuf
+spare_sum:0x%x,check_sum:0x%x
+start block:%d
+nand secure storage firsr build  fail: %d,%d
+nand secure storage firsr build  ok: %d,%d
+nand secure storage check fail:%d
+secure storage fail 1
+secure storage repair:%d
+secure storage updata ok!
+nand_secure_storage_write: %d,%d
+nand secure storage fail: %d,%d
+nand secure storage ok: %d,%d
+read secure storage:%d ret %d buf :0x%x,0x%x,0x%x,0x%x,
+nand_secure_storage_test_read item:%d ret:%d buf:0x%x,0x%x,0x%x,0x%x,
+nand_reset_chip, reset failed!
+nand_first_reset_chip, reset failed!
+nand_first_reset_chip, ndfc_wait_all_rb_ready timeout
+nand_reset_chip, read chip status failed!
+wait nand status ready timeout,chip=%x, status=%x
+read chip status failed %x %x!
+nand_reset_chip, read chip id failed!
+error page per block %d!
+wrong dclk(%d) in mode(%d)
+set feature(addr 0x02) NV-DDR2 Configuration failed!
+wrong onfi nand flash driver strength value: %d. keep default value
+set feature(addr 0x10) Programmable output driver strength failed!
+set feature(addr 0x80) Programmable output driver strength failed!
+set feature(addr 0x80) Programmable R/B# Pull-Down strength failed!
+wrong onfi interface type: %d
+wrong onfi timing mode(%d) in interface type(%d)
+set feature(addr 0x02) Toggle 2.0-specific Configuration failed!
+wrong toggle nand flash driver strength value: %d. keep default value.
+check scan data, main_buf 0x%x is null!
+check scan data, first_check %d %d!
+_change_nand_parameter: wrong input para, ddr_type %d, pre_ddr_type %d
+_setup_nand_onfi_ddr2_para() failed! %d
+_setup_nand_onfi_driver_strength() failed! %d
+_setup_nand_onfi_vendor_specific_feature() failed! %d
+_change nand onfi timing mode failed
+nand flash switch to nv-ddr or nv-ddr2 failed!  %d
+_change_nand onfi timing_mode  failed
+nand flash change timing mode at async interface failed!  %d 
+set nand onfi ddr2 parameter failed! %d
+_setup_nand_toggle_driver_strength() failed! %d
+_setup_nand_toggle_vendor_specific_feature() failed! %d
+nand flash change timing mode at async interface failed! %d  continue...
+set nand onfi ddr2 parameter failed! %d 
+_setup_nand_onfi_driver_strength() failed! %d 
+_setup_nand_onfi_vendor_specific_feature() failed! %d 
+nand flash change timing mode at nvddr/nvddr2 failed! %d 
+set nand toggle ddr2 parameter failed! %d 
+_setup_nand_toggle_driver_strength() failed! %d 
+_setup_nand_toggle_vendor_specific_feature() failed! %d 
+wrong nand interface type!
+_get right timing para, set edo to 1 for sdr nand.
+wrong ndfc version, %d
+read id failed! ---> continue
+ddr edo:0x%x, delay:0x%x is 
+wrong %d
+can't find a good edo, delay chain. index %d:  %d %d %d
+(0x%x, 0x%x - 0x%x), (0x%x, 0x%x - 0x%x)
+good edo: 0x%x, good delay chain: 0x%x
+can't find a good edo, delay chain !
+(0x%x, 0x%x - 0x%x) 
+scan error!!!!!!!
+can't find a good edo, delay chain!!
+set cmd with nand bus fail, cmd:0x%x;dat_len:0x%x;counter:0x%x;!
+dat_len is too long %d!
+cmd:0x%x;
+get_data_with nand_bus_one_cmd fail, cmd:0x%x;dat_len:0x%x!
+nand_write_data_in block error1 chip:0x%x block:0x%x 
+nand_write_data_in block error2 chip:0x%x block:0x%x page:0x%x 
+nand_read_data_in block error2 chip:0x%x block:0x%x page:0x%x 
+nci_add_to_nsi: %d 0x%x
+nci_add_to_nctri: %d 0x%x
+invalid nctri!
+nand_reset_chip error %d
+nand_read_id error %d
+nand not support! channel %d chip %d: %02x %02x %02x %02x %02x %02x %02x %02x
+init_nci_from_id error %d
+ no nand found !
+search nand structure %d  %d: get last physic arch ok 0x%x 0x%x!
+search nand structure %d  %d: get old physic arch ok 0x%x 0x%x!
+search nand structure: bad block no physic arch info!
+search nand structure: find a good block: %d, but no physic arch info.
+search nand structure: blank block!
+search nand structure: unkonwn %d!
+write nand structure: write physic arch to blk %d...
+write nand structure: erase chip %d, block %d error
+write nand structure: mark bad block, write chip %d, block %d, page %d error
+write nand structure: erase block %d ok.
+write nand structure: write chip %d, block %d, page %d error
+search nand structure: ok arch
+search nand structure: old arch
+never be here! store nand structure
+search nand structure: can not find good block: 12~112
+write nand structure fail1
+write nand structure: can not find nand structure: 12~112
+get nand structure ok!
+get nand structure 1!
+get nand structure 2 %d!
+get nand structure 3 0x%x!
+not support chip_cnt1 %d
+not support chip_cnt2 %d
+not support channel_num %d
+not support chip_cnt %d %d
+%s: ch %d, init toggle interface!
+%s: init toggle interface with classic clk cfg(%d, %d) failed!
+try timing %d clk %dMHz!
+1 _change nand parameter error when use clk %dMhz!
+1 change clk to cfg(%d, %d) failed!
+get timing para failed 0!
+get timing para failed! 1
+interface change ddr_type:%x sclk0:%d sclk1:%d sdr_edo_bak:%x ddr_edo_bak:%x ddr_delay_bak:%x !
+interface  not change ddr_type:%x sclk0:%d sclk1:%d sdr_edo:%x ddr_edo:%x ddr_delay:%x !
+start update nctri interface  fail --1!
+%s: wrong nctri %d
+%s: nand interface will be changed! %d -> %d
+%s: sclk0 will be changed! %d -> %d
+%s: sclk1 will be changed! %d -> %d
+%s: timing_change %d, sclk0_bak %d, sclk0 %d!
+start update nctri_interface fail --0!
+_update_ext accessfreq_para: wrong freq para, 0x%x
+_update_ext accessfreq_para: update freq from script, %d
+_update_ext accessfreq_para: wrong freq, %d
+_update_ext accessfreq_para: wrong id number, 0x%x/0x%x
+_update_ext accessfreq_para: update freq high, %d
+update ext accessfreq para fail, using internal frequency!
+update_nctri: build nand rb connect fail, chip_cnt=%d, chip_connect=0x%x
+build nand physical connection ok...
+before_update nctri nand interface fail!
+update 1st nctri interface fail!
+update other nctri interface fail!
+null channel %d
+error, channel 0 is null!!!!
+check_nctri, different chip_connect %d %d
+check_nctri, different id number
+gen_rand_num, wrong input len %d, len must be even!!
+nand wait_reg_status timeout, reg:0x%x, value:0x%x
+print ndfc reg:
+reg_ctl:               0x%08x
+reg_sta:               0x%08x
+reg_int:               0x%08x
+reg_timing_ctl:        0x%08x
+reg_timing_cfg:        0x%08x
+reg_addr_low:          0x%08x
+reg_addr_high:         0x%08x
+reg_sect_num:          0x%08x
+reg_byte_cnt:          0x%08x
+reg_cmd:               0x%08x
+reg_read_cmd_set:      0x%08x
+reg_write_cmd_set:     0x%08x
+reg_io:                0x%08x
+reg_ecc_ctl:           0x%08x
+reg_ecc_sta:           0x%08x
+reg_debug:             0x%08x
+reg_err_cnt0:          0x%08x
+reg_err_cnt1:          0x%08x
+reg_err_cnt2:          0x%08x
+reg_err_cnt3:          0x%08x
+reg_user_data_base:    0x%08x
+reg_efnand_sta:        0x%08x
+reg_spare_area:        0x%08x
+reg_pat_id:            0x%08x
+reg_mbus_dma_addr:     0x%08x
+reg_dma_cnt:           0x%08x
+reg_ram0_base:         0x%08x
+reg_ram1_base:         0x%08x
+reg_dma_sta:           0x%08x
+print ndfc save reg:
+Reset NDFC start %d  %x
+Reset NDFC end %d  %x
+ndfc wait cmdfifo free error!
+ndfc wait fsm ready error!
+ndfc wait cmd finish error!
+_wait_rb ready_int int timeout, ch: 0x%x, sta: 0x%x
+_wait_rb ready_int wait timeout, ch: 0x%x, sta: 0x%x
+ndfc_change_page_size, wrong page size!
+_normal_cmd_io_send, wait cmd fifo free timeout!
+_normal_cmd io_wait, wait cmd finish timeout 0x%x!
+_normal_cmd io_wait, wait dma timeout!
+_normal cmd io_wait, sw wait rb b2r error 0x%x, wait mode %d!
+_batch_cmd io_send, cmd type error, %d!
+_batch cmd io send, wait cmd fifo free timeout!
+_batch cmd io wait, wait dma timeout!
+wait dma timeout end!
+_batch cmd io wait, wait cmd finish timeout 0x%x!
+cmd_type:0x%x!
+ecc_layout:0x%x!
+row_addr_auto_inc:0x%x!
+re_start_cmd:0x%x!
+re_end_cmd:0x%x!
+re_cmd_times:0x%x!
+==========0x%x===========
+cmd_send:0x%x!
+cmd_wait_rb:0x%x!
+cmd_acnt:0x%x!
+cmd_trans_data_nand_bus:0x%x!
+cmd_swap_data:0x%x!
+cmd_swap_data_dma:0x%x!
+cmd_direction:0x%x!
+cmd_mdata_len:0x%x!
+cmd_mdata_addr:0x%x!
+cmd_addr[%d]:0x%x!
+ndfc_execute_cmd, send normal cmd %d error!
+ndfc_execute_cmd, wait normal cmd %d error!
+ndfc_execute_cmd, send batch cmd %d error!
+ndfc_execute_cmd, wait batch cmd %d error!
+ndfc_execute_cmd, wrong cmd type, %d!
+ndfc_get_spare_data, wrong input parameter!
+ndfc set spare data, wrong input parameter!
+wrong interface , 0x%x
+init nctri, request dma fail!
+init nctri NAND PIORequest error!
+init nctri NAND_ClkRequest error!
+_dma_config_start, wrong dma mode, %d
+_wait_dma_ready_int int timeout, ch: 0x%x, sta: 0x%x
+nand _wait_dma_end timeout, NandIndex: 0x%x, rw: 0x%x, status:0x%x
+ret !!!!:0x%x
+read data sta, some ecc blocks are all '1', others are all '0' %x %x
+ndfc get_bad_blk_flag, input parameter error!
+_cal_page_map_tab, wrong @nand_page_size, %d
+_cal_page_map_tab, wrong @page_cnt, %d
+BT0.NTAB
+_cal_page_map_tab, checksum error!
+burn_boot0 page table nonsecure mode
+ malloc for data_FF_buf failed.!
+block:%x 
+burn_boot0_lsb_pagetab_4k mode!
+burn_boot0_lsb_FF_mode, malloc for pos_data failed.
+burn_boot0_lsb_FF_mode, malloc for tab failed.
+pagetab boot0 %x 
+burn_boot0_lsb_pagetab_2k mode!
+burn_boot0_1k mode!
+pages_per_block bigger than 128!
+boot0 count %d!
+m0 write boot0 one nonsecure
+m0 write boot0 one secure
+m0 write boot0 one
+secure mode judge error
+erase_block wrong1
+erase_block wrong2
+read page start, batch cmd io send error:chip:%d block:%d page:%d sect_bitmap:%d mdata:%x slen:%d: !
+read page end, batch cmd io wait error:chip:%d block:%d page:%d sect_bitmap:%d mdata:%x slen:%d: !
+read page ecc limit,chip=%d block=%d page=%d
+ecc err!read page, read page end error %d,chip=%d block=%d page=%d
+fatal err -1, wrong input parameter, mdata: 0x%08x  sdata: 0x%08x  sect_bitmap: 0x%x
+read page, read page start error %d
+read2 page start, batch cmd io send error:chip:%d block:%d page:%d sect_bitmap:%d mdata:%x slen:%d: !
+write page end, batch cmd io wait error:chip:%d block:%d page:%d sect_bitmap:%d mdata:%x slen:%d: !
+wfatal err -0, wrong input parameter, ch: %d  chip: %d/%d  block: %d/%d  page: %d/%d
+wFatal err -2, wrong input parameter, unaligned write page SectBitmap: 0x%x/0x%x
+write page, write page start error %d
+write page, write page end error %d
+read_two_plane_page_start failed!
+cfatal err -0, wrong input parameter, ch: %d  chip: %d/%d  block: %d/%d 
+bad block check, unknown bad block flag position
+find a bad block: %d %d %d 
+sdata: %02x %02x %02x %02x 
+bad block mark no memory chip: %d block:%d
+Mfatal err -0, wrong input parameter, chip: %d/%d  block: %d/%d 
+bad block mark chip: %d block:%d
+bad block mark, unknown bad block flag position
+bad block mark, erase block failed, blk %d, chip %d, ch %d
+ m0 special init 
+ m0 special exit 
+m1 write page FF wrong
+rr value %x %x %x %x!
+_major_check_byte, wrong input para, level %d, len %d
+%d:  '1'-'0' : %d - %d
+get bit %d failed!
+_get_read_retry_parameters, get rr count failed!
+rr cnt: %d
+_get_read_retry_parameters, get rr reg count failed!
+rr reg cnt: %d
+read retry value from otp error: rr_cnt %d rr_reg_cnt %d!
+_get_read_retry_parameters, get the %d-th byte of rr table failed!
+start get read retry param from: ce %d, rb %d...
+invalid buffer for otp info!
+hynix OTP RegCount value error: 0x%x, 0x%x 
+otp_info_hynix_16nm : allocate memory fail
+m1 CH %d chip %d get otp info failed!
+m1 CH %d chip %d get read retry cfg from otp info failed!
+_vender_get_param_otp_hynix time %d!
+set retry default value: 
+m1_readretry_exit. 
+m1 retry!
+m1 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m1_special_exit 
+get_hynix_special_info start!!
+hynix_special_info:can't find uboot head
+physic info start_block %d
+[PHY_GetDefaultParam]:readbuf malloc fail
+ch %d, chip %d Read Retry value Table from uboot
+[PHY_DBG] ch %d, can't get right otp value from nand otp blocks, then use otp command
+[PHY_DBG] repair ch %d chip %d otp value end
+NFC_ReadRetryInit, unknown read retry mode 0x%x
+ m1_special_init m1_read_retry_mode: %d m1_read_retry_cycle:%d m1_read_retry_reg_num:%d
+ m1_special_init error m1_read_retry_mode: %d m1_read_retry_cycle:%d m1_read_retry_reg_num:%d
+m8 read page start, batch cmd io send error!
+m8 read page end, batch cmd io wait error!
+m8 write page start, input parameter error!
+m8 read page end,  batch cmd io wait error!
+read_boot0_lsb_FF_pagetab_mode!
+block %x 
+get flash driver version error!
+read blk %x 
+read_boot0_1k mode!
+m0 read boot0 one secure
+burn_boot0_hynixF16_4G
+data_FF_buf malloc error!
+burn_boot0_lsb_FF_pagetab secure mode!
+burn_boot0_hynixF20 page table nonsecure mode
+lsb enalbe 
+read retry mode: 0x%x
+lsb disalbe 
+burn_boot0_lsb_enable_pagetab mode!
+m2_lsb_exit
+otp copy %d is ok!
+otp copy failed!
+_vender_get_param_otp_hynix error!
+m2 get default param error !
+ch %d, chip %d Read Retry value Table from uboot:
+[PHY_DBG] repair ch %d otp value end
+m2_readretry_exit. 
+retry para:
+m2 retry!
+retry spare all 0xff! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+sdata:0x%x %x %x %x 
+m2 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m2_special_init m2_read_retry_mode: %d m2_read_retry_cycle:%d m2_read_retry_reg_num:%d
+ m2_special_init error m2_read_retry_mode: %d m2_read_retry_cycle:%d m2_read_retry_reg_num:%d
+ m2_special_exit 
+m3_lsb_exit
+m3_get_default_param: ch: %d, chip: %d, value: 0x%x 0x%x 0x%x 0x%x 
+m3_readretry_exit. 
+m3 retry param:
+m0 retry!
+m3 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m3_special_init m3_read_retry_mode: %d m3_read_retry_cycle:%d m3_read_retry_reg_num:%d
+ m3_special_init error m3_read_retry_mode: %d m3_read_retry_cycle:%d m3_read_retry_reg_num:%d
+ m3_special_exit 
+set feature(addr %d) p0: %d readretry Configuration failed!
+micron read retry cannot support!
+micron read retry conut: %d !
+m4 retry!
+m4 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m4_special_init m4_read_retry_mode:%d m4_read_retry_cycle:%d 
+ m4_special_init error m4_read_retry_mode:%d m4_read_retry_cycle:%d 
+ m4_special_exit 
+samsung read retry conut: %d !
+m5 set readretry error ! %x 
+m5 retry!
+m5 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m5_special_init m5_read_retry_mode:%d m5_read_retry_cycle :%d 
+ m5_special_init error m5_read_retry_mode:%d m5_read_retry_cycle :%d 
+ m5_special_exit 
+toshiba read retry conut: %d !
+toshiba vender_pre_condition error!
+m6 rr value 3 %x %x %x %x!
+m6 retry!
+m6 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m6_special_init m6_read_retry_mode :%d m6_read_retry_cycle :%d m6_read_retry_reg_cnt :%d 
+ m6_special_init error m6_read_retry_mode :%d m6_read_retry_cycle :%d m6_read_retry_reg_cnt :%d 
+ m6_special_exit 
+m7 activation seq fail 0x%x
+sandisk read retry conut: %d !
+m7 retry!
+m7 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m7_special_init m7_read_retry_mode:%d m7_read_retry_cycle :%d m7_read_retry_reg_cnt %d 
+ m7_special_init error m7_read_retry_mode:%d m7_read_retry_cycle :%d m7_read_retry_reg_cnt %d 
+ m7_special_exit 
+m9 retry mode err : %d !
+sandisk A19 read retry conut: %d !
+m9 retry!
+m9 set readretry error
+m9 ReadRetry ok! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+m9 ReadRetry ok with ecc limit! ch =%d, chip = %d  block = %d, page = %d, RetryCount = %d  
+ m9_special_init m9_read_retry_mode:%d m9_read_retry_cycle :%d m9_read_retry_reg_cnt %d 
+ m9_special_init error m9_read_retry_mode:%d m9_read_retry_cycle :%d m9_read_retry_reg_cnt %d 
+_setup_nand_toggle_vendor_specific_feature() failed!
+ m9_special_exit 
+bootdelay=0
+bootcmd=run sunxi_sprite_test
+console=ttyS0,115200
+sunxi_sprite_test=sprite_test read
+        
+U-Boot 2014.07 (Mar 27 2017 - 15:51:11) Allwinner Technology 
+[addr [arg ...]]
+    - boot application image stored in memory
+passing arguments 'arg ...'; when booting a Linux kernel,
+'arg' can be the address of an initrd image
+When booting a Linux kernel which requires a flat device-tree
+a third argument is required which is the address of the
+device-tree blob. To boot that kernel without an initrd image,
+use a '-' for the second argument. If you do not pass a third
+a bd_info struct will be passed instead
+Sub-commands to do part of the bootm sequence.  The sub-commands must be
+issued in the order below (it's ok to not issue all sub-commands):
+start [addr [arg ...]]
+loados  - load OS image
+ramdisk - relocate initrd, set env initrd_start/initrd_end
+fdt     - relocate flat device tree
+cmdline - OS specific command line processing/setup
+bdt     - OS specific bd_t processing
+prep    - OS specific prep before relocation or go
+go      - start OS
+addr [-c]  <addr> [<length>]   - Set the [control] fdt location to <addr>
+fdt move   <fdt> <newaddr> <length> - Copy the fdt to <addr> and make it active
+fdt resize                          - Resize fdt to size + padding to 4k addr
+fdt print  <path> [<prop>]          - Recursive print starting at <path>
+fdt list   <path> [<prop>]          - Print one level starting at <path>
+fdt get value <var> <path> <prop>   - Get <property> and store in <var>
+fdt get name <var> <path> <index>   - Get name of node <index> and store in <var>
+fdt get addr <var> <path> <prop>    - Get start address of <property> and store in <var>
+fdt get size <var> <path> [<prop>]  - Get size of [<property>] or num nodes and store in <var>
+fdt set    <path> <prop> [<val>]    - Set <property> [to <val>]
+fdt mknode <path> <node>            - Create a new node after <path>
+fdt rm     <path> [<prop>]          - Delete the node or <property>
+fdt header                          - Display header info
+fdt bootcpu <id>                    - Set boot cpuid
+fdt memory <addr> <size>            - Add/Update memory node
+fdt rsvmem print                    - Show current mem reserves
+fdt rsvmem add <addr> <size>        - Add a mem reserve
+fdt rsvmem delete <index>           - Delete a mem reserves
+fdt chosen [<start> <end>]          - Add/update the /chosen branch in the tree
+                                        <start>/<end> - initrd start/end addr
+fdt save                           - write fdt to flash
+NOTE: Dereference aliases by omiting the leading '/', e.g. fdt print ethernet0.
+default [-f] -a - [forcibly] reset default environment
+env default [-f] var [...] - [forcibly] reset variable(s) to their default values
+env delete [-f] var [...] - [forcibly] delete variable(s)
+env export [-t | -b | -c] [-s size] addr [var ...] - export environment
+env import [-d] [-t | -b | -c] addr [size] - import environment
+env print [-a | name ...] - print environment
+env run var [...] - run commands in an environment variable
+env save - save environment
+env set [-f] name [arg ...]
+@J @J @J(@J(@J0@J0@J8@J8@J@@J@@JH@JH@JP@JP@JX@JX@J`@J`@Jh@Jh@Jp@Jp@Jx@Jx@J
+AJ AJ AJ(AJ(AJ0AJ0AJ8AJ8AJ@AJ@AJHAJHAJPAJPAJXAJXAJ`AJ`AJhAJhAJpAJpAJxAJxAJ
+BJ BJ BJ(BJ(BJ0BJ0BJ8BJ8BJ@BJ@BJHBJHBJPBJPBJXBJXBJ`BJ`BJhBJhBJpBJpBJxBJxBJ
+CJ CJ CJ(CJ(CJ0CJ0CJ8CJ8CJ@CJ@CJHCJHCJPCJPCJXCJXCJ`CJ`CJhCJhCJpCJpCJxCJxCJ
+boot_disp
+DJ$EJXEJ
+EJ(FJ\FJ
+default_lcd
+lt070me05000
+Jwtq05027d01
+dx0960be40a1
+tft720x1280
+S6D7AA0X01
+inet_dsi_panel
+tg078uw004a0
+6tMStar Demo
+KONAK TV
+Jeserial0
+eserial1
+eserial2
+eserial3
+AllWinner Technology
+20101201120001
+USB Mass Storage
+||||xxxxtttt
+UUUUUUUUU&]
+|xxxxxxxtxx
+xtxtxttpxtxxxpxtxppp|
+xt||xtxxxt
+|xt|xpttt|tpp
+pppttppp
+xtxtxttpxtplxtlhxpxtxptpxplhxpplxlplxllhxlhdthlhthhd
+x||xpxxpl
+tttlxx|p
+xx|txxph
+Hcb228c720b6d1011bed61321f20e329ea7ed9cdb
+v1.0(debug):cb228c7
+Built : 14:06:42, Sep 29 2016
+bl31_plat_get_next_image_ep_info
+sec_state_is_valid(type)
+plat/sun50iw2p1/bl31_sunxi_setup.c
+sunxi_do_plat_actions
+ERROR:   Sunxi System Reset: SCP error %u.
+ERROR:   Sunxi System Reset: operation not handled.
+ERROR:   Sunxi System Off: SCP error %u.
+ERROR:   Sunxi System Off: operation not handled.
+plat/sun50iw2p1/plat_pm.c
+max_phys_off_afflvl != PSCI_INVALID_DATA
+psci_get_suspend_afflvl() >= max_phys_off_afflvl
+plat_interrupt_type_to_line
+NOTICE:  GIC parameter config error, only support %d irqs < %d(spec define)!!
+type == INTR_TYPE_S_EL1 || type == INTR_TYPE_EL3 || type == INTR_TYPE_NS
+plat/sun50iw2p1/plat_gic.c
+sec_state_is_valid(security_state)
+INFO:    Configuring SPC Controller
+NOTICE:  %s: power switch enable already
+NOTICE:  %s: power switch disable already
+INFO:    sun50i power-up cluster-%d cpu-%d ok
+INFO:    sun50i power-down cluster-%d cpu-%d ok.
+sun50i_power_switch_set
+plat_get_aff_count
+plat_get_aff_state
+topology_setup_done == 1
+plat/sun50iw2p1/plat_topology.c
+parent_aff_id == 0
+parent_aff_id < PLATFORM_CLUSTER_COUNT
+INFO:    BL3-1: Next image address = 0x%llx
+INFO:    BL3-1: Next image spsr = 0x%x
+WARNING: Unimplemented Standard Service Call: 0x%x 
+[efuse] error: buf is null
+^^^^^^^tf_printf key_buf^^^^^^^^^^^^
+key name=%s
+key len=%d
+key data:%p
+###################
+ burn key start
+key name = %s
+key index = 0x%x
+[efuse] error: not enough space to store the key, efuse size(%d), data size(%d)
+===== key_map->burned_bit_offset ====%d 
+key %s has been burned already
+key_data_remain_size=%d
+key data=0x%x, addr=0x%p
+[efuse] addr = 0x%x, data = 0x%x
+compare burned key with memory data failed
+memory data:
+burned key:
+ burn key end
+[efuse] error: can't burn the key (unknow)
+read key start
+key %s have not been burned yet
+key %s don't show 
+[efuse] error: can't read the key (unknow)
+[SCP ERROR] :arisc firmware:%d and driver version:%u not matched
+[SCP] :arisc version: [%s]
+[SCP] :arisc startup ready
+[SCP] :arisc startup notify message feedback
+[SCP] :arisc startup notify message free directly
+[SCP WARING] :arisc startup waiting ignore message
+[SCP] :set arisc reset to de-assert state
+[SCP] :setup arisc para finish
+[SCP] :sunxi-arisc driver begin startup %d
+[SCP] :hwspinlock initialize
+[SCP] :hwmsgbox initialize
+[SCP] :message manager initialize start:0x%llx, size:0x%llx
+[SCP] :wait arisc ready....
+[SCP] :arisc startup failed
+[SCP] :sunxi-arisc driver v%s is starting
+[SCP] :sunxi-arisc driver v%s startup ok
+[SCP] :ac327 send hard syn message : %x
+[SCP ERROR] :hard syn message error [%x, %x]
+[SCP] :ac327 hard syn message [%x, %x] feedback
+[SCP ERROR] :message process error
+[SCP ERROR] :message addr   : %llx
+[SCP ERROR] :message state  : %x
+[SCP ERROR] :message attr   : %x
+[SCP ERROR] :message type   : %x
+[SCP ERROR] :message result : %x
+[SCP WARING] :callback not install
+[SCP WARING] :call the callback function
+[SCP] :ac327 send message : %x
+[SCP] :arisc feedback hard syn message : %x
+[SCP ERROR] :invalid asyn message received: pmessage = 0x%llx. 
+[SCP ERROR] :invalid syn message received: pmessage = 0x%llx. 
+[SCP ERROR] :invalid hwspinlock id [%d] for trylock
+[SCP ERROR] :invalid hwspinlock id [%d] for unlock
+[SCP] :arisc message_cache.number = 0x%x.
+[SCP] :message [%llx] allocate from message_cache
+[SCP ERROR] :allocate cache message [%llx] invalid
+[SCP] :message [%llx] allocate from message pool
+[SCP ERROR] :allocate message [%llx] frame is invalid
+[SCP ERROR] :free invalid arisc message [%llx]
+[SCP] :insert message [%llx] to message_cache
+[SCP] :message_cache number : %d
+[SCP] :insert message [%llx] to message pool
+[SCP] :-------------------------------------------------------------
+[SCP] :                MESSAGE FROM ARISC                           
+[SCP] :message addr : %llx
+[SCP] :message type : %x
+[SCP] :message attr : %x
+[SCP] :pmu interrupt coming notify
+[SCP] :audio perdone notify
+[SCP] :arisc report error info
+[SCP ERROR] :invalid message type for ac327 process
+[SCP WARING] :allocate message failed
+[SCP ERROR] :dvfs error
+[SCP] :arisc dvfs request : %d
+[SCP ERROR] :arisc twi read pmu reg 0x%x err
+[SCP] :read pmu reg 0x%x:0x%x
+[SCP ERROR] :arisc twi write pmu reg 0x%x:0x%x err
+[SCP] :write pmu reg 0x%x:0x%x
+[SCP WARING] :nmi interrupt handler register already
+[SCP WARING] :invalid handler for unreg
+[SCP WARING] :pmu irq handler not install
+[SCP] :call pmu interrupt handler
+[SCP WARING] :rtc irq handler not install
+[SCP] :call rtc interrupt handler
+[SCP ERROR] :allocate message for cpu op request failed
+[SCP ERROR] :allocate message for sys op request failed
+[SCP ERROR] :allocate message for super-standby request failed
+[SCP ERROR] :allocate message for query standby info failed
+[SCP] :ir power key:0x%x, addr:0x%x
+[SCP WARING] :config ir power key code [%d] fail
+[SCP] :en:%x, src:%x len:%x
+[SCP ERROR] :allocate message for seting dram crc paras request failed
+[SCP ERROR] :allocate message for debug level request failed
+[SCP ERROR] :allocate message for set baudrate request failed
+[SCP ERROR] :arisc report error info: nmi int response timeout
+[SCP ERROR] :invaid arisc report error infomation id:%u
+[SCP ERROR] :allocate message for set paras request failed
+bl31_prepare_next_image_entry
+bl31/bl31_main.c
+next_image_info
+image_type == GET_SECURITY_STATE(next_image_info->h.attr)
+INFO:    BL3-1: Preparing for EL3 exit to %s world
+NOTICE:  BL3-1: %s
+NOTICE:  BL3-1 commit: %s
+INFO:    BL3-1: Initializing runtime services
+NOTICE:  secure os exist
+INFO:    BL3-1: Initializing BL3-2
+cm_set_next_eret_context
+cm_init_context
+cm_prepare_el3_exit
+cm_get_context
+cm_el1_sysregs_context_save
+security_state <= NON_SECURE
+include/bl31/context_mgmt.h
+sp_mode == MODE_SP_EL0
+bl31/context_mgmt.c
+(1 << bit_pos) & SCR_VALID_BIT_MASK
+value <= 1
+cm_get_context_by_mpidr
+cm_set_elr_el3
+cm_el1_sysregs_context_restore
+cm_set_context_by_mpidr
+cm_write_scr_el3_bit
+cm_set_next_context
+ERROR:   Error initializing runtime service %s
+ERROR:   Invalid runtime service descriptor 0x%x (%s)
+bl31/interrupt_mgmt.c
+get_scr_el3_from_routing_model
+bakery_lock_init
+lib/locks/bakery/bakery_lock.c
+me < BAKERY_LOCK_MAX_CPUS
+bakery->owner != me
+bakery->owner == me
+bakery_lock_get
+bakery_lock_release
+psci_afflvl0_off
+psci_afflvl1_off
+system_node->level == MPIDR_AFFLVL2
+services/std_svc/psci/psci_afflvl_off.c
+cluster_node->level == MPIDR_AFFLVL1
+cpu_node->level == MPIDR_AFFLVL0
+psci_afflvl2_off
+psci_afflvl_off
+psci_afflvl1_on
+psci_afflvl2_on
+psci_afflvl1_on_finish
+services/std_svc/psci/psci_afflvl_on.c
+psci_state == PSCI_STATE_OFF
+state == PSCI_STATE_ON_PENDING
+cpu_on_validate_state
+psci_afflvl0_on_finish
+psci_afflvl0_on
+psci_afflvl2_on_finish
+psci_afflvl2_suspend
+services/std_svc/psci/psci_afflvl_suspend.c
+state == PSCI_STATE_SUSPEND
+suspend_level != PSCI_INVALID_DATA
+psci_afflvl0_suspend
+psci_afflvl0_suspend_finish
+psci_afflvl1_suspend_finish
+psci_afflvl2_suspend_finish
+psci_afflvl_suspend
+psci_afflvl1_suspend
+mpidr_set_aff_inst
+psci_set_state
+aff_lvl <= MPIDR_MAX_AFFLVL && aff_lvl >= MPIDR_AFFLVL0
+services/std_svc/psci/psci_common.c
+aff_lvl <= MPIDR_AFFLVL3
+node->level >= MPIDR_AFFLVL0 && node->level <= MPIDR_MAX_AFFLVL
+INFO:    PSCI Affinity Map:
+INFO:      AffInst: Level %u, MPID 0x%lx, State %s
+get_power_on_target_afflvl
+psci_afflvl_power_on_finish
+get_max_afflvl
+psci_get_state
+psci_cpu_suspend
+psci_cpu_off
+rc == PSCI_E_INVALID_PARAMS || rc == PSCI_E_SUCCESS
+services/std_svc/psci/psci_main.c
+rc == PSCI_E_INVALID_PARAMS
+rc == PSCI_E_DENIED
+WARNING: Unimplemented PSCI Call: 0x%x 
+psci_init_aff_map_node
+psci_init_aff_map
+cur_afflvl >= tgt_afflvl
+services/std_svc/psci/psci_setup.c
+aff_count
+linear_id < PLATFORM_CORE_COUNT
+max_afflvl <= MPIDR_MAX_AFFLVL
+psci_plat_pm_ops
+psci_setup
+ERROR:   Platform has not exported a PSCI System Off hook.
+ERROR:   Platform has not exported a PSCI System Reset hook.
+tspd_synchronous_sp_exit
+services/spd/tspd/tspd_common.c
+tsp_entry_point
+tsp_ctx != NULL
+tsp_ctx->c_rt_ctx == 0
+cm_get_context(SECURE) == &tsp_ctx->cpu_ctx
+tsp_ctx->c_rt_ctx != 0
+tspd_init_tsp_ep_state
+tspd_synchronous_sp_entry
+tspd_smc_handler
+WARNING: No TSP provided by BL2 boot loader, Booting device without TSP initialization. SMC`s destined for TSP will return SMC_UNK
+services/spd/tspd/tspd_main.c
+get_interrupt_src_ss(flags) == NON_SECURE
+handle == cm_get_context(NON_SECURE)
+&tspd_ctx->cpu_ctx == cm_get_context(SECURE)
+&tsp_ctx->cpu_ctx == cm_get_context(SECURE)
+tsp_vectors == NULL
+handle == cm_get_context(SECURE)
+ns_cpu_context
+tspd_std
+tspd_fast
+tspd_sel1_interrupt_handler
+tspd_init
+tsp_vectors
+services/spd/tspd/tspd_sunxi.c
+get_tsp_pstate(tsp_ctx->state) == TSP_PSTATE_OFF
+sunxi_tspd_cpu_on_init
+calc_physical_addr_size_bits
+init_xlat_tables
+level <= 3
+lib/aarch64/xlat_tables.c
+next_xlat <= MAX_XLAT_TABLES
+IS_PAGE_ALIGNED(base_pa)
+IS_PAGE_ALIGNED(base_va)
+IS_PAGE_ALIGNED(size)
+mm_last->size == 0
+(max_addr & ADDR_MASK_48_TO_63) == 0
+max_va < ADDR_SPACE_SIZE
+IS_IN_EL(1)
+(read_sctlr_el1() & SCTLR_M_BIT) == 0
+IS_IN_EL(3)
+(read_sctlr_el3() & SCTLR_M_BIT) == 0
+mmap_add_region
+enable_mmu_el3
+init_xlation_table
+cpuectlr_el1
+cpuectlr_el1
+gic_hppir
+gic_ahppir
+gic_ctlr
+gicd_ispendr regs (Offsets 0x200 - 0x278)
+ Offset:
+sctlr_el3
+cptr_el3
+mair_el3
+spsr_el3
+ttbr0_el3
+spsr_el1
+spsr_abt
+spsr_und
+spsr_irq
+spsr_fiq
+sctlr_el1
+actlr_el1
+cpacr_el1
+csselr_el1
+ttbr0_el1
+ttbr1_el1
+mair_el1
+amair_el1
+tpidr_el1
+tpidr_el0
+tpidrro_el0
+dacr32_el2
+ifsr32_el2
+mpidr_el1
+afsr0_el1
+afsr1_el1
+contextidr_el1
+vbar_el1
+cntp_ctl_el0
+cntp_cval_el0
+cntv_ctl_el0
+cntv_cval_el0
+cntkctl_el1
+fpexc32_el2
+PANIC in EL3 at x30 = 0x
+Unhandled Exception in EL3.
+Unhandled Interrupt Exception in EL3.
+lib/cpus/aarch64/cpu_helpers.S
+services/std_svc/psci/psci_helpers.S
+ASSERT: File 
+PANIC at PC : 0x
+lib/aarch64/misc_helpers.S
+hdcphash
+arisc defualt version
+ testsysn me
+32107654BA98FEDC
+ umpe sitsixmp
+si uton ixe 
+tsesers 1tetsyp
+n 0upetnefw ron iw ,w tia]d%[
+:8%x0 : px8%
+ eb c.nig
+..:crsl x%%:nec
+xf crsini...hts
+ kcaeerfbd%:
+itpe[ no ,x% ]s%imoc ,gncpe[% = 
+]xigerretssil 
+:tigerrets :x%
+x% upcrobane t.ret
+..u nAonknA
+tesuB rrE A
+rotaD aP aF egtlua nA
+tsnItcur noiegaPuaF A
+tlciT iT-k
+remA nAngiltnem nA
+ellI lagtsnItcur
+noiE nAretx lanetnIpurr A
+tLT-DiM BA
+ss-I n BLTssiMR A
+etsyaC mA
+llolF nitaoP-g
+tnirT AA
+paseR evre0v
+2----------------------------  
+            m
+platform
+power_sply
+ir_boot_recovery
+card_boot
+recovery_para
+boot_init_gpio
+card0_boot_para
+card2_boot_para
+twi_para
+uart_para
+jtag_para
+dram_para
+twi0_suspend
+twi1_suspend
+twi2_suspend
+uart0_suspend
+uart1_suspend
+uart2_suspend
+uart3_suspend
+spi0_suspend
+spi1_suspend
+rtp_para
+ctp_list
+tkey_para
+motor_para
+nand0_para
+lcd0_suspend
+pwm0_suspend
+pwm16_suspend

@@ -12,6 +12,7 @@ ubuntu-*-cloudimg-console.log
 !/config-vagrant.conf
 
 ### output directories
+/scratch
 /.tmp/
 /output/
 /cache/
