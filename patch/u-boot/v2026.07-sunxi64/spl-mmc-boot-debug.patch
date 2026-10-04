@@ -3,8 +3,9 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 ---
  common/spl/spl.c     |  3 +++
- common/spl/spl_mmc.c | 22 ++++++++++++++++++----
- 2 files changed, 21 insertions(+), 4 deletions(-)
+ common/spl/spl_fit.c | 16 ++++++++++++++--
+ common/spl/spl_mmc.c | 32 ++++++++++++++++++++++++--------
+ 3 files changed, 41 insertions(+), 10 deletions(-)
 
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
@@ -20,7 +21,23 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -379,20 +379,27 @@
+@@ -22,8 +22,13 @@
+ 	struct blk_desc *bd = load->priv;
+ 	lbaint_t sector = off >> bd->log2blksz;
+ 	lbaint_t count = size >> bd->log2blksz;
+-
+-	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
++	ulong r;
++
++	printf("[SPL-READ] off=0x%lx, size=%lu, buf=%p (sec=%lu, cnt=%lu)...\n",
++	       off, size, buf, (unsigned long)sector, (unsigned long)count);
++	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
++	printf("[SPL-READ] done: %lu bytes\n", r);
++	return r;
+ }
+ 
+ static __maybe_unused unsigned long spl_mmc_raw_uboot_offset(int part)
+@@ -379,20 +384,27 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -54,7 +71,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +429,14 @@
+@@ -422,11 +434,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);
@@ -69,3 +86,35 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  		if (!ret)
  			return 0;
  #elif defined(CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION) || \
+
+--- a/common/spl/spl_fit.c
++++ b/common/spl/spl_fit.c
+@@ -721,16 +721,13 @@
+ 	 */
+ 	size = get_aligned_image_size(info, size, 0);
+ 	buf = board_spl_fit_buffer_addr(size, size, 1);
++	printf("[SPL-FIT] fit_buffer=%p, size=%lu\n", buf, size);
+ 	if (!buf) {
+-		/*
+-		 * We assume that none of the board will ever use 0x0 as a
+-		 * valid load address. Theoretically some board could use it,
+-		 * but this is extremely unlikely.
+-		 */
+ 		return -EIO;
+ 	}
+ 
+ 	count = info->read(info, offset, size, buf);
++	printf("[SPL-FIT] info->read count=%lu\n", count);
+ 	if (!count) {
+ 		/*
+ 		 * FIT could not be read. This means we should free the
+@@ -804,7 +801,9 @@
+ 	int index = 0;
+ 	int firmware_node;
+ 
++	printf("[SPL-FIT] load_simple_fit starting (off=0x%lx)...\n", offset);
+ 	ret = spl_simple_fit_read(&ctx, info, offset, fit);
++	printf("[SPL-FIT] simple_fit_read ret=%d\n", ret);
+ 	if (ret < 0)
+ 		return ret;
+ 
