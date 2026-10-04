@@ -4,6 +4,15 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 ---
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
+@@ -255,7 +255,7 @@
+ 
+ __weak struct legacy_img_hdr *spl_get_load_buffer(ssize_t offset, size_t size)
+ {
+-	return map_sysmem(CONFIG_TEXT_BASE + offset, 0);
++	return map_sysmem(CONFIG_SYS_LOAD_ADDR + offset, 0);
+ }
+ 
+ void spl_set_header_raw_uboot(struct spl_image_info *spl_image)
 @@ -769,6 +769,8 @@
  	spl_perform_board_fixups(&spl_image);
  
@@ -135,18 +144,4 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 +	printf("[SPL-FIT] simple_fit_read ret=%d\n", ret);
  	if (ret < 0)
  		return ret;
- 
-
---- a/include/spl_load.h
-+++ b/include/spl_load.h
-@@ -15,8 +15,8 @@
- 			    struct spl_load_info *info, size_t size,
- 			    size_t offset)
- {
--	struct legacy_img_hdr *header =
--		spl_get_load_buffer(-sizeof(*header), sizeof(*header));
-+	ALLOC_CACHE_ALIGN_BUFFER(char, header_buf, 512);
-+	struct legacy_img_hdr *header = (struct legacy_img_hdr *)header_buf;
- 	ulong base_offset, image_offset, overhead;
- 	int read, ret;
  
