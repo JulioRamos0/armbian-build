@@ -37,9 +37,10 @@ jobs:
 
       - name: Build U-Boot
         run: |
-          sudo ./compile.sh uboot \
+          sudo ./compile.sh build \
             BOARD=pbstvstick \
             BRANCH=current \
+            UBOOT_ONLY=yes \
             KERNEL_GIT=shallow
 
       - name: Upload U-Boot Artifact
