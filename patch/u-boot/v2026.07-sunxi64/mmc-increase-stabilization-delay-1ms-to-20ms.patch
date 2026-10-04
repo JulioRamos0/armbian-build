@@ -247,3 +247,12 @@ loop counters to avoid infinite SPL hangs during card detection.
  
  	return mmc_create(cfg, priv);
  }
+@@ -688,7 +729,7 @@
+ 
+ 	cfg->voltages = MMC_VDD_32_33 | MMC_VDD_33_34;
+ 	cfg->host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS;
+-	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
++	cfg->b_max = (priv->mmc_no == 2) ? 1 : CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
