@@ -25,7 +25,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,13 @@
+@@ -22,8 +22,12 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
@@ -33,15 +33,14 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	ulong r;
 +
-+	printf("[SPL-READ] sec=%u cnt=%u ", (unsigned int)sector, (unsigned int)count);
-+	printf("(off=0x%x size=%u) buf=0x%x\n", (unsigned int)off, (unsigned int)size, (unsigned int)(uintptr_t)buf);
++	printf("[SPL-READ] sector %u count %u... ", (unsigned int)sector, (unsigned int)count);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
-+	printf("\n[SPL-READ] done: %u bytes\n", (unsigned int)r);
++	printf("done\n");
 +	return r;
  }
  
  static __maybe_unused unsigned long spl_mmc_raw_uboot_offset(int part)
-@@ -379,20 +384,27 @@
+@@ -379,20 +383,27 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -75,7 +74,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +434,14 @@
+@@ -422,11 +433,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);
