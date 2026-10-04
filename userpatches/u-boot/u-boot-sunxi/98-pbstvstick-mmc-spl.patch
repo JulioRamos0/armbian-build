@@ -1,13 +1,12 @@
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -384,8 +384,14 @@
+@@ -384,8 +384,13 @@
  		writel(data->blocks * data->blocksize, &priv->reg->bytecnt);
  	}
  
 +#ifdef CONFIG_XPL_BUILD
 +	/* Feed watchdog for Allwinner H5 */
 +	writel((0xa57 << 1) | 1, (void *)0x01c20cb0);
-+	writel((0xa57 << 1) | 1, (void *)0x01c20cc0);
 +#else
  	debug("mmc %d, cmd %d(0x%08x), arg 0x%08x\n", priv->mmc_no,
  	      cmd->cmdidx, cmdval | cmd->cmdidx, cmd->cmdarg);
@@ -15,7 +14,7 @@
  	writel(cmd->cmdarg, &priv->reg->arg);
  
  	if (!data)
-@@ -611,6 +617,11 @@
+@@ -611,6 +616,11 @@
  	ret = mmc_set_mod_clk(priv, 24000000);
  	if (ret)
  		return NULL;
