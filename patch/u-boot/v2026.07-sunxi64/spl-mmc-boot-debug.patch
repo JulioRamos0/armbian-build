@@ -2,11 +2,6 @@ From: Armbian Build Framework <build@armbian.com>
 Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage jump
 
 ---
- common/spl/spl.c     |  3 +++
- common/spl/spl_fit.c | 16 ++++++++++++++--
- common/spl/spl_mmc.c | 32 ++++++++++++++++++++++++--------
- 3 files changed, 41 insertions(+), 10 deletions(-)
-
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
 @@ -769,6 +769,8 @@
@@ -140,4 +135,18 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 +	printf("[SPL-FIT] simple_fit_read ret=%d\n", ret);
  	if (ret < 0)
  		return ret;
+ 
+
+--- a/include/spl_load.h
++++ b/include/spl_load.h
+@@ -15,8 +15,8 @@
+ 			    struct spl_load_info *info, size_t size,
+ 			    size_t offset)
+ {
+-	struct legacy_img_hdr *header =
+-		spl_get_load_buffer(-sizeof(*header), sizeof(*header));
++	ALLOC_CACHE_ALIGN_BUFFER(char, header_buf, 512);
++	struct legacy_img_hdr *header = (struct legacy_img_hdr *)header_buf;
+ 	ulong base_offset, image_offset, overhead;
+ 	int read, ret;
  
