@@ -9,7 +9,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl.c
 +++ b/common/spl/spl.c
-@@ -769,6 +769,8 @@
+@@ -769,7 +769,9 @@
  	spl_perform_board_fixups(&spl_image);
  
  	os = spl_image.os;
@@ -21,7 +21,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,16 @@
+@@ -22,8 +22,15 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
@@ -73,7 +73,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +438,14 @@
+@@ -422,12 +438,15 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);

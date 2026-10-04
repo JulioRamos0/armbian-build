@@ -160,7 +160,7 @@ index dec8bc1..7c59c74 100644
  
  	if (mmc_resource_init(sdc_no) != 0)
  		return NULL;
-@@ -709,6 +709,16 @@ static int sunxi_mmc_probe(struct udevice *dev)
+@@ -709,7 +709,16 @@ static int sunxi_mmc_probe(struct udevice *dev)
  	priv->mmc_no = ((uintptr_t)priv->reg - SUNXI_MMC0_BASE) / 0x1000;
  	priv->mclkreg = (void *)ccu_reg + get_mclk_offset() + priv->mmc_no * 4;
  
