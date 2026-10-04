@@ -149,18 +149,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  	sunxi_mmc_reset(priv->reg);
  
  	return 0;
-@@ -581,7 +612,9 @@
- 		cfg->host_caps = MMC_MODE_8BIT;
- 
- 	cfg->host_caps |= MMC_MODE_HS_52MHz | MMC_MODE_HS;
--	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
-+	/* In SPL, all transfers use CPU PIO. Multi-block reads hang on SMHC FIFO.
-+	 * Using b_max = 1 forces rock-solid single-block CMD17 reads in SPL. */
-+	cfg->b_max = 1;
- 
- 	cfg->f_min = 400000;
- 	cfg->f_max = 52000000;
-@@ -608,6 +641,11 @@
+@@ -608,6 +639,11 @@
  	/* unassert reset */
  	setbits_le32(ccm + CCU_H6_MMC_GATE_RESET, 1 << (RESET_SHIFT + sdc_no));
  #endif

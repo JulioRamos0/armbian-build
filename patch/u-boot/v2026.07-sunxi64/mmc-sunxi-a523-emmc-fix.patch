@@ -89,7 +89,7 @@ index dec8bc1..7c59c74 100644
  	writel(rval, &priv->reg->clkcr);
  
  #if defined(CONFIG_SUNXI_GEN_SUN6I) || defined(CONFIG_SUN50I_GEN_H6) || defined(CONFIG_SUNXI_GEN_NCAT2)
-@@ -573,18 +596,63 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+@@ -573,18 +596,65 @@ struct mmc *sunxi_mmc_init(int sdc_no)
  	cfg->ops  = &sunxi_mmc_ops;
  
  	cfg->voltages = MMC_VDD_32_33 | MMC_VDD_33_34;
@@ -148,6 +148,8 @@ index dec8bc1..7c59c74 100644
 +		cfg->host_caps &= ~(MMC_MODE_HS_52MHz | MMC_MODE_HS);
 +		if (cfg->f_max > 20000000)
 +			cfg->f_max = 20000000;
++		/* Force single-block PIO reads in SPL to prevent FIFO desync */
++		cfg->b_max = 1;
 +	}
 +	#endif
  
