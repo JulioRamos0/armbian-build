@@ -4,17 +4,56 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: 'Target to build (all = full image, uboot = only u-boot)'
+        description: 'Target to build (both = parallel uboot and full image, uboot = only u-boot, image = only full image)'
         required: true
-        default: 'all'
+        default: 'both'
         type: choice
         options:
-          - all
+          - both
           - uboot
+          - image
   push:
 
 jobs:
-  build:
+  build-uboot:
+    name: Build U-Boot (Fast ~3min)
+    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'uboot' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: Build U-Boot
+        run: |
+          sudo ./compile.sh uboot \
+            BOARD=pbstvstick \
+            BRANCH=current \
+            KERNEL_GIT=shallow
+
+      - name: Upload U-Boot Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: armbian-pbstvstick-uboot
+          path: |
+            output/debs/linux-u-boot-*.deb
+            output/debug/uboot/*
+          retention-days: 7
+
+  build-image:
+    name: Build Full Image (Bookworm)
+    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'image' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,33 +77,26 @@ jobs:
           sed -i "s/REPLACE_WITH_KEY/${{ secrets.WIFI_KEY }}/g" userpatches/customize-image.sh
           sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
 
-      - name: Build Armbian
+      - name: Build Armbian Image
         run: |
-          TARGET="${{ github.event.inputs.target || 'all' }}"
-          if [ "$TARGET" = "uboot" ]; then
-            sudo ./compile.sh uboot \
-              BOARD=pbstvstick \
-              BRANCH=current \
-              KERNEL_GIT=shallow
-          else
-            sudo ./compile.sh build \
-              BOARD=pbstvstick \
-              BRANCH=current \
-              BUILD_DESKTOP=no \
-              BUILD_MINIMAL=no \
-              KERNEL_BTF=no \
-              KERNEL_CONFIGURE=no \
-              RELEASE=bookworm \
-              KERNEL_GIT=shallow
-          fi
+          sudo ./compile.sh build \
+            BOARD=pbstvstick \
+            BRANCH=current \
+            BUILD_DESKTOP=no \
+            BUILD_MINIMAL=no \
+            KERNEL_BTF=no \
+            KERNEL_CONFIGURE=no \
+            RELEASE=bookworm \
+            KERNEL_GIT=shallow
 
-      - name: Upload Artifact
+      - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ github.event.inputs.target == 'uboot' && 'armbian-pbstvstick-uboot' || 'armbian-pbstvstick-bookworm' }}
+          name: armbian-pbstvstick-bookworm
           path: |
             output/images/*
             output/debs/linux-u-boot-*.deb
             output/debug/uboot/*
           retention-days: 7
+
 
