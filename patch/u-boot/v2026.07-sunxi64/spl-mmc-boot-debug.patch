@@ -112,7 +112,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -		buf = spl_get_load_buffer(0, size);
 -	}
 -	return buf;
-+	return (void *)CONFIG_SYS_LOAD_ADDR;
++	return (void *)0x45000000;
  }
  
  /*
