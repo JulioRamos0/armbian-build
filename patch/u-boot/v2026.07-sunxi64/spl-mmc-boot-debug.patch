@@ -21,7 +21,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,15 @@
+@@ -22,8 +22,16 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
