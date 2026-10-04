@@ -149,7 +149,8 @@ index dec8bc1..7c59c74 100644
 +		if (cfg->f_max > 20000000)
 +			cfg->f_max = 20000000;
 +		/* Safe multi-block reads in SPL */
-+		cfg->b_max = 32;
++		/* Single-block reads (CMD17) avoid AUTO_STOP/CMD18 issues in SPL */
++		cfg->b_max = 1;
 +	}
 +	#endif
  

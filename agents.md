@@ -218,20 +218,20 @@ El LED principal del TV Stick está conectado físicamente al puerto **PA15**.
 Actualmente estamos trabajando en resolver un problema de cuelgue (hang) durante la carga de U-Boot SPL al intentar arrancar desde la memoria interna eMMC (MMC2). 
 
 ## 1. Estado del Problema (Octubre 2026)
-- El sistema se cuelga en el proceso de carga del FIT (`[SPL-FIT] load_simple_fit starting (off=0xa000)`).
-- Inmediatamente después imprime un misterioso código de error o texto corrupto: `50:wtcd`.
+- El SPL inicializa la eMMC en MMC2 correctamente a 20MHz en modo 8-bit.
+- Lee exitosamente el primer sector de 512 bytes (cabecera FIT) en `0x49ffffc0`.
+- El parser FIT (`spl_fit.c`) determina que el tamaño total del FIT es 870,400 bytes (1,700 sectores) y llama a leerlos hacia el buffer estático `0x42000000` (DRAM).
+- Al iniciar la lectura de los 1,700 sectores, se observó que la salida UART se truncaba en `buf=0x42000`.
 
 ## 2. Hallazgos y Correcciones Aplicadas
-- **Fallo por Desbordamiento de Memoria (Heap Exhaustion):** Descubrimos que `board_spl_fit_buffer_addr` (en U-Boot) intentaba alojar aproximadamente 850KB usando `malloc_cache_aligned`. Esto desbordaba el limitado heap de la fase SPL, causando reinicios silenciosos o cuelgues.
-- **El Fix:** Se aplicó un parche para sobreescribir `board_spl_fit_buffer_addr` forzando que devuelva la dirección estática `CONFIG_SYS_LOAD_ADDR` (`0x42000000`) en lugar de usar `malloc`. Esto evadió el desbordamiento de memoria.
-- **Restricciones de UART:** La salida serial en la etapa SPL es extremadamente limitada. Agregar demasiados `printf` desborda el buffer serial, causando reinicios o bloqueos silenciosos.
+- **Fallo por Desbordamiento de Memoria (Heap Exhaustion):** `board_spl_fit_buffer_addr` intentaba alojar ~850KB usando `malloc_cache_aligned`. En SPL (`CONFIG_SPL_SYS_MALLOC_F_LEN=0x2000`, 8KB), esto fallaba. Se parcheó para retornar `CONFIG_SYS_LOAD_ADDR` (`0x42000000`), el cual apunta directamente a la DRAM DDR3 ya inicializada y verificada (1024 MiB).
+- **Desbordamiento / Limitación de tiny-printf:** En U-Boot SPL (`CONFIG_SPL_USE_TINY_PRINTF=y`), la implementación interna de `printf` usa un buffer de formateo muy pequeño. Al poner más de 4-5 especificadores en una sola llamada a `printf`, el formateo de números hexadecimales largos como `0x42000000` truncaba la salida o corrompía la pila. La solución es dividir los logs en impresiones breves.
+- **Modo Multi-bloque (CMD18) vs Single-block (CMD17):**
+  - Cuando `count > 1` (1,700 sectores), el subsistema MMC divide la lectura en lotes definidos por `cfg->b_max`.
+  - Con `b_max > 1`, el controlador Allwinner H5 (`sunxi_mmc.c`) emite `CMD18` y activa `SUNXI_MMC_CMD_AUTO_STOP`. En SPL (donde el controlador opera en modo PIO/CPU FIFO sin interrupciones DMA complejas), `AUTO_STOP` (`CMD12` automático) produce cuelgues o desincronización de FIFO.
+  - Al forzar `cfg->b_max = 1` en SPL para la eMMC (`sdc_no == 2`), todas las lecturas se realizan mediante `CMD17` (single block), que es 100% robusto y no utiliza `AUTO_STOP`. Como ya no hay prints ruidosos por cada comando `CMD17`, la transferencia de los 1,700 bloques toma apenas ~100-150ms.
 
 ## 3. Metodología de Trabajo y Flujo
-- **Trazabilidad:** Se inyectaron comandos `printf` detallados en `common/spl/spl_mmc.c`, `common/spl/spl_fit.c` y `common/spl/spl.c` para seguir el flujo de lectura de los sectores y las asignaciones de memoria.
-- **Automatización:** Utilizamos un script en Python (`scratch/auto_build_and_deploy.py`) que interactúa con GitHub Actions para monitorear, descargar y extraer automáticamente los artefactos binarios de U-Boot generados en cada *commit*. Luego, `scratch/deploy_new_uboot.py` instala el SPL parcheado directamente en el dispositivo vía red (usando un kernel en ejecución).
-- **Herramientas de Análisis:** Se ha instalado la librería `capstone` para Python en caso de necesitar desensamblar y analizar el código binario compilado del SPL (ya que la cadena `50:wtcd` no se encuentra en el código fuente, sugiriendo una corrupción de puntero o ensamblaje parcial de string en un `printf`).
+- **Trazabilidad:** Logs concisos en `common/spl/spl_mmc.c` y `common/spl/spl_fit.c`.
+- **Automatización CI/CD:** El script `scratch/auto_build_and_deploy.py <commit_sha>` espera la compilación en GitHub Actions, descarga los `.deb`/`.bin`, los transfiere vía SSH/SFTP al TV Stick (`192.168.128.114`) y los graba a la eMMC (`/dev/mmcblk2`).
 
-## 4. Próximos Pasos (Next Steps)
-1. Rastrear el origen de la impresión `50:wtcd`. Dado que no existe en el código fuente (`grep`), es probable que un argumento `printf` esté recibiendo un puntero incorrecto o desalineado.
-2. Analizar `board_spl_fit_buffer_addr` y la subsecuente llamada a `spl_simple_fit_read` en `common/spl/spl_fit.c` para verificar si la lectura a la DRAM o la alineación son correctas.
-3. Utilizar herramientas de desensamblado (objdump / capstone) sobre los binarios SPL generados, enfocándose en las funciones de `spl_fit.c`, para ver si hay comportamiento anómalo.
