@@ -148,7 +148,7 @@ index dec8bc1..7c59c74 100644
 +		cfg->host_caps &= ~(MMC_MODE_HS_52MHz | MMC_MODE_HS);
 +		if (cfg->f_max > 20000000)
 +			cfg->f_max = 20000000;
-+		/* Single-block reads (CMD17) avoid AUTO_STOP/CMD18 issues in SPL */
++		/* Safe multi-block reads in SPL */
 +		cfg->b_max = 1;
 +	}
 +	#endif
@@ -160,7 +160,7 @@ index dec8bc1..7c59c74 100644
  
  	if (mmc_resource_init(sdc_no) != 0)
  		return NULL;
-@@ -709,7 +709,16 @@ static int sunxi_mmc_probe(struct udevice *dev)
+@@ -709,6 +709,16 @@ static int sunxi_mmc_probe(struct udevice *dev)
  	priv->mmc_no = ((uintptr_t)priv->reg - SUNXI_MMC0_BASE) / 0x1000;
  	priv->mclkreg = (void *)ccu_reg + get_mclk_offset() + priv->mmc_no * 4;
  
