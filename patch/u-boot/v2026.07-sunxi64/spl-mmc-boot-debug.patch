@@ -21,7 +21,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,13 @@
+@@ -22,8 +22,15 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
@@ -29,15 +29,17 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	ulong r;
 +
-+	printf("[SPL-READ] off=0x%lx, size=%lu, buf=0x%lx (sec=%lu, cnt=%lu)...\n",
-+	       off, size, (unsigned long)(uintptr_t)buf, (unsigned long)sector, (unsigned long)count);
++	printf("[SPL-READ] off=0x%x size=%u buf=%p sec=%u cnt=%u\n",
++	       (unsigned int)off, (unsigned int)size, buf, (unsigned int)sector, (unsigned int)count);
++	*(volatile u32 *)buf = 0xa5a55a5a;
++	printf("[SPL-READ] write ok (0x%x), calling dread...\n", *(volatile u32 *)buf);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	printf("\n[SPL-READ] done: %lu bytes\n", r);
 +	return r;
  }
  
  static __maybe_unused unsigned long spl_mmc_raw_uboot_offset(int part)
-@@ -379,20 +384,27 @@
+@@ -379,20 +386,27 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -71,7 +73,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +434,14 @@
+@@ -422,11 +436,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);
@@ -93,7 +95,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	 */
  	size = get_aligned_image_size(info, size, 0);
  	buf = board_spl_fit_buffer_addr(size, size, 1);
-+	printf("[SPL-FIT] fit_buffer=0x%lx, size=%lu\n", (unsigned long)(uintptr_t)buf, size);
++	printf("[SPL-FIT] fit_buffer=%p, size=%u\n", buf, (unsigned int)size);
  	if (!buf) {
 -		/*
 -		 * We assume that none of the board will ever use 0x0 as a
@@ -104,7 +106,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	}
  
  	count = info->read(info, offset, size, buf);
-+	printf("[SPL-FIT] info->read count=%lu\n", count);
++	printf("[SPL-FIT] info->read count=%u\n", (unsigned int)count);
  	if (!count) {
  		/*
  		 * FIT could not be read. This means we should free the
@@ -112,7 +114,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	int index = 0;
  	int firmware_node;
  
-+	printf("[SPL-FIT] load_simple_fit starting (off=0x%lx)...\n", offset);
++	printf("[SPL-FIT] load_simple_fit starting (off=0x%x)...\n", (unsigned int)offset);
  	ret = spl_simple_fit_read(&ctx, info, offset, fit);
 +	printf("[SPL-FIT] simple_fit_read ret=%d\n", ret);
  	if (ret < 0)

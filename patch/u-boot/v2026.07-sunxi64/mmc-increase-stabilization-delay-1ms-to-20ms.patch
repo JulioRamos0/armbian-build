@@ -104,7 +104,7 @@ loop counters to avoid infinite SPL hangs during card detection.
 +#ifdef CONFIG_XPL_BUILD
 +	if (cmd->cmdidx == 17) {
 +		printf("%x:", cmd->cmdarg);
-+	} else if (cmd->cmdidx != 16) {
++	} else {
 +		printf("[MMC%d] cmd%d arg=0x%x\n", priv->mmc_no, cmd->cmdidx, cmd->cmdarg);
 +	}
 +#else
