@@ -9,7 +9,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  __weak struct legacy_img_hdr *spl_get_load_buffer(ssize_t offset, size_t size)
  {
 -	return map_sysmem(CONFIG_TEXT_BASE + offset, 0);
-+	return map_sysmem(CONFIG_SYS_LOAD_ADDR + offset, 0);
++	return (void *)(0x45000000 + offset);
  }
  
  void spl_set_header_raw_uboot(struct spl_image_info *spl_image)
