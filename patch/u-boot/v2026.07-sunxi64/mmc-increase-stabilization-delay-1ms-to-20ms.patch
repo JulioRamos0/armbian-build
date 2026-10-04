@@ -103,8 +103,8 @@ loop counters to avoid infinite SPL hangs during card detection.
  
 +#ifdef CONFIG_XPL_BUILD
 +	/* Feed watchdog for Allwinner H5 */
-+	writel((0xa57 << 1) | 1, 0x01c20cb0);
-+	writel((0xa57 << 1) | 1, 0x01c20cc0);
++	writel((0xa57 << 1) | 1, (void *)0x01c20cb0);
++	writel((0xa57 << 1) | 1, (void *)0x01c20cc0);
 +	if (cmd->cmdidx != 17)
 +		printf("[MMC%d] cmd%d arg=0x%x\n", priv->mmc_no, cmd->cmdidx, cmd->cmdarg);
 +#else
