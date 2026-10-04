@@ -41,6 +41,7 @@ jobs:
             BOARD=pbstvstick \
             BRANCH=current \
             UBOOT_ONLY=yes \
+            KERNEL_CONFIGURE=no \
             KERNEL_GIT=shallow
 
       - name: Upload U-Boot Artifact
