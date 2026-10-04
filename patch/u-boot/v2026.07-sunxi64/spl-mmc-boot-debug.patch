@@ -29,8 +29,8 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	ulong r;
 +
-+	printf("[SPL-READ] off=0x%lx, size=%lu, buf=%p (sec=%lu, cnt=%lu)...\n",
-+	       off, size, buf, (unsigned long)sector, (unsigned long)count);
++	printf("[SPL-READ] off=0x%lx, size=%lu, buf=0x%lx (sec=%lu, cnt=%lu)...\n",
++	       off, size, (unsigned long)(uintptr_t)buf, (unsigned long)sector, (unsigned long)count);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	printf("[SPL-READ] done: %lu bytes\n", r);
 +	return r;
@@ -93,7 +93,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
  	 */
  	size = get_aligned_image_size(info, size, 0);
  	buf = board_spl_fit_buffer_addr(size, size, 1);
-+	printf("[SPL-FIT] fit_buffer=%p, size=%lu\n", buf, size);
++	printf("[SPL-FIT] fit_buffer=0x%lx, size=%lu\n", (unsigned long)(uintptr_t)buf, size);
  	if (!buf) {
 -		/*
 -		 * We assume that none of the board will ever use 0x0 as a
