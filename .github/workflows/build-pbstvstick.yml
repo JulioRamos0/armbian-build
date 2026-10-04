@@ -40,8 +40,11 @@ jobs:
           sudo ./compile.sh build \
             BOARD=pbstvstick \
             BRANCH=current \
-            UBOOT_ONLY=yes \
+            RELEASE=bookworm \
+            BUILD_MINIMAL=no \
+            BUILD_DESKTOP=no \
             KERNEL_CONFIGURE=no \
+            UBOOT_ONLY=yes \
             KERNEL_GIT=shallow
 
       - name: Upload U-Boot Artifact
