@@ -21,9 +21,26 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "576"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
-	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	run_host_command_logged scripts/config --disable CONFIG_OF_UPSTREAM
+
+	# MASTERPLAN TO SURVIVE A2 SDCARD BROWNOUT WITH SAMSUNG EMMC:
+	# 1. Force SPL to ALWAYS boot from SD card, even if BootROM fell back to eMMC!
+	sed -i '/u32 spl_boot_device(void)/a \treturn BOOT_DEVICE_MMC1; /* FORCE SD CARD */' arch/arm/mach-sunxi/board.c
+
+	# 2. Disable complex DM MMC in SPL to use the ultra-robust TINY legacy driver
+	run_host_command_logged scripts/config --disable CONFIG_SPL_DM_MMC
+	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
+	
+	# 3. Disable simultaneous dual-initialization in SPL
+	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA -1
+
+	# 4. Hardware Kill Switch: Hold eMMC (PC14) in reset during SPL to free up power for SD card
+	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
+	
+	# 5. Extreme Power Throttle: Slow down SD card to 4MHz / 1-bit in SPL to survive brownout
+	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 4000000;/g' drivers/mmc/sunxi_mmc.c
+	sed -i 's/MMC_MODE_4BIT/0/g' drivers/mmc/sunxi_mmc.c
 
 	local node_content='
 &mmc0 {
