@@ -21,7 +21,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -22,8 +22,17 @@
+@@ -22,8 +22,15 @@
  	struct blk_desc *bd = load->priv;
  	lbaint_t sector = off >> bd->log2blksz;
  	lbaint_t count = size >> bd->log2blksz;
@@ -29,14 +29,12 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 -	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
 +	ulong r;
 +
-+	printf("[SPL-READ] off=0x%x size=%u buf=0x%x sec=%u cnt=%u\n",
++	printf("[SPL-READ] sec=%u cnt=%u (off=0x%x size=%u) buf=0x%x\n",
++	       (unsigned int)sector, (unsigned int)count,
 +	       (unsigned int)off, (unsigned int)size,
-+	       (unsigned int)(uintptr_t)buf,
-+	       (unsigned int)sector, (unsigned int)count);
-+	*(volatile u32 *)buf = 0xa5a55a5a;
-+	printf("[SPL-READ] write ok (0x%x), calling dread...\n", *(volatile u32 *)buf);
++	       (unsigned int)(uintptr_t)buf);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
-+	printf("\n[SPL-READ] done: %u bytes\n", (unsigned int)r);
++	printf("[SPL-READ] done: %u bytes\n", (unsigned int)r);
 +	return r;
  }
  
