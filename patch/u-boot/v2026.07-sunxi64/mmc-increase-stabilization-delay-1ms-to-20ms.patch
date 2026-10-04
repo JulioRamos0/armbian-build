@@ -103,7 +103,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  
 +#ifdef CONFIG_XPL_BUILD
 +	if (cmd->cmdidx == 17) {
-+		if (cmd->cmdarg < 85 || (cmd->cmdarg % 200) == 0)
++		if ((cmd->cmdarg % 100) == 0)
 +			printf(".");
 +	} else if (cmd->cmdidx != 16) {
 +		printf("[MMC%d] cmd%d arg=0x%x\n", priv->mmc_no, cmd->cmdidx, cmd->cmdarg);
@@ -129,7 +129,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  				debug("busy timeout\n");
  				error = -ETIMEDOUT;
  				goto out;
-@@ -457,12 +450,20 @@
+@@ -457,11 +450,22 @@
  out:
  	if (error < 0) {
  		writel(SUNXI_MMC_GCTRL_RESET, &priv->reg->gctrl);
@@ -141,16 +141,18 @@ loop counters to avoid infinite SPL hangs during card detection.
  	writel(0xffffffff, &priv->reg->rint);
  	writel(readl(&priv->reg->gctrl) | SUNXI_MMC_GCTRL_FIFO_RESET,
  	       &priv->reg->gctrl);
- 
++	while (readl(&priv->reg->gctrl) & SUNXI_MMC_GCTRL_FIFO_RESET)
++		;
++	udelay(50);
++
 +#ifdef CONFIG_XPL_BUILD
 +	if (error)
 +		printf("[MMC%d] cmd%d err=%d\n", priv->mmc_no, cmd->cmdidx, error);
 +#endif
-+
+ 
  	return error;
  }
- 
-@@ -470,15 +471,15 @@
+@@ -470,15 +474,15 @@
  {
  	/* Reset controller */
  	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
@@ -172,7 +174,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  		/* Setup FIFO R/W threshold. Needed on H616. */
  		writel(SUNXI_MMC_THLDC_READ_THLD(512) |
  		       SUNXI_MMC_THLDC_WRITE_EN |
-@@ -533,6 +534,9 @@
+@@ -533,6 +537,9 @@
  {
  	struct sunxi_mmc_priv *priv = mmc->priv;
  
@@ -182,7 +184,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  	sunxi_mmc_reset(priv->reg);
  
  	return 0;
-@@ -608,6 +612,11 @@
+@@ -608,6 +615,11 @@
  	/* unassert reset */
  	setbits_le32(ccm + CCU_H6_MMC_GATE_RESET, 1 << (RESET_SHIFT + sdc_no));
  #endif

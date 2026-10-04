@@ -32,7 +32,7 @@ Subject: [PATCH] spl: Add detailed boot progress diagnostics for MMC and stage j
 +	printf("[SPL-READ] off=0x%lx, size=%lu, buf=0x%lx (sec=%lu, cnt=%lu)...\n",
 +	       off, size, (unsigned long)(uintptr_t)buf, (unsigned long)sector, (unsigned long)count);
 +	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
-+	printf("[SPL-READ] done: %lu bytes\n", r);
++	printf("\n[SPL-READ] done: %lu bytes\n", r);
 +	return r;
  }
  
