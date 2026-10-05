@@ -3,14 +3,11 @@ Subject: [PATCH] mmc: sunxi: SPL trace for data reads (diagnostic)
 
 Print every CMD17/18 (first 4, then every 64th), detect FIFO wait spins
 that never time out (get_timer stuck?), and report data transfer errors.
-
----
- drivers/mmc/sunxi_mmc.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
+index 3cd504ba..3aff230d 100644
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -287,10 +287,18 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+@@ -310,10 +310,18 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
  	for (i = 0; i < word_cnt;) {
  		unsigned int in_fifo;
  		unsigned int loop_count = 10000000;
@@ -30,7 +27,7 @@ that never time out (get_timer stuck?), and report data transfer errors.
  		}
  
  		/*
-@@ -386,6 +394,15 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -415,6 +423,15 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
  
  	debug("mmc %d, cmd %d(0x%08x), arg 0x%08x\n", priv->mmc_no,
  	      cmd->cmdidx, cmdval | cmd->cmdidx, cmd->cmdarg);
@@ -46,7 +43,7 @@ that never time out (get_timer stuck?), and report data transfer errors.
  	writel(cmd->cmdarg, &priv->reg->arg);
  
  	if (!data)
-@@ -404,6 +422,7 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
+@@ -433,6 +450,7 @@ static int sunxi_mmc_send_cmd_common(struct sunxi_mmc_priv *priv,
  		writel(cmdval | cmd->cmdidx, &priv->reg->cmd);
  		ret = mmc_trans_data_by_cpu(priv, mmc, data);
  		if (ret) {

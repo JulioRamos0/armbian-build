@@ -6,9 +6,11 @@ hardware reset (HWRST) on all SoCs, set FIFO threshold, and add safety
 loop counters to avoid infinite SPL hangs during card detection.
 
 ---
+diff --git a/drivers/mmc/sunxi_mmc.c b/drivers/mmc/sunxi_mmc.c
+index e28c81af..de1c517d 100644
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -188,10 +188,11 @@
+@@ -188,10 +188,11 @@ static int mmc_update_clk(struct sunxi_mmc_priv *priv)
  	cmd = SUNXI_MMC_CMD_START |
  	      SUNXI_MMC_CMD_UPCLK_ONLY |
  	      SUNXI_MMC_CMD_WAIT_PRE_OVER;
@@ -21,7 +23,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  			return -1;
  	}
  
-@@ -285,9 +286,10 @@
+@@ -285,9 +286,10 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
  
  	for (i = 0; i < word_cnt;) {
  		unsigned int in_fifo;
@@ -33,7 +35,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  				return -1;
  		}
  
-@@ -316,9 +318,11 @@
+@@ -316,9 +318,11 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
  		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
  		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
  			in_fifo = 32;
@@ -46,7 +48,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  	}
  
  	return 0;
-@@ -330,9 +334,11 @@
+@@ -330,9 +334,11 @@ static int mmc_rint_wait(struct sunxi_mmc_priv *priv, struct mmc *mmc,
  	unsigned int status;
  	unsigned long start = get_timer(0);
  
@@ -59,17 +61,12 @@ loop counters to avoid infinite SPL hangs during card detection.
  		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {
  			debug("%s timeout %x\n", what,
  			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);
-@@ -470,20 +476,18 @@
+@@ -470,20 +476,19 @@ static void sunxi_mmc_reset(void *regs)
  {
  	/* Reset controller */
  	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
+-	udelay(1000);
 +	udelay(20000);
-+
-+	/* Reset card on all SoCs supporting eMMC hardware reset */
-+	writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);
-+	udelay(50);
-+	writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);
- 	udelay(1000);
  
 -	if (IS_ENABLED(CONFIG_SUN50I_GEN_H6) || IS_ENABLED(CONFIG_SUNXI_GEN_NCAT2)) {
 -		/* Reset card */
@@ -77,16 +74,19 @@ loop counters to avoid infinite SPL hangs during card detection.
 -		udelay(10);
 -		writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);
 -		udelay(300);
--
++	/* Reset card on all SoCs supporting eMMC hardware reset */
++	writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);
++	udelay(50);
++	writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);
++	udelay(1000);
+ 
 -		/* Setup FIFO R/W threshold. Needed on H616. */
--		writel(SUNXI_MMC_THLDC_READ_THLD(512) |
--		       SUNXI_MMC_THLDC_WRITE_EN |
--		       SUNXI_MMC_THLDC_READ_EN, regs + SUNXI_MMC_THLDC);
--	}
 +	/* Setup FIFO R/W threshold */
-+	writel(SUNXI_MMC_THLDC_READ_THLD(512) |
-+	       SUNXI_MMC_THLDC_WRITE_EN |
-+	       SUNXI_MMC_THLDC_READ_EN, regs + SUNXI_MMC_THLDC);
++	if (IS_ENABLED(CONFIG_SUN50I_GEN_H6) || IS_ENABLED(CONFIG_SUNXI_GEN_NCAT2))
+ 		writel(SUNXI_MMC_THLDC_READ_THLD(512) |
+ 		       SUNXI_MMC_THLDC_WRITE_EN |
+ 		       SUNXI_MMC_THLDC_READ_EN, regs + SUNXI_MMC_THLDC);
+-	}
  }
  
  /* non-DM code here is used by the (ARM) SPL only */
