@@ -1,26 +1,23 @@
 From: Agent
-Subject: [PATCH] mmc: sunxi: Force b_max=1 for SPL in DM probe
+Subject: [PATCH] mmc: sunxi: Force b_max=1 for eMMC in legacy (SPL) init
 
-When u-boot,dm-spl is set, SPL uses sunxi_mmc_probe() instead of sunxi_mmc_init().
-Because CMD18 (multi-block reads) hangs the controller in PIO mode without DMA,
-we must force single-block reads (b_max = 1) for the eMMC in SPL when using DM.
+SPL on sun50i-h5 uses the non-DM path (sunxi_mmc_init, name "SUNXI SD/MMC"),
+not sunxi_mmc_probe(). CMD18 (multi-block read) hangs the controller in PIO
+mode, so force single-block reads for mmc2 (eMMC) in this path.
 
 ---
- drivers/mmc/sunxi_mmc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/mmc/sunxi_mmc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -717,6 +717,12 @@ static int sunxi_mmc_probe(struct udevice *dev)
- 		cfg->f_max = 12000000;
- 	}
+@@ -584,6 +584,10 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+ 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
  
-+#if defined(CONFIG_SPL_BUILD) || defined(CONFIG_XPL_BUILD)
-+	if (priv->mmc_no == 2) {
++	if (sdc_no == 2)
 +		cfg->b_max = 1;
-+	}
-+#endif
++	printf("[MMC%d] legacy init b_max=%u\n", sdc_no, cfg->b_max);
 +
- 	ret = clk_get_by_name(dev, "ahb", &gate_clk);
- 	if (!ret)
- 		clk_enable(&gate_clk);
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
+ 
