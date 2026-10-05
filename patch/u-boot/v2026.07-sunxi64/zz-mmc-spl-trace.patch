@@ -10,20 +10,21 @@ that never time out (get_timer stuck?), and report data transfer errors.
 
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -286,9 +286,17 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
+@@ -287,10 +287,18 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
  	for (i = 0; i < word_cnt;) {
  		unsigned int in_fifo;
+ 		unsigned int loop_count = 10000000;
 +		unsigned long spins = 0;
  
  		while ((status = readl(&priv->reg->status)) & status_bit) {
--			if (get_timer(start) > timeout_msecs)
-+			if (++spins == 20000000UL)
-+				printf("[TRACE] fifo stuck i=%u/%u status=0x%x rint=0x%x t=%lu\n",
+-			if (get_timer(start) > timeout_msecs || --loop_count == 0)
++			if (++spins == 2000000UL)
++				printf("[TRACE] fifo slow i=%u/%u status=0x%x rint=0x%x t=%lu\n",
 +				       i, word_cnt, status, readl(&priv->reg->rint),
 +				       get_timer(start));
-+			if (get_timer(start) > timeout_msecs) {
-+				printf("[TRACE] fifo timeout i=%u/%u status=0x%x rint=0x%x\n",
-+				       i, word_cnt, status, readl(&priv->reg->rint));
++			if (get_timer(start) > timeout_msecs || --loop_count == 0) {
++				printf("[TRACE] fifo timeout i=%u/%u status=0x%x rint=0x%x t=%lu\n",
++				       i, word_cnt, status, readl(&priv->reg->rint), get_timer(start));
  				return -1;
 +			}
  		}
