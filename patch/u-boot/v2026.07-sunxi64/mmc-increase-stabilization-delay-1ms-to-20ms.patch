@@ -1,1 +1,82 @@
-From: Armbian Build Framework <build@armbian.com>\nSubject: [PATCH] mmc: sunxi: Improve reset procedure, card reset and bounded timeouts\n\nIncrease stabilization delay to 20ms, assert and deassert eMMC\nhardware reset (HWRST), keep THLDC only for H6, and add safety\nloop counters to avoid infinite SPL hangs during card detection.\n\n---\n drivers/mmc/sunxi_mmc.c | 50 ++++++++++++++++++++++++++++++-------------------\n 1 file changed, 31 insertions(+), 19 deletions(-)\n\n--- a/drivers/mmc/sunxi_mmc.c\n+++ b/drivers/mmc/sunxi_mmc.c\n@@ -188,10 +188,11 @@\n 	cmd = SUNXI_MMC_CMD_START |\n 	      SUNXI_MMC_CMD_UPCLK_ONLY |\n 	      SUNXI_MMC_CMD_WAIT_PRE_OVER;\n+	unsigned int loop_count = 100000;\n \n 	writel(cmd, &priv->reg->cmd);\n 	while (readl(&priv->reg->cmd) & SUNXI_MMC_CMD_START) {\n-		if (get_timer(start) > timeout_msecs)\n+		if (get_timer(start) > timeout_msecs || --loop_count == 0)\n 			return -1;\n 	}\n \n@@ -329,10 +311,11 @@\n {\n 	unsigned int status;\n 	unsigned long start = get_timer(0);\n+	unsigned int loop_count = 100000;\n \n 	do {\n 		status = readl(&priv->reg->rint);\n-		if ((get_timer(start) > timeout_msecs) ||\n+		if ((get_timer(start) > timeout_msecs) || --loop_count == 0 ||\n 		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {\n 			debug("%s timeout %x\n", what,\n 			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);\n@@ -430,11 +421,12 @@\n \n 	if (cmd->resp_type & MMC_RSP_BUSY) {\n 		unsigned long start = get_timer(0);\n+		unsigned int loop_count = 200000;\n 		timeout_msecs = 2000;\n \n 		do {\n 			status = readl(&priv->reg->status);\n-			if (get_timer(start) > timeout_msecs) {\n+			if ((get_timer(start) > timeout_msecs) || --loop_count == 0) {\n 				debug("busy timeout\n");\n 				error = -ETIMEDOUT;\n 				goto out;\n@@ -457,11 +449,31 @@\n out:\n 	if (error < 0) {\n 		writel(SUNXI_MMC_GCTRL_RESET, &priv->reg->gctrl);\n+		udelay(500);\n+		writel(SUNXI_MMC_HWRST_DEASSERT, &priv->reg->hwrst);\n+		udelay(500);\n 		mmc_update_clk(priv);\n 	}\n 	writel(0xffffffff, &priv->reg->rint);\n 	writel(readl(&priv->reg->gctrl) | SUNXI_MMC_GCTRL_FIFO_RESET,\n 	       &priv->reg->gctrl);\n+	{\n+		unsigned int rst_loops = 100000;\n+\n+		while ((readl(&priv->reg->gctrl) & SUNXI_MMC_GCTRL_FIFO_RESET) &&\n+		       --rst_loops)\n+			;\n+	}\n+	udelay(50);\n+\n+#ifdef CONFIG_XPL_BUILD\n+	if (cmd->cmdidx == 17)\n+		printf((cmd->cmdarg & 7) == 7 ? "\n" : " ");\n+	if (error)\n+		printf("\n[MMC%d] cmd%d err=%d rint=0x%x status=0x%x\n",\n+		       priv->mmc_no, cmd->cmdidx, error,\n+		       readl(&priv->reg->rint), readl(&priv->reg->status));\n+#endif\n \n 	return error;\n }\n@@ -470,15 +482,15 @@\n {\n 	/* Reset controller */\n 	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);\n+	udelay(20000);\n+\n+	/* Reset card on all SoCs supporting eMMC hardware reset */\n+	writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);\n+	udelay(50);\n+	writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);\n 	udelay(1000);\n \n 	if (IS_ENABLED(CONFIG_SUN50I_GEN_H6) || IS_ENABLED(CONFIG_SUNXI_GEN_NCAT2)) {\n-		/* Reset card */\n-		writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);\n-		udelay(10);\n-		writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);\n-		udelay(300);\n-\n 		/* Setup FIFO R/W threshold. Needed on H616. */\n 		writel(SUNXI_MMC_THLDC_READ_THLD(512) |\n 		       SUNXI_MMC_THLDC_WRITE_EN |\n@@ -533,6 +545,9 @@\n {\n 	struct sunxi_mmc_priv *priv = mmc->priv;\n \n+#ifdef CONFIG_XPL_BUILD\n+	printf("[MMC%d] core_init\n", priv->mmc_no);\n+#endif\n 	sunxi_mmc_reset(priv->reg);\n \n 	return 0;\n \n
+From: Armbian Build Framework <build@armbian.com>
+Subject: [PATCH] mmc: sunxi: Improve reset procedure, card reset and bounded timeouts
+
+Increase stabilization delay from 1ms to 20ms, assert and deassert eMMC
+hardware reset (HWRST) on all SoCs, set FIFO threshold, and add safety
+loop counters to avoid infinite SPL hangs during card detection.
+
+---
+ drivers/mmc/sunxi_mmc.c | 41 ++++++++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
+
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -188,10 +188,11 @@
+ 	cmd = SUNXI_MMC_CMD_START |
+ 	      SUNXI_MMC_CMD_UPCLK_ONLY |
+ 	      SUNXI_MMC_CMD_WAIT_PRE_OVER;
++	unsigned int loop_count = 10000000;
+ 
+ 	writel(cmd, &priv->reg->cmd);
+ 	while (readl(&priv->reg->cmd) & SUNXI_MMC_CMD_START) {
+-		if (get_timer(start) > timeout_msecs)
++		if (get_timer(start) > timeout_msecs || --loop_count == 0)
+ 			return -1;
+ 	}
+ 
+@@ -285,9 +286,10 @@
+ 
+ 	for (i = 0; i < word_cnt;) {
+ 		unsigned int in_fifo;
++		unsigned int loop_count = 10000000;
+ 
+ 		while ((status = readl(&priv->reg->status)) & status_bit) {
+-			if (get_timer(start) > timeout_msecs)
++			if (get_timer(start) > timeout_msecs || --loop_count == 0)
+ 				return -1;
+ 		}
+ 
+@@ -329,10 +331,11 @@
+ {
+ 	unsigned int status;
+ 	unsigned long start = get_timer(0);
++	unsigned int loop_count = 10000000;
+ 
+ 	do {
+ 		status = readl(&priv->reg->rint);
+-		if ((get_timer(start) > timeout_msecs) ||
++		if ((get_timer(start) > timeout_msecs) || --loop_count == 0 ||
+ 		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {
+ 			debug("%s timeout %x\n", what,
+ 			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);
+@@ -470,20 +473,18 @@
+ {
+ 	/* Reset controller */
+ 	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
++	udelay(20000);
++
++	/* Reset card on all SoCs supporting eMMC hardware reset */
++	writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);
++	udelay(50);
++	writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);
+ 	udelay(1000);
+ 
+-	if (IS_ENABLED(CONFIG_SUN50I_GEN_H6) || IS_ENABLED(CONFIG_SUNXI_GEN_NCAT2)) {
+-		/* Reset card */
+-		writel(SUNXI_MMC_HWRST_ASSERT, regs + SUNXI_MMC_HWRST);
+-		udelay(10);
+-		writel(SUNXI_MMC_HWRST_DEASSERT, regs + SUNXI_MMC_HWRST);
+-		udelay(300);
+-
+-		/* Setup FIFO R/W threshold. Needed on H616. */
+-		writel(SUNXI_MMC_THLDC_READ_THLD(512) |
+-		       SUNXI_MMC_THLDC_WRITE_EN |
+-		       SUNXI_MMC_THLDC_READ_EN, regs + SUNXI_MMC_THLDC);
+-	}
++	/* Setup FIFO R/W threshold */
++	writel(SUNXI_MMC_THLDC_READ_THLD(512) |
++	       SUNXI_MMC_THLDC_WRITE_EN |
++	       SUNXI_MMC_THLDC_READ_EN, regs + SUNXI_MMC_THLDC);
+ }
+ 
+ /* non-DM code here is used by the (ARM) SPL only */
