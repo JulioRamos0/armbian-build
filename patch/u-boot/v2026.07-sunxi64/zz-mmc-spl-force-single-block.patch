@@ -11,13 +11,12 @@ mode, so force single-block reads for mmc2 (eMMC) in this path.
 
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
-@@ -584,5 +584,9 @@ struct mmc *sunxi_mmc_init(int sdc_no)
- 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
+@@ -589,4 +589,8 @@ struct mmc *sunxi_mmc_init(int sdc_no)
+ 	if (mmc_resource_init(sdc_no) != 0)
+ 		return NULL;
  
 +	if (sdc_no == 2)
 +		cfg->b_max = 1;
 +	printf("[MMC%d] legacy init b_max=%u\n", sdc_no, cfg->b_max);
 +
- 	cfg->f_min = 400000;
- 	cfg->f_max = 52000000;
- 
+ 	/* config ahb clock */
