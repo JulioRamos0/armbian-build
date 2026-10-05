@@ -33,7 +33,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  				return -1;
  		}
  
-@@ -316,6 +318,8 @@
+@@ -316,9 +318,11 @@
  		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
  		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
  			in_fifo = 32;
@@ -41,7 +41,11 @@ loop counters to avoid infinite SPL hangs during card detection.
 +			in_fifo = word_cnt - i;
  		for (; in_fifo > 0; in_fifo--)
  			buff[i++] = readl_relaxed(&priv->reg->fifo);
- 		dmb();
+-		dmb();
++		mb();
+ 	}
+ 
+ 	return 0;
 @@ -330,9 +334,11 @@
  	unsigned int status;
  	unsigned long start = get_timer(0);
