@@ -1,0 +1,17 @@
+services:
+  build-uboot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: armbian-build-uboot
+    privileged: true
+    network_mode: host
+    volumes:
+      - .:/workspace
+      - armbian-cache:/workspace/cache
+      - /dev:/dev
+    environment:
+      - FORCE_CHECKOUT=no
+
+volumes:
+  armbian-cache:
