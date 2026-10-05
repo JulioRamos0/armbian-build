@@ -6,9 +6,6 @@ hardware reset (HWRST) on all SoCs, set FIFO threshold, and add safety
 loop counters to avoid infinite SPL hangs during card detection.
 
 ---
- drivers/mmc/sunxi_mmc.c | 41 ++++++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 19 deletions(-)
-
 --- a/drivers/mmc/sunxi_mmc.c
 +++ b/drivers/mmc/sunxi_mmc.c
 @@ -188,10 +188,11 @@
@@ -36,12 +33,12 @@ loop counters to avoid infinite SPL hangs during card detection.
  				return -1;
  		}
  
-@@ -329,10 +331,11 @@
- {
+@@ -330,9 +332,11 @@
  	unsigned int status;
  	unsigned long start = get_timer(0);
-+	unsigned int loop_count = 10000000;
  
++	unsigned int loop_count = 10000000;
++
  	do {
  		status = readl(&priv->reg->rint);
 -		if ((get_timer(start) > timeout_msecs) ||
@@ -49,7 +46,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {
  			debug("%s timeout %x\n", what,
  			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);
-@@ -470,20 +473,18 @@
+@@ -470,20 +474,18 @@
  {
  	/* Reset controller */
  	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
