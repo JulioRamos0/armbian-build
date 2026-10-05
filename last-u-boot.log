@@ -1,38 +1,8 @@
-U-Boot SPL 2026.07_armbian-2026.07-Sece3-P381b-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 00:28:23 +0000)
+U-Boot SPL 2026.07_armbian-2026.07-Sece3-Pd15e-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 01:06:40 +0000)
 DRAM: 1024 MiB
 Trying to boot from MMC2
 [SPL] mmc dev 1 init...
-[SPL] calling spl_mmc_find_device(1)
-[SPL] find_device ok: SUNXI SD/MMC
-[SPL] calling mmc_init...
-[MMC2] core_init
-[MMC2] cmd0 arg=0x0
-[MMC2] cmd8 arg=0x1aa
-
-[MMC2] cmd8 err=-110 rint=0x0 status=0x106
-[MMC2] cmd55 arg=0x0
-
-[MMC2] cmd55 err=-110 rint=0x0 status=0x106
-[MMC2] cmd0 arg=0x0
-[MMC2] cmd1 arg=0x0
-[MMC2] cmd1 arg=0x40300000
-[MMC2] cmd1 arg=0x40300000
-[MMC2] cmd1 arg=0x40300000
-[MMC2] cmd2 arg=0x0
-[MMC2] cmd3 arg=0x10000
-[MMC2] cmd9 arg=0x10000
-[MMC2] cmd7 arg=0x10000
-[MMC2] cmd8 arg=0x0
-[MMC2] cmd6 arg=0x3b70200
-[MMC2] cmd13 arg=0x10000
-[MMC2] cmd6 arg=0x3b90000
-[MMC2] cmd13 arg=0x10000
-[MMC2] cmd8 arg=0x0
-[SPL] mmc_init ok
-[SPL] mmc ready: SUNXI SD/MMC (caps=0x40000000, clock=20000000)
+[SPL] mmc init ok: SUNXI SD/MMC (caps=0x40000000, clock=20000000)
 [SPL] loading from raw sector 64 (offset 0xa000)...
-[SPL-READ] sector 80 count 1... [MMC2] cmd16 arg=0x200
- done
 [SPL-FIT] load_simple_fit starting (off=0xa000)...
 [SPL-FIT] fit_buffer=0x41000000, size=870400
-[SPL-READ] sector 80 count 1700... [MMC2] cmd16 a

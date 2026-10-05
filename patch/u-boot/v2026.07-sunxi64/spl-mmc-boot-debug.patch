@@ -27,7 +27,20 @@ and image jumping to aid debugging headless / UART boot failures.
  	} else if (CONFIG_IS_ENABLED(ATF) && os == IH_OS_ARM_TRUSTED_FIRMWARE) {
 --- a/common/spl/spl_mmc.c
 +++ b/common/spl/spl_mmc.c
-@@ -379,12 +379,13 @@
+@@ -23,7 +23,11 @@
+ 	lbaint_t sector = off >> bd->log2blksz;
+ 	lbaint_t count = size >> bd->log2blksz;
+ 
+-	return blk_dread(bd, sector, count, buf) << bd->log2blksz;
++	ulong r;
++	printf("[SPL-READ] sector %u count %u... ", (unsigned int)sector, (unsigned int)count);
++	r = blk_dread(bd, sector, count, buf) << bd->log2blksz;
++	printf("done\n");
++	return r;
+ }
+ 
+ static __maybe_unused unsigned long spl_mmc_raw_uboot_offset(int part)
+@@ -379,12 +383,13 @@
  
  	/* Perform peripheral init only once for an mmc device */
  	mmc_dev = spl_mmc_get_device_index(bootdev->boot_device);
@@ -44,7 +57,7 @@ and image jumping to aid debugging headless / UART boot failures.
  
  		ret = mmc_init(mmc);
  		if (ret) {
-@@ -393,6 +394,8 @@
+@@ -393,6 +398,8 @@
  			return ret;
  		}
  	}
@@ -53,7 +66,7 @@ and image jumping to aid debugging headless / UART boot failures.
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;
-@@ -422,11 +425,14 @@
+@@ -422,11 +429,14 @@
  		}
  
  		raw_sect = spl_mmc_get_uboot_raw_sector(mmc, raw_sect);

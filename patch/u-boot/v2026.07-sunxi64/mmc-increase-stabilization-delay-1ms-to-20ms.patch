@@ -33,7 +33,16 @@ loop counters to avoid infinite SPL hangs during card detection.
  				return -1;
  		}
  
-@@ -330,9 +332,11 @@
+@@ -316,6 +318,8 @@
+ 		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
+ 		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
+ 			in_fifo = 32;
++		if (in_fifo > word_cnt - i)
++			in_fifo = word_cnt - i;
+ 		for (; in_fifo > 0; in_fifo--)
+ 			buff[i++] = readl_relaxed(&priv->reg->fifo);
+ 		dmb();
+@@ -330,9 +334,11 @@
  	unsigned int status;
  	unsigned long start = get_timer(0);
  
@@ -46,7 +55,7 @@ loop counters to avoid infinite SPL hangs during card detection.
  		    (status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT)) {
  			debug("%s timeout %x\n", what,
  			      status & SUNXI_MMC_RINT_INTERRUPT_ERROR_BIT);
-@@ -470,20 +474,18 @@
+@@ -470,20 +476,18 @@
  {
  	/* Reset controller */
  	writel(SUNXI_MMC_GCTRL_RESET, regs + SUNXI_MMC_GCTRL);
@@ -77,3 +86,21 @@ loop counters to avoid infinite SPL hangs during card detection.
  }
  
  /* non-DM code here is used by the (ARM) SPL only */
+@@ -581,7 +585,7 @@
+ 		cfg->host_caps = MMC_MODE_8BIT;
+ 
+ 	cfg->host_caps |= MMC_MODE_HS_52MHz | MMC_MODE_HS;
+-	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
++	cfg->b_max = (priv->mmc_no == 2) ? 1 : CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
+@@ -688,7 +692,7 @@
+ 
+ 	cfg->voltages = MMC_VDD_32_33 | MMC_VDD_33_34;
+ 	cfg->host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS;
+-	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
++	cfg->b_max = (priv->mmc_no == 2) ? 1 : CONFIG_SYS_MMC_MAX_BLK_COUNT;
+ 
+ 	cfg->f_min = 400000;
+ 	cfg->f_max = 52000000;
