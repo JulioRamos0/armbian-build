@@ -1,0 +1,26 @@
+From: Agent
+Subject: [PATCH] mmc: sunxi: Force b_max=1 for SPL in DM probe
+
+When u-boot,dm-spl is set, SPL uses sunxi_mmc_probe() instead of sunxi_mmc_init().
+Because CMD18 (multi-block reads) hangs the controller in PIO mode without DMA,
+we must force single-block reads (b_max = 1) for the eMMC in SPL when using DM.
+
+---
+ drivers/mmc/sunxi_mmc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -717,6 +717,12 @@ static int sunxi_mmc_probe(struct udevice *dev)
+ 		cfg->f_max = 12000000;
+ 	}
+ 
++#if defined(CONFIG_SPL_BUILD) || defined(CONFIG_XPL_BUILD)
++	if (priv->mmc_no == 2) {
++		cfg->b_max = 1;
++	}
++#endif
++
+ 	ret = clk_get_by_name(dev, "ahb", &gate_clk);
+ 	if (!ret)
+ 		clk_enable(&gate_clk);
