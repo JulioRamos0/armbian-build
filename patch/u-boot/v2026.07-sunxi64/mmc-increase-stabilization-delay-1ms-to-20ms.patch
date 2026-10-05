@@ -24,66 +24,6 @@ loop counters to avoid infinite SPL hangs during card detection.
  			return -1;
  	}
  
-@@ -282,44 +283,25 @@
- 	setbits_le32(&priv->reg->gctrl, SUNXI_MMC_GCTRL_ACCESS_BY_AHB);
- 
- 	start = get_timer(0);
--
--	for (i = 0; i < word_cnt;) {
--		unsigned int in_fifo;
--
-+	unsigned int total_loop_count = 5000000;
-+
-+	for (i = 0; i < word_cnt; i++) {
- 		while ((status = readl(&priv->reg->status)) & status_bit) {
--			if (get_timer(start) > timeout_msecs)
-+			if (get_timer(start) > timeout_msecs || --total_loop_count == 0) {
-+#ifdef CONFIG_XPL_BUILD
-+				printf("[MMC%d] trans timeout at word %u/%u status=0x%x\n",
-+				       priv->mmc_no, i, word_cnt, status);
-+#endif
- 				return -1;
-+			}
- 		}
- 
--		/*
--		 * For writing we do not easily know the FIFO size, so have
--		 * to check the FIFO status after every word written.
--		 * TODO: For optimisation we could work out a minimum FIFO
--		 * size across all SoCs, and use that together with the current
--		 * fill level to write chunks of words.
--		 */
--		if (!reading) {
--			writel(buff[i++], &priv->reg->fifo);
--			continue;
--		}
--
--		/*
--		 * The status register holds the current FIFO level, so we
--		 * can be sure to collect as many words from the FIFO
--		 * register without checking the status register after every
--		 * read. That saves half of the costly MMIO reads, effectively
--		 * doubling the read performance.
--		 * Some SoCs (A20) report a level of 0 if the FIFO is
--		 * completely full (value masked out?). Use a safe minimal
--		 * FIFO size in this case.
--		 */
--		in_fifo = SUNXI_MMC_STATUS_FIFO_LEVEL(status);
--		if (in_fifo == 0 && (status & SUNXI_MMC_STATUS_FIFO_FULL))
--			in_fifo = 32;
--		for (; in_fifo > 0; in_fifo--)
--			buff[i++] = readl_relaxed(&priv->reg->fifo);
--		dmb();
--	}
-+		if (reading)
-+			buff[i] = readl_relaxed(&priv->reg->fifo);
-+		else
-+			writel(buff[i], &priv->reg->fifo);
-+	}
-+	dmb();
- 
- 	return 0;
- }
 @@ -329,10 +311,11 @@
  {
  	unsigned int status;

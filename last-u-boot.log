@@ -1,4 +1,4 @@
-U-Boot SPL 2026.07_armbian-2026.07-Sece3-Pc933-Hf96d-V7ced-B6a81-R448a (Oct 04 2026 - 19:51:21 +0000)
+U-Boot SPL 2026.07_armbian-2026.07-Sece3-P158e-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 00:13:41 +0000)
 DRAM: 1024 MiB
 Trying to boot from MMC2
 [SPL] mmc dev 1 init...
@@ -31,10 +31,8 @@ Trying to boot from MMC2
 [SPL] mmc_init ok
 [SPL] mmc ready: SUNXI SD/MMC (caps=0x40000000, clock=20000000)
 [SPL] loading from raw sector 64 (offset 0xa000)...
-[SPL-READ] sec=80 cnt=1 (off=0xa000 size=512) buf=0x44ffffc0
-[MMC2] cmd16 arg=0x200
-50:wtcd 
-[SPL-READ] done: 512 bytes
+[SPL-READ] sector 80 count 1... [MMC2] cmd16 arg=0x200
+ done
 [SPL-FIT] load_simple_fit starting (off=0xa000)...
-[SPL-FIT] fit_buffer=0x45000000, size=870400
-[SPL-READ] ec=80 
+[SPL-FIT] fit_buffer=0x41000000, size=870400
+[SPL-READ] sector 80 count 1700... [MMC2] cmd16 arg=
