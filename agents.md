@@ -236,3 +236,6 @@ Actualmente estamos trabajando en resolver un problema de cuelgue (hang) durante
 - **Automatización CI/CD:** El script `scratch/auto_build_and_deploy.py <commit_sha>` espera la compilación en GitHub Actions, descarga los `.deb`/`.bin`, los transfiere vía SSH/SFTP al TV Stick (`192.168.128.114`) y los graba a la eMMC (`/dev/mmcblk2`).
 - **Flujo de Pruebas Manual:** Después de realizar cambios para solventar problemas de u-boot, hay que esperar a que el build del uboot en github termine, descargarlo e instalarlo en ssh `root@192.168.128.114` usando la contraseña `toor@100`.
 
+## 4. Reglas de Parcheo
+**CRÍTICO:** Los parches que modifican el código fuente de U-Boot **SIEMPRE** deben colocarse en `patch/u-boot/v2026.07-sunxi64/` (o la versión correspondiente). **NUNCA** utilices `userpatches/u-boot/u-boot-sunxi/` para estos cambios. Si utilizas `userpatches/`, Armbian los aplicará al final, lo cual sobrescribe o rompe parches oficiales del sistema (como soporte de SPI NAND, correcciones eMMC y DTB), causando un sistema inarrancable ("0 logs").
+
