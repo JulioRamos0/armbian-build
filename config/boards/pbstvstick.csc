@@ -21,31 +21,47 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "576"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
-	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
 	run_host_command_logged scripts/config --disable CONFIG_OF_UPSTREAM
 	run_host_command_logged scripts/config --disable CONFIG_SPL_WDT
 	run_host_command_logged scripts/config --disable CONFIG_WDT
 	run_host_command_logged scripts/config --disable CONFIG_WATCHDOG
+	run_host_command_logged scripts/config --disable CONFIG_SPL_DM_MMC
+	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
+	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA -1
+	
+	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
+	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 4000000;/g' drivers/mmc/sunxi_mmc.c
+	sed -i 's/MMC_MODE_4BIT/0/g' drivers/mmc/sunxi_mmc.c
+	
 
-	local node_content='
+local node_content='
+&reg_vcc3v3 {
+	u-boot,dm-spl;
+};
+
+&mmc0_pins {
+	u-boot,dm-spl;
+};
+
 &mmc0 {
 	u-boot,dm-spl;
 	vmmc-supply = <&reg_vcc3v3>;
 	bus-width = <4>;
 	cap-sd-highspeed;
-	broken-cd;
+	broken-cd;	disable-wp;
 	no-1-8-v;
 	status = "okay";
 };
 
 &mmc2 {
-	u-boot,dm-spl;
 	pinctrl-names = "default";
 	pinctrl-0 = <&mmc2_8bit_pins>;
 	vmmc-supply = <&reg_vcc3v3>;
-	bus-width = <8>;
+	bus-width = <4>;
 	max-frequency = <25000000>;
+	vqmmc-supply = <&reg_vcc3v3>;
+	no-1-8-v;
 	non-removable;
 	cap-mmc-hw-reset;
 	status = "okay";

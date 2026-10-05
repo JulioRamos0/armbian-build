@@ -1,17 +1,11 @@
-U-Boot SPL 2026.07_armbian-2026.07-Sece3-Pe538-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 03:02:08 +0000)
+U-Boot SPL 2026.07_armbian-2026.07-Sece3-P8c73-H8945-V7ced-B6a81-R448a (Oct 05 2026 - 21:41:53 +0000)
 DRAM: 1024 MiB
 Trying to boot from MMC2
 [SPL] mmc dev 1 init...
 [MMC0] legacy init b_max=65535
-[MMC2] legacy init b_max=1
-[SPL] mmc init ok: SUNXI SD/MMC (caps=0x40000000, clock=20000000)
-[SPL] loading from raw sector 64 (offset 0xa000)...
-[SPL-READ] sector 80 count 1... [TRACE] #0 cmd17 arg=0x50 blks=1 dest=?
-done
-[SPL-FIT] load_simple_fit starting (off=0xa000)...
-[SPL-FIT] fit_buffer=0x41000000, size=870400
-[SPL-READ] sector 80 count 1700... [TRACE] #1 cmd17 arg=0x50 blks=1 dest=?
-[TRACE] #2 cmd17 arg=0x51 blks=1 dest=?
-[TRACE] #3 cmd17 arg=0x52 blks=1 dest=?
-[TRACE] #64 cmd17 arg=0x8f blks=1 dest=?
-[TRACE] #128 cmd17 arg=0xcf blks=1 dest=?
+Card did not respond to voltage select! : -110
+spl: mmc init failed with error: -95
+Error: -95
+SPL: Unsupported Boot Device!
+SPL: failed to boot from all boot devices
+### ERROR ### Please RESET the board ###

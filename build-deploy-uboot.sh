@@ -10,18 +10,29 @@ REMOTE_PASS="toor@100"
 REMOTE_DEB="/root/new_uboot.deb"
 UBOOT_BIN_PATH="/usr/lib/linux-u-boot-current-pbstvstick/u-boot-sunxi-with-spl.bin"
 
-# Funciones SSH y SCP dentro del contenedor
+# Función auxiliar para ejecutar SSH
 ssh_run() {
     local cmd="$1"
     echo -e "\n>>> ${cmd}"
-    sshpass -p "${REMOTE_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${REMOTE_USER}@${REMOTE_HOST}" "${cmd}"
+    sshpass -p "${REMOTE_PASS}" ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o LogLevel=ERROR \
+        -o ConnectTimeout=10 \
+        "${REMOTE_USER}@${REMOTE_HOST}" "${cmd}"
 }
 
+# Función auxiliar para transferir vía SCP
 scp_push() {
     local local_file="$1"
     local dest_path="$2"
     echo "Subiendo ${local_file} -> ${dest_path}..."
-    sshpass -p "${REMOTE_PASS}" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=10 "${local_file}" "${REMOTE_USER}@${REMOTE_HOST}:${dest_path}"
+    sshpass -p "${REMOTE_PASS}" scp \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o LogLevel=ERROR \
+        -o ConnectTimeout=10 \
+        "${local_file}" "${REMOTE_USER}@${REMOTE_HOST}:${dest_path}"
     echo "Upload OK!"
 }
 
