@@ -1,4 +1,4 @@
-U-Boot SPL 2026.07_armbian-2026.07-Sece3-P158e-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 00:13:41 +0000)
+U-Boot SPL 2026.07_armbian-2026.07-Sece3-P381b-Hf96d-V7ced-B6a81-R448a (Oct 05 2026 - 00:28:23 +0000)
 DRAM: 1024 MiB
 Trying to boot from MMC2
 [SPL] mmc dev 1 init...
@@ -35,4 +35,4 @@ Trying to boot from MMC2
  done
 [SPL-FIT] load_simple_fit starting (off=0xa000)...
 [SPL-FIT] fit_buffer=0x41000000, size=870400
-[SPL-READ] sector 80 count 1700... [MMC2] cmd16 arg=
+[SPL-READ] sector 80 count 1700... [MMC2] cmd16 a

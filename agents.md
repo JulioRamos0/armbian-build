@@ -8,7 +8,7 @@ Para lograrlo, debes guiar al usuario según el entorno que elija:
 3. **Utilizando Docker** (pero SIEMPRE debes lanzarle la advertencia de que puede ser muy lento).
 
 # Perfil del Hardware
-- **Procesador (SoC):** Allwinner H5 (4 Núcleos ARM64)
+- **Procesador (SoC):** Allwinner H5 (4 Núcleos ARM64, Cortex-A53)
 - **RAM:** 1GB
 - **Almacenamiento Interno:** Chip eMMC integrado (memoria flash soldada en la placa, en el puerto mmc2).
 - **Gráficos (GPU):** Mali-450 (Capaz de emular juegos retro hasta PS1 usando RetroArch)
