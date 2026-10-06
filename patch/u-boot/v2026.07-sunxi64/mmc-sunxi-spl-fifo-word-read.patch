@@ -1,0 +1,23 @@
+From: Agent
+Subject: [PATCH] mmc: sunxi: read the data FIFO one word per EMPTY check
+
+SPL eMMC reads on H5 hang (no timeout, no error print) in the middle of a
+CMD17 transfer, at a different block on each build. A hard bus lock is what
+reading the FIFO register while it is empty causes, so do not trust the
+FIFO level to read several words in a row: re-check the EMPTY flag before
+every word.
+
+---
+ drivers/mmc/sunxi_mmc.c | 4 ++++
+ 1 file changed, 3 insertions(+)
+
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -352,4 +352,7 @@
+ 		if (in_fifo > word_cnt - i)
+ 			in_fifo = word_cnt - i;
++		/* Level may overstate real FIFO content: one word per EMPTY check */
++		if (in_fifo > 1)
++			in_fifo = 1;
+ 		for (; in_fifo > 0; in_fifo--)
+ 			buff[i++] = readl_relaxed(&priv->reg->fifo);

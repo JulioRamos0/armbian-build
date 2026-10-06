@@ -12,6 +12,8 @@ services:
       - /dev:/dev
     environment:
       - FORCE_CHECKOUT=no
+      # - REMOTE_HOST=192.168.128.15
+      # - SKIP_BUILD=1
 
 volumes:
   armbian-cache:

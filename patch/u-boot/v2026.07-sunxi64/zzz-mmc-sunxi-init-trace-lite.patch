@@ -1,0 +1,34 @@
+From: Agent
+Subject: [PATCH] mmc: sunxi: SPL init-path trace, lite (warm-reboot hang diagnosis)
+
+Log hangs right after "[MMC2] legacy init". Short prints (tiny-printf safe)
+around clock setup, mmc_create, core_init and the first commands.
+
+---
+ drivers/mmc/sunxi_mmc.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -362 +362,7 @@
+-	if (priv->fatal_err)
++	{
++		static unsigned int trace_c;
++
++		if (trace_c++ < 12)
++			printf("[T] cmd%d\n", cmd->cmdidx);
++	}
++	if (priv->fatal_err)
+@@ -590 +590,2 @@
+-	sunxi_mmc_reset(priv->reg);
++	printf("[T] reset\n");
++	sunxi_mmc_reset(priv->reg);
+@@ -717 +717,3 @@
+-	ret = mmc_set_mod_clk(priv, 24000000);
++	printf("[T] clk\n");
++	ret = mmc_set_mod_clk(priv, 24000000);
++	printf("[T] clk ok\n");
+@@ -726 +728,2 @@
+-	return mmc_create(cfg, priv);
++	printf("[T] create\n");
++	return mmc_create(cfg, priv);

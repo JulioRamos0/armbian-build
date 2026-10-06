@@ -28,7 +28,7 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --disable CONFIG_WATCHDOG
 	run_host_command_logged scripts/config --disable CONFIG_SPL_DM_MMC
 	run_host_command_logged scripts/config --enable CONFIG_SPL_MMC_TINY
-	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA -1
+	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	
 	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
 	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 4000000;/g' drivers/mmc/sunxi_mmc.c

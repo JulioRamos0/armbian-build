@@ -57,12 +57,17 @@ and image jumping to aid debugging headless / UART boot failures.
  
  		ret = mmc_init(mmc);
  		if (ret) {
-@@ -393,6 +398,8 @@
+@@ -393,6 +398,13 @@
  			return ret;
  		}
  	}
 +	printf("[SPL] mmc init ok: %s (caps=0x%x, clock=%u)\n",
 +	       mmc->cfg->name, mmc->cfg->host_caps, mmc->clock);
++	{
++		extern void udelay(unsigned long usec);
++		printf("[SETTLE 100ms]\n");
++		udelay(100000);
++	}
  
  	boot_mode = spl_mmc_boot_mode(mmc, bootdev->boot_device);
  	ret = -EINVAL;

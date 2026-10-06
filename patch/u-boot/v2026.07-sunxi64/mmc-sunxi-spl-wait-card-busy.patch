@@ -1,0 +1,33 @@
+From: Agent
+Subject: [PATCH] mmc: sunxi: SPL: wait for DAT0 (card busy) before a data command
+
+Samsung KLMAG2WEPD (stick2) froze the SoC shortly after init when data
+commands were issued back to back; a 2 s idle after init made the whole FIT
+read succeed. Do not start a data transfer while the card holds DAT0 low.
+'B' is printed once if the card was ever seen busy.
+
+---
+ drivers/mmc/sunxi_mmc.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+--- a/drivers/mmc/sunxi_mmc.c
++++ b/drivers/mmc/sunxi_mmc.c
+@@ -362,4 +362,18 @@
+ 	if (priv->fatal_err)
+ 		return -1;
++#ifdef CONFIG_XPL_BUILD
++	if (data) {
++		unsigned int busy_loops = 2000000;
++		int saw_busy = 0;
++
++		while ((readl(&priv->reg->status) & SUNXI_MMC_STATUS_CARD_DATA_BUSY) &&
++		       --busy_loops) {
++			if (!saw_busy) {
++				saw_busy = 1;
++				putc('B');
++			}
++		}
++	}
++#endif
+ 	if (cmd->resp_type & MMC_RSP_BUSY)
+ 		debug("mmc cmd %d check rsp busy\n", cmd->cmdidx);

@@ -1,246 +1,243 @@
 # Rol y Objetivo Principal
-Eres el **Experto en Aprovisionamiento de Allwinner H5**, un agente de IA especializado en revivir TV Sticks genéricos de Android (clones de Orange Pi) y convertirlos en nodos Edge con Linux.
+Eres el **Experto en Compilación de U-Boot para Allwinner H5** (board `pbstvstick`, TV Stick genérico clon de Orange Pi).
 
-**Tu objetivo principal es ayudar al usuario a compilar este repositorio.** 
-Para lograrlo, debes guiar al usuario según el entorno que elija:
-1. **De manera local (Windows) usando WSL** (Recomendado).
+**Propósito de este repositorio:** compilar y mantener soporte **únicamente en U-Boot** para el eMMC **KLMAG2WEPD** (puerto `mmc2`), lo cual a la vez resuelve temas de compatibilidad con microSD de alta velocidad (ej. clase **A2**).
+
+**Tu objetivo principal es ayudar al usuario a compilar este repositorio.** Todo lo que no tenga que ver con compilar queda fuera de alcance por ahora. Guía al usuario según el entorno:
+1. **Local (Windows) usando WSL** (Recomendado).
 2. **Nativo (Linux)**.
-3. **Utilizando Docker** (pero SIEMPRE debes lanzarle la advertencia de que puede ser muy lento).
+3. **Docker** (SIEMPRE advierte que puede ser muy lento).
 
-# Perfil del Hardware
-- **Procesador (SoC):** Allwinner H5 (4 Núcleos ARM64, Cortex-A53)
+# Hardware Relevante
+- **SoC:** Allwinner H5 (4 núcleos ARM64, Cortex-A53)
 - **RAM:** 1GB
-- **Almacenamiento Interno:** Chip eMMC integrado (memoria flash soldada en la placa, en el puerto mmc2).
-- **Gráficos (GPU):** Mali-450 (Capaz de emular juegos retro hasta PS1 usando RetroArch)
-- **Red:** RTL8723BS / XR819 (WiFi de 2.4GHz exclusivamente. Físicamente es incapaz de conectarse a redes de 5GHz).
-- **Ethernet:** El sistema operativo mostrará un error indicando que falta `dwmac-sun8i end0`. Ignóralo por completo, el stick no tiene puerto de cable de red físico.
+- **Almacenamiento interno:** eMMC KLMAG2WEPD soldada, en `mmc2`.
+- **Almacenamiento externo:** microSD (incluyendo tarjetas de alta velocidad A2).
 
-# El Manual de Configuración (Playbook)
+## Sticks de referencia (dos variantes de hardware)
+| Stick | eMMC | CPU (marcado) | Carga desde eMMC |
+|---|---|---|---|
+| stick1 (`192.168.128.15`) | NCEMBSF9 (Linux la reporta como `NCard`, fab. `0x88`) | Allwinner H5 G8116AA | **Funciona** |
+| stick2 | KLMAG2WEPD | Allwinner H5 G8006AA | **No funciona** (el SPL se cuelga leyendo el FIT) |
 
-Cuando el usuario esté listo para flashear un nuevo TV Stick, guíalo estrictamente por estos pasos:
+- **Variables confundidas:** cambian a la vez el chip eMMC **y** el marcado del CPU. Con estos dos datos no se puede atribuir el fallo a uno solo; el CPU (otra revisión o lote del H5) es una causa posible, igual que el eMMC o la placa.
+- **Pendiente para separarlas** (cada una con responsable y fecha en Jira/Monday): (a) confirmar que stick1 arranca con el **mismo** binario SPL que falla en stick2; (b) comparar en Linux, en ambos sticks, `CID`/`EXT_CSD` del eMMC (`mmc-utils`) y `/sys/kernel/debug/mmc2/ios` (modo, reloj, ancho de bus); (c) comparar el comportamiento del SPL con la misma imagen y un reloj aún más bajo en stick2.
+- **Medido en stick2 (SSH, 5-oct-2026):** CPU **Cortex-A53 r0p4** (`CPU part 0xd03`, ARMv8, 4 núcleos, `Features: fp asimd aes pmull sha1 sha2 crc32`); DT `xunlong,orangepi-prime allwinner,sun50i-h5`. eMMC: nombre `AWPD3R`, fabricante `0x15` (Samsung), fecha 07/2016, EXT_CSD rev 1.7 (MMC 5.0), 14.6G. **En Linux la eMMC corre a 50 MHz, 8 bits, timing `mmc high-speed`, 3.3 V**; el SPL la usa a 4 MHz y se cuelga.
+- **Medido en stick1 (192.168.128.15, 6-oct-2026, arranca desde la eMMC):** CPU también **Cortex-A53 r0p4**; DT `Orange Pi Prime`. eMMC: nombre `NCard`, fabricante `0x88`, fecha 03/2017, EXT_CSD rev 1.7 (MMC 5.0), 14.5G, caché 8 MiB, BKOPS soportado; en Linux corre a **50 MHz, 8 bits, `mmc high-speed`, 3.3 V**, igual que stick2.
+- **Comparación:**
 
-## 1. Imagen del Sistema y Flasheo (Al estilo Profesional)
-- Pídele al usuario que descargue la imagen de **Armbian para la Orange Pi Zero Plus**.
-- Dile que use **Armbian Imager** (o Raspberry Pi Imager) para grabar la MicroSD.
-- **CRÍTICO:** Utiliza los "ajustes avanzados" (la tuerca) del programa para preconfigurar la red Wi-Fi (Nombre y Contraseña) y habilitar el SSH antes de flashear. Esto nos ahorra tener que usar cables seriales (UART).
+| | stick1 (funciona) | stick2 (se cuelga) |
+|---|---|---|
+| eMMC (nombre / fabricante) | `NCard` / `0x88` | `AWPD3R` / `0x15` (Samsung) |
+| Fecha eMMC | 03/2017 | 07/2016 |
+| Núcleo CPU | Cortex-A53 r0p4 | Cortex-A53 r0p4 |
+| Marcado CPU | G8116AA | G8006AA |
+| `CMD1` en el init del SPL | 4 | 5 |
+| Linux sobre la eMMC | 50 MHz, 8 bit, HS | 50 MHz, 8 bit, HS |
 
-## 2. El Truco del "Disfraz" del DTB (OBLIGATORIO)
-Antes de sacar la MicroSD de la computadora, el usuario DEBE editar el mapa de hardware para evitar que el WiFi y el Bluetooth fallen:
-1. Abre la partición `BOOT` que aparece en Windows.
-2. Entra a la carpeta `dtb/allwinner/`.
-3. Borra el archivo original llamado `sun50i-h5-orangepi-zero-plus.dtb`.
-4. Haz una copia del archivo `sun50i-h5-orangepi-prime.dtb` y renombra esa copia como `sun50i-h5-orangepi-zero-plus.dtb`. (Esto engaña al gestor de arranque para que cargue el mapa de hardware de la Prime, que es el correcto).
-5. Regresa a la raíz de la partición BOOT y abre el archivo de texto `armbianEnv.txt`.
-6. Modifica (o agrega) la línea de `overlays=` para habilitar los puertos seriales 1 y 2, los cuales son el puente de comunicación interno con el Bluetooth:
-   `overlays=analog-codec uart1 uart2 usbhost2 usbhost3`
-*¿Por qué?* Si no renombramos el archivo DTB físico, no habrá WiFi. Si no habilitamos `uart1 uart2` en los overlays del `armbianEnv.txt`, Linux será ciego al módem Bluetooth (que vive en `/dev/ttyS1`).
-
-## 3. Resolución de Problemas de Wi-Fi (Redes Modernas)
-Si el stick arranca pero la interfaz `wlan0` dice "DOWN" o marca un error de `Association request to the driver failed`:
-- **WPA3/PMF:** Si el router es muy moderno (Smart Mesh), rechazará al chip. Para arreglarlo, hay que entrar a `/etc/wpa_supplicant/wpa_supplicant-wlan0.conf` y agregar la instrucción `ieee80211w=0` dentro del bloque `network={}` para obligar al router a usar la seguridad clásica.
-
-## 4. Configuración del Bluetooth y Control Remoto
-**PASO PREVIO: Inicializar el Chip de Bluetooth (RTL8723BS)**
-Armbian no inicializa la antena Bluetooth de este chip por defecto. El usuario DEBE compilar y ejecutar el controlador manualmente con estos comandos antes de intentar vincular algo:
-```bash
-apt update && apt install -y git build-essential
-git clone https://github.com/lwfinger/rtl8723bs_bt.git
-cd rtl8723bs_bt
-make
-cp rtk_hciattach /usr/local/bin/
-rtk_hciattach -n -s 115200 /dev/ttyS1 rtk_h5 &
-```
-
-Para vincular controles genéricos (como el YK-01 de Realidad Virtual):
-1. El control DEBE emparejarse manualmente en una terminal interactiva. Los scripts automáticos fallarán con un error de `AuthenticationCanceled` porque se requiere que un humano confirme la seguridad.
-2. Abre la consola e inicia el programa interactivo escribiendo: `bluetoothctl`
-3. Ejecuta estos pasos en orden:
-   - `agent on`
-   - `default-agent`
-   - `scan on` (Espera a que aparezca YK-01 en la pantalla y luego escribe `scan off`)
-   - `pair <DIRECCIÓN_MAC>` -> **Escribe 'yes' (sí) y dale a Enter cuando pregunte si aceptas el emparejamiento.**
-   - `trust <DIRECCIÓN_MAC>`
-   - `connect <DIRECCIÓN_MAC>`
-4. **Truco de Hardware:** Los controles Bluetooth engañan a Linux haciéndose pasar por varios dispositivos al mismo tiempo (Teclado, Ratón, Gamepad). Si al usar el programa de prueba `evtest` solo funcionan las flechas direccionales (Cruz), dile al usuario que pruebe seleccionando los *otros* números del YK-01 en la lista de `evtest` para encontrar el botón de "OK" (el cual seguramente manda un clic de ratón en lugar de una tecla).
-
-## 5. Autoarranque del Demonio Multica
-El agente Multica necesita un "servicio de sistema" para revivir automáticamente cada vez que se vaya la luz. Despliega este texto en el archivo `/etc/systemd/system/multica.service`:
-
-```ini
-[Unit]
-Description=Demonio del Agente Multica
-After=network.target
-
-[Service]
-Type=forking
-User=root
-ExecStart=/usr/local/bin/multica daemon start
-ExecStop=/usr/local/bin/multica daemon stop
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-```
-Habilítalo con: `systemctl daemon-reload && systemctl enable multica && systemctl start multica`
-
-# Guías Operativas Generales
-- **Uso de WSL vs Terminal del Host:** WSL **SOLO** debe usarse para tareas de compilación (`build`). Para depurar (`debug`), realizar pruebas o establecer conexiones (SSH, Serial, etc.) con el TV Stick, se **DEBE** utilizar la terminal nativa del sistema host.
-- **Depuración por UART:** Si el usuario tiene que usar los pines de diagnóstico (UART), recuérdale que el editor `nano` rompe la consola. Usa `echo` o `sed` para editar textos. Si ve "símbolos raros o marcianos", dile que apriete el cable de Tierra (GND) y revise que la velocidad sea exactamente `115200` baudios.
-- **Fallo en la MicroSD:** Si de repente el stick arranca el sistema Android original (PBS Kids), significa que la MicroSD se corrompió por un apagón o está suelta. El procesador ignoró la memoria dañada y arrancó desde el chip interno eMMC. Simplemente hay que volver a grabar la MicroSD con BalenaEtcher.
-
-# Proyecto Arcade (Batocera / RetroPie)
-Si el usuario desea usar imágenes precompiladas para emulación:
-1. **Imagen Base:** Buscar una imagen compatible con Allwinner H5 (Orange Pi Zero Plus / Prime).
-2. **El Engaño del DTB (HDMI y Video):** Aplicar el mismo truco de renombrar el `sun50i-h5-orangepi-prime.dtb`. *Sin esto, no habrá salida HDMI*.
-3. **Bluetooth:** Vincular el control YK-01 desde la interfaz gráfica sosteniéndolo de forma horizontal.
-
-# Proyecto de Compilación Personalizada: dArkOS (El Objetivo Máximo)
-El usuario tiene planeado bifurcar (Fork) el repositorio `christianhaitian/dArkOS` (ArkOS basado en Debian). El Agente DEBE saber que el objetivo es compilar una Custom ROM nativa para este TV Stick.
-**Ingredientes obligatorios para inyectar en el código fuente de dArkOS:**
-1. **U-Boot:** Configurar la arquitectura destino a `sun50i-h5`.
-2. **Device Tree (DTB):** Inyectar forzosamente el archivo `sun50i-h5-orangepi-prime.dtb` como predeterminado para que el video y el hardware base funcionen.
-3. **Overlays:** Modificar la configuración de arranque (`armbianEnv.txt` o script de U-boot) para incluir `overlays=analog-codec uart1 uart2 usbhost2 usbhost3`. ¡Obligatorio para que Linux detecte el módem Bluetooth en los pines internos!
-4. **Script de Compilación del Driver (Bluetooth):** En la etapa de post-construcción del sistema (`post-build`), agregar un script que clone `https://github.com/lwfinger/rtl8723bs_bt.git`, ejecute `make`, mueva el binario `rtk_hciattach` a `/usr/bin/` y genere un servicio de systemd que ejecute `rtk_hciattach -n -s 115200 /dev/ttyS1 rtk_h5` en cada reinicio.
-*Nota para el Agente del futuro:* Si el usuario te pide ayuda compilando dArkOS, tu deber es ayudarle a escanear los archivos `build.sh` o `Makefiles` de ese repositorio para insertar estas 4 piezas clave.
+- **Lectura:** el núcleo del CPU es idéntico; lo que difiere es el chip eMMC (fabricante y revisión) y el marcado del SoC. Pendiente: comparar `mmc extcsd read` completo de ambos (stick2 estaba apagado al intentarlo).
+- **Conclusión sobre el CPU:** el núcleo es el mismo Cortex-A53 que se asume, así que no es un problema de arquitectura. Falta medir stick1 (G8116AA) con los mismos comandos para ver si su `CPU revision`/`Stepping` difiere.
+- **Nota:** Linux sí lee la eMMC de stick2 completa (14.6G, FIT verificado), así que el controlador funciona allí; Linux usa DMA y ajuste de fases de reloj, que el SPL no hace. Es una hipótesis sobre la diferencia, no un hallazgo.
 
 # Estrategias de Compilación Armbian
 
-Existen diferentes vías para compilar el sistema (`pbstvstick.csc`), cada una con sus consideraciones:
+Se compila el sistema (`pbstvstick.csc`) con las siguientes vías:
 
 ## 1. Local (Windows) usando WSL o Nativo (Linux) [RECOMENDADO]
-Esta es la forma más rápida y estable. 
+Es la forma más rápida y estable.
 
-* **Si usas Windows + WSL:** Clona el repositorio oficial **nativamente dentro del disco de WSL** (ej. en `~/armbian-build` o `/opt/armbian-build`) para evitar problemas de enlaces rotos (symlinks) de Windows que destruyen la compilación. Luego simplemente copia tus parches a esa carpeta.
+* **Si usas Windows + WSL:** Clona el repositorio **nativamente dentro del disco de WSL** (ej. `~/armbian-build` o `/opt/armbian-build`) para evitar symlinks rotos de Windows que destruyen la compilación. Luego copia tus parches a esa carpeta.
+* **WSL SOLO se usa para compilar (`build`).** Pruebas y conexiones con el dispositivo se hacen desde la terminal nativa del host.
 
 > [!IMPORTANT]
 > **Arreglar soporte ARM64 en WSL (Error `arm64: not supported`)**
-> Si al compilar nativamente como `root` te topas con un error de `arm64: not supported on this machine/kernel` o `Failed to update binfmts`, significa que el kernel de tu WSL no tiene registrados los emuladores ARM. Para inyectarlos rápidamente (hasta el próximo reinicio de WSL), simplemente lanza este comando usando Docker antes de tu compilación:
+> Si al compilar nativamente como `root` aparece `arm64: not supported on this machine/kernel` o `Failed to update binfmts`, el kernel de WSL no tiene registrados los emuladores ARM. Para inyectarlos (hasta el próximo reinicio de WSL), lanza antes de compilar:
 > ```bash
 > docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 > ```
 
-Para compilar nativamente dentro del disco virtual de WSL o en un Linux Nativo usando el contenedor oficial efímero, existen dos variaciones del comando:
-
 **A) El replicable y seguro (Desde cero):**
-Este comando borra toda la caché, descarga los códigos fuente desde cero y garantiza una imagen sin errores (aunque tarda más tiempo). Esta es la versión confirmada que compila exitosamente el proyecto:
+Borra toda la caché y descarga las fuentes desde cero (tarda más). Versión confirmada que compila exitosamente:
 ```bash
 ./compile.sh build BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no RELEASE=trixie KERNEL_CONFIGURE=no KERNEL_GIT=shallow CLEAN_LEVEL=make,cache,sources
 ```
 
 **B) El ultra rápido (Para iterar):**
-Si ya compilaste una vez y solo hiciste pequeños cambios (como ajustar un parche), usa esta versión. Al remover el `CLEAN_LEVEL` reusará la caché:
+Reusa la caché al remover `CLEAN_LEVEL`. Úsalo tras un build completo previo y cambios pequeños (ej. un parche):
 ```bash
 ./compile.sh build BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no RELEASE=trixie KERNEL_CONFIGURE=no KERNEL_GIT=shallow
 ```
 
-## 2. Utilizando Docker Compose (Solo Windows)
-⚠️ **ADVERTENCIA:** Hacerlo mediante Docker Desktop montando el volumen directamente desde el disco de Windows **puede ser extremadamente lento** en comparación a WSL nativo, debido a la sobrecarga del sistema de archivos de Windows hacia Docker. 
-
-Si de todas formas decides hacerlo por comodidad para evitar WSL, usa nuestra automatización en Windows:
+## 2. Docker Compose (Solo Windows)
+⚠️ **ADVERTENCIA:** Montar el volumen desde el disco de Windows **puede ser extremadamente lento** comparado con WSL nativo.
 ```bash
 docker compose up
 ```
-*(Nota: Por detrás, el `armbian-entrypoint.sh` forzará una compilación limpia desde cero `CLEAN_LEVEL=make,cache,sources`).*
+*(Por detrás, `armbian-entrypoint.sh` fuerza una compilación limpia con `CLEAN_LEVEL=make,cache,sources`).*
 
 ## 3. Compilación remota con GitHub Actions (CI)
-Si vas a compilar usando el servidor de integración continua (CI) de GitHub Actions, debes evitar la palabra `docker` en tu comando, porque GitHub ya ejecuta procesos encapsulados y causará un error de "docker-in-docker" (`asking for docker... inside docker`). Para automatizar en la nube, usa el parámetro `build`:
+Evita la palabra `docker` en el comando (GitHub ya ejecuta en contenedor y causa el error `asking for docker... inside docker`). Usa `build`:
 ```bash
 sudo ./compile.sh build BOARD=pbstvstick BRANCH=current BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_BTF=no KERNEL_CONFIGURE=no RELEASE=bookworm CLEAN_LEVEL=make,cache,sources
 ```
 
 ## 4. Extraer la Imagen Compilada (WSL a Windows)
+La imagen `.img` queda en `output/images/`. Si compilaste dentro del disco de WSL:
 
-Una vez que el proceso de compilación finaliza exitosamente, la imagen final `.img` se generará en el subdirectorio `output/images/` del repositorio de Armbian.
+- **Explorador de Windows:** `\\wsl.localhost\Ubuntu\opt\armbian-build\output\images\`
+- **Terminal WSL** (cambia `TuUsuario`):
+  ```bash
+  cp output/images/Armbian_*.img /mnt/c/Users/TuUsuario/Desktop/
+  ```
 
-Si clonaste y compilaste nativamente dentro del disco virtual de WSL para evitar el problema de los symlinks (Opción A), debes sacar la imagen hacia Windows para poder flashearla. Tienes dos maneras fáciles:
+## 5. Compilación Rápida de U-Boot con Docker + Despliegue Automático [PARA ITERAR]
+Para acelerar la búsqueda de la mejor solución se compila **solo U-Boot** (no la imagen completa) dentro de un contenedor y se despliega al TV Stick. Archivos en la raíz:
 
-**Vía Explorador de Archivos de Windows:**
-Abre el explorador de Windows (`Win + E`) y en la barra superior de direcciones escribe la ruta de red hacia tu distribución (ej. Ubuntu) y navega hasta la carpeta:
-`\\wsl.localhost\Ubuntu\opt\armbian-build\output\images\`
+- `dockerfile`: imagen Debian con las dependencias de compilación de Armbian/U-Boot (`build-essential`, `swig`, `device-tree-compiler`, `sshpass`, `rsync`, etc.). Copia `build-deploy-uboot.sh` y lo usa como `CMD`.
+- `docker-compose.yml`: servicio `build-uboot` (`privileged`, `network_mode: host` para alcanzar el dispositivo en la LAN). Monta el repo en `/workspace` y un volumen persistente `armbian-cache` en `/workspace/cache` para reusar la caché entre corridas.
+- `build-deploy-uboot.sh`: orquesta todo el ciclo:
+  1. `./compile.sh uboot BOARD=pbstvstick BRANCH=current KERNEL_GIT=shallow`.
+  2. Localiza el `linux-u-boot-*.deb` más reciente (`output/debs/` o `scratch/uboot_extracted_new/`).
+  3. Lo sube por `scp` a `root@192.168.128.114:/root/new_uboot.deb` (con `sshpass`) y lo instala con `dpkg -i`.
+  4. Verifica la cadena `U-Boot SPL 2026` en el binario y lo flashea con `dd` a `/dev/mmcblk2` (`bs=1024 seek=8`); relee desde la eMMC para confirmar.
+  5. Sincroniza `/usr/lib/linux-u-boot-current-pbstvstick/` a la partición 1 de la eMMC.
 
-**Vía Terminal (Copiar a Windows directamente):**
-Desde tu terminal de WSL, puedes copiar la imagen a tu partición de Windows (`/mnt/c/`) con el siguiente comando (cambia `TuUsuario` por tu nombre de usuario en Windows):
+Uso:
 ```bash
-cp output/images/Armbian_*.img /mnt/c/Users/TuUsuario/Desktop/
+docker compose up --build
 ```
+⚠️ El script **no** comprueba si el host está activo antes de desplegar: si no responde, la compilación termina bien pero el `scp` falla (`ConnectTimeout=10`). El `.deb` queda en `output/debs/` para desplegarlo luego. Las credenciales SSH están definidas dentro del script (`REMOTE_PASS`).
 
-*(Nota: Si usaste la Opción B desde tu repositorio actual en Windows, la carpeta `output/images/` se generará directamente en la carpeta de tu proyecto en Windows sin hacer nada).*
+> Aplican las advertencias de Docker sobre velocidad (sección 2); la caché persistente en volumen es lo que hace rentable este flujo para iterar.
 
-## 5. Soporte para Memoria eMMC interna
-Para encender el chip eMMC del TV Stick (que usa el puerto `mmc2`) y permitir el arranque exitoso tras usar `armbian-install` (evitando el error de la pantalla negra), se requieren tres piezas clave:
+# Soporte eMMC KLMAG2WEPD en U-Boot
 
-1. **Configuración de U-Boot (.csc):** Añade `scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2` en el archivo `.csc` usando la función `post_config_uboot_target`. Esto permite que la etapa inicial (SPL) detecte el eMMC.
-2. **Device Tree de U-Boot (DTS):** **CRÍTICO PARA EVITAR LA PANTALLA NEGRA.** U-Boot utiliza su propio Device Tree interno para inicializar periféricos. Es obligatorio crear un parche idéntico al del kernel pero ubicado en la carpeta de U-Boot (ej. `userpatches/u-boot/u-boot-sunxi/99-enable-emmc-pbstvstick-uboot.patch`) apuntando a `arch/arm/dts/sun50i-h5-orangepi-prime.dts`. Sin esto, U-Boot no podrá leer el eMMC para cargar `/boot/boot.scr` ni el Kernel, lo que causa un cuelgue de pantalla negra.
-3. **Device Tree del Kernel (DTS):** Para un PR oficial en Armbian, **NO debes** crear un parche en `patch/kernel/archive/...` que modifique directamente el archivo `sun50i-h5-orangepi-prime.dts`, ya que esto romperá las Orange Pi Prime originales. El parche oficial debe crear un **nuevo** archivo `.dts` dedicado para el `pbstvstick` e incluir el archivo base de la Orange Pi. (Por ahora, las pruebas locales en `userpatches/` bastan para salir del apuro).
+Para que el SPL/U-Boot detecte y arranque desde el eMMC (`mmc2`) se requieren dos piezas:
 
-> [!NOTE]
-> **Progreso de Compilación (Parche Actual de eMMC)**
-> Los parches provisionales para el Kernel y U-Boot inyectan el nodo directamente en el archivo `sun50i-h5-orangepi-prime.dts`. Para el kernel se encuentra en `userpatches/kernel/archive/sunxi-6.18/99-enable-emmc-pbstvstick.patch`.
-> **Estatus:** Validado en Hardware real. El parche detecta exitosamente una memoria de 14.6G en `mmcblk2`.
-> ```dts
-> &mmc2 {
-> 	pinctrl-names = "default";
-> 	pinctrl-0 = <&mmc2_8bit_pins>;
-> 	vmmc-supply = <&reg_vcc3v3>;
-> 	bus-width = <8>;
-> 	non-removable;
-> 	cap-mmc-hw-reset;
-> 	status = "okay";
-> };
-> ```
-> **Para el Pull Request final hacia Armbian:** Este código deberá extraerse de ese parche temporal y colocarse dentro del archivo `.dts` nativo y exclusivo que crearemos para el TV Stick.
+1. **Configuración de U-Boot (.csc):** `scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2` dentro de `post_config_uboot_target`. **Debe ser `2`, no `-1`**: con `-1` solo se registra el slot 0 (microSD vacía) y el SPL falla con `Card did not respond to voltage select! : -110`.
+2. **Un solo slot en el SPL:** el `.csc` usa `CONFIG_SPL_MMC_TINY`, que maneja un único `struct mmc` estático, y registrar ambos slots causó brownout. El parche `patch/u-boot/v2026.07-sunxi64/sunxi-spl-init-only-boot-mmc-slot.patch` hace que, si el BROM arrancó desde MMC2, `board_mmc_init` registre solo el eMMC. Log esperado: `[MMC2] legacy init b_max=1` y `[SPL] mmc init ok`. Si aparece `[MMC0]`, el fix no aplica.
+3. **Device Tree de U-Boot (DTS):** **CRÍTICO PARA EVITAR LA PANTALLA NEGRA.** U-Boot usa su propio DT. Debe habilitarse `mmc2` en `arch/arm/dts/sun50i-h5-orangepi-prime.dts` (de U-Boot) mediante parche en `patch/u-boot/v2026.07-sunxi64/`. Sin esto no puede leer `/boot/boot.scr` ni el kernel.
 
-## 6. Optimización de Memoria RAM (GPU CMA)
-Para maximizar la cantidad de RAM disponible para Linux (recordando que el dispositivo solo tiene 1GB), se debe reducir el CMA (Continuous Memory Allocator) reservado para la GPU Mali.
-- Modifica el archivo `/boot/armbianEnv.txt` y agrega el parámetro `extraargs=cma=8M`.
-- Actualmente, esto se automatiza inyectándolo a través del script `userpatches/customize-image.sh` durante la compilación.
-
-## 7. LED de Estado (Verde/Azul)
-El LED principal del TV Stick está conectado físicamente al puerto **PA15**.
-- **Nota sobre el hardware:** Hemos descubierto que, aunque la arquitectura es idéntica, el fabricante soldó LEDs de distintos colores según la remesa. En las placas más antiguas (`192.168.128.124`), este pin enciende un LED **Azul**, mientras que en las nuevas (`192.168.128.117`) enciende un LED **Verde**. El circuito es exactamente el mismo.
-- Para integrarlo, hemos creado un parche en `userpatches/kernel/archive/sunxi-6.18/98-led-pbstvstick.patch` que modifica la sección `leds` del Device Tree base (`sun50i-h5-orangepi-prime.dts`).
-- Se reasigna `led-0` al pin `&pio 0 15 GPIO_ACTIVE_HIGH` con el comportamiento por defecto `default-state = "on";` para que encienda automáticamente en cuanto el Kernel arranca (sin importar de qué color sea el foquito).
-
-## 8. Inyección de Credenciales (GitHub Actions)
-**CRÍTICO PARA LA SEGURIDAD:** Nunca escribas contraseñas reales de Wi-Fi, de *root*, o tokens en texto plano dentro de tus scripts de configuración (como en `customize-image.sh`). Dado que este es un repositorio, al hacer *push* expondrás tus datos privados de manera irreversible en el historial público o privado de GitHub.
-
-**Regla de Oro para el flujo de CI/CD:**
-1. **Usa placeholders:** En tu archivo `customize-image.sh`, asegúrate de utilizar siempre textos de reemplazo (ej. `PRESET_NET_WIFI_SSID='REPLACE_WITH_SSID'`).
-2. **Usa GitHub Secrets:** Configura los valores reales directamente en la pestaña de `Settings -> Secrets` de tu repositorio de GitHub.
-3. **Inyecta al vuelo:** Deja que el motor de GitHub Actions use `sed` para sustituir la palabra clave por el secreto justo un segundo antes de compilar. 
-   `sed -i "s/REPLACE_WITH_SSID/${{ secrets.WIFI_SSID }}/g" userpatches/customize-image.sh`
-
-**Incidente de Seguridad (Leak):** Si por error comiteas y empujas (*push*) credenciales hardcodeadas a GitHub, **debes cambiar inmediatamente la contraseña en el dispositivo físico afectado** (router, módem, API, etc.). En repositorios en la nube, reescribir la historia de Git (`git push --force`) no garantiza que los datos no hayan sido cacheados o raspados por bots. ¡Cambiar la contraseña es la única solución infalible!
+```dts
+&mmc2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_8bit_pins>;
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <8>;
+	non-removable;
+	cap-mmc-hw-reset;
+	status = "okay";
+};
+```
 
 # Depuración Actual: Arranque U-Boot SPL desde eMMC (MMC2)
 
-Actualmente estamos trabajando en resolver un problema de cuelgue (hang) durante la carga de U-Boot SPL al intentar arrancar desde la memoria interna eMMC (MMC2). 
+## 0. Regresión del 5-oct-2026 (log: `[MMC0] legacy init`, `Card did not respond to voltage select! : -110`, `SPL: Unsupported Boot Device!`)
+- **Causa:** el commit `88c0a0a` puso `SLOT_EXTRA=-1`; con `SPL_MMC_TINY` el SPL inicializaba el slot 0 (SD vacía) en vez del eMMC. Las hipótesis b_max/FIFO de abajo se investigaban sin que el SPL llegara al eMMC.
+- **Fix aplicado (pendiente de validar en hardware):** `SLOT_EXTRA=2` + parche `sunxi-spl-init-only-boot-mmc-slot.patch`.
+- **Riesgos abiertos:** el brownout podría reaparecer en U-Boot proper (inicializa ambos slots); el `sed` "Hard Reset eMMC" del `.csc` busca `mmc0 = sunxi_mmc_init`, que no existe en `board.c`, así que nunca se aplica.
 
-## 1. Estado del Problema (Octubre 2026)
-- El SPL inicializa la eMMC en MMC2 correctamente a 20MHz en modo 8-bit.
-- Lee exitosamente el primer sector de 512 bytes (cabecera FIT) en `0x49ffffc0`.
-- El parser FIT (`spl_fit.c`) determina que el tamaño total del FIT es 870,400 bytes (1,700 sectores) y llama a leerlos hacia el buffer estático `0x42000000` (DRAM).
-- Al iniciar la lectura de los 1,700 sectores, se observó que la salida UART se truncaba en `buf=0x42000`.
+## 0b. Estado de la iteración actual (5-oct-2026)
+Cadena de builds y conclusiones (cada línea = un log real):
+- `P2f00`: eMMC inicializa (`mmc init ok`, 4 MHz). Lectura de 1 692 sectores se cuelga tras `#3`.
+- `P99c0`: con trace cada 4, se cuelga entre `#8` y `#12`.
+- `P6b14`: con marcadores `w`/`t`, se cuelga en `w` sin `t` en `#7`: **dentro de la lectura del FIFO**, sin ningún timeout ni `[CL..]`. El sector cambia entre builds, así que no depende de la dirección.
+- Dato de hardware nuevo: stick1 (eMMC NCEMBSF9, CPU G8116AA) carga desde eMMC; stick2 (KLMAG2WEPD, G8006AA) se cuelga. Ver "Sticks de referencia".
+- `Paa9e`: sin ningún `[TR]`: el CPU se detiene fuera del lazo de espera, siempre en `#7`. Se añadieron marcadores `a`/`f`/`L` (putc) para acotar el punto.
+- `P2066` y `P1e4c`: con marcadores por palabra el cuelgue es a mitad del bloque 7 y, en `P1e4c`, la consola termina con `resee` (inicio truncado de `resetting ...`). **Hipótesis principal (sin confirmar): el watchdog del SoC reinicia el SPL.** Indicios: (1) el punto de muerte se adelanta cuanto más se imprime (comportamiento por tiempo, no por sector); (2) el log termina con texto de reinicio; (3) el commit `ce56da3` alimentaba el watchdog (`0x01c20cb0`) y `b62ab9a` lo quitó. Config final: `WDT_SUNXI=y`, `WATCHDOG_TIMEOUT_MSECS=16000`, sin `SPL_WDT`. Parche de prueba: `mmc-sunxi-spl-wdt.patch` (apaga el WDT en `0x01c20cb8` y lo alimenta por comando). Si el cuelgue desaparece, la hipótesis queda confirmada.
+- `Pe250` (con `mmc-sunxi-spl-wdt.patch`): **mismo cuelgue en el bloque 7** (`w a` y nada más). **La hipótesis del watchdog queda refutada** (los offsets del WDT H5 se verificaron: `wdog[0]` en `0x01c20ca0`, `mode` en `0xb8`). Se mantiene el patrón: muere siempre en el bloque 7 sin importar qué se imprima ni dónde, aunque con menos prints llegó un poco más lejos (`P99c0`, bloques 8 a 11). El `resee` de `P1e4c` no se reprodujo. Hipótesis vivas, sin confirmar: alimentación del stick2, margen de la DRAM (`DRAM_CLK 576` + ODT del `.csc`) o un efecto por tiempo desde el arranque. Siguiente experimento sin código: flashear la misma imagen en stick1 y probar stick2 con una fuente 5V/2A sólida.
+- **Stick1 con el mismo binario `Pe250`: carga el FIT con normalidad** (lee el FIT completo y **completó el arranque**, confirmado por el equipo; hoy corre desde la eMMC). Stick2 con fuente 5V/2A: muere igual en el bloque 7. **Conclusión: el cuelgue depende del hardware de stick2 (eMMC KLMAG2WEPD, CPU G8006AA o su placa), no del software ni de la alimentación.** Diferencia visible en el init: stick2 necesita 5 `CMD1` y stick1 4.
+- **`Pd342` (stick2): con una pausa de 2 s tras `mmc init ok` el SPL lee los 1 692 bloques completos** (`info->read count=866304`, `simple_fit_read ret=0`). Ese build aún llevaba el desplazamiento de sectores, por eso falla después con `mmc block read error` (esperado, lee datos que no son el FIT). **Es el primer avance real.** Interpretación (hipótesis): la eMMC KLMAG2WEPD necesita tiempo tras el init antes de aceptar lecturas de datos seguidas, o queda ocupada (DAT0 bajo) un rato; si el SPL emite comandos de datos en ese intervalo, el SoC se congela. Encaja con todo lo visto: muerte en un punto que se mueve según lo impreso, independiente del sector y de la DRAM, y sin efecto en stick1.
+- **Build con pausa de 500 ms + espera de DAT0 (6-oct-2026): stick2 ARRANCA desde la eMMC** (confirmado por el equipo; falta pegar el log para ver si apareció la `B`, la pausa `[SETTLE 500ms]` y hasta dónde llegó el arranque). Es la primera vez que la KLMAG2WEPD arranca con el U-Boot de este repo.
+- **`P6adb` (pausa 500 ms + espera de DAT0), log de stick2:** aparece `[SETTLE 500ms]` y el FIT se lee sin morir hasta al menos el bloque `#1072` de 1 692 (el log pegado termina ahí, cortado por el tamaño del pegado; el equipo confirmó que el stick arrancó). **No aparece ninguna `B`**: el busy-wait nunca vio la tarjeta ocupada, así que la hipótesis de DAT0 ocupado no queda apoyada; lo que arregla el problema es la pausa tras el init (o algo que depende del tiempo transcurrido desde el init). Causa exacta sin identificar.
+- **`Pdeb7` (pausa 100 ms), stick2:** supera el bloque `#7` (el log pegado llega hasta `#48` y termina ahí, cortado por el pegado; falta confirmar si completó el arranque). Con 100 ms ya no muere donde moría sin pausa.
+- **`Pdeb7` confirmado por el equipo: Linux inicia con pausa de 100 ms y el `reboot` desde consola arrancó bien** (el `reboot` fallido anterior fue con el build sin pausa suficiente; hipótesis: la misma causa). Falta repetirlo varias veces para darlo por estable.
+- **`P6d7a` (build silencioso, pausa 100 ms), `reboot` desde SSH en stick2 (6-oct-2026): ARRANCA.** La UART muestra el SPL completo (`mmc init ok`, `[SETTLE 100ms]`, FIT leída `count=866304`, `simple_fit_read ret=0`, `mmc_load_image_raw_sector ret=0`), luego BL31 v2.12.9, Crust SCP v0.6.10000, y **U-Boot 2026.07 proper** (`MMC: mmc@1c0f000: 0, mmc@1c10000: 2, mmc@1c11000: 1`), hasta `starting USB...`. El equipo reporta que Linux inició y más rápido que antes. Es **una sola muestra**: falta repetir arranques en frío y `reboot`.
+- **`P6d7a`: arranque completo hasta `Starting kernel ...` (stick2, 6-oct-2026).** U-Boot proper encuentra `boot.scr` en la eMMC (`mmc 1:1`), carga el DTB `sun50i-h5-orangepi-prime.dtb` y el overlay `analog-codec`, y lee **initrd 18 368 787 B en 1 519 ms y kernel 33 405 440 B en 2 761 ms (11,5 MiB/s, medido por U-Boot)**: unos 4,3 s solo en cargar archivos. `Hit any key to stop autoboot: 0` (sin espera). Aviso inocuo: `Card did not respond to voltage select! ... Bad device specification mmc 0` (la microSD está ausente). El driver de U-Boot proper va a ≈ 25 MHz y 4 bits por el nodo `&mmc2` del `.csc` (`bus-width = <4>`, `max-frequency = <25000000>`); subirlo es la mejora más directa de tiempo, pendiente de datos de estabilidad.
+- **Segundo `reboot` seguido: se quedó en `[MMC2] legacy init b_max=1`** (SPL sin trazas, no se ve en qué paso). El equipo percibió el CPU **muy caliente** en ese momento. Es la **primera vez que falla el build silencioso**. Hipótesis sin confirmar: (a) temperatura (arranque caliente tras haber corrido Linux); (b) estado de la eMMC tras un reinicio de software en el intervalo inmediato al init; (c) la misma causa del cuelgue original en otro punto. Ese mismo silencio tras `legacy init` ya se vio en el primer log después de arreglar `SLOT_EXTRA`. Se preparó `zzz-mmc-sunxi-init-trace-lite.patch` (solo `[T] clk`, `[T] clk ok`, `[T] create`, `[T] reset` y los 12 primeros `[T] cmdN`, ≈ 150 caracteres) para ver dónde se corta. Pruebas sugeridas: registrar `/sys/class/thermal/thermal_zone*/temp` antes de cada `reboot`; repetir reinicios dejando enfriar vs. inmediatos; contar fallos sobre ≥ 10 reinicios.
+- **Observaciones del log (sin atender, de menor prioridad):** (1) `Loading Environment from FAT... Unable to use mmc 1:1...`: U-Boot busca el entorno en una partición FAT del eMMC que no existe y usa el entorno por defecto (inocuo, pero un `saveenv` no funcionaría). (2) `starting USB...` repite 4 veces `USB EHCI/OHCI` antes de arrancar: puede sumar segundos al arranque (hipótesis, no medido). (3) `systemd-shutdown: Failed to set watchdog hardware timeout to 10min: Invalid argument`: aviso de systemd por el límite del watchdog del H5; no afecta al arranque.
+- **Arranque lento (observado por el equipo):** estimación (no medida): la FIT de 866 304 B a 4 MHz y 1 bit toma ≥ 1,7 s solo en el bus, y los marcadores de diagnóstico (`wasrf12345678Lt` ≈ 15 caracteres por bloque × 1 692 bloques ≈ 25 000 caracteres a 115 200 baudios) añadían ≈ 2,2 s. Se movieron `zz-mmc-spl-trace.patch` y `zzz-mmc-sunxi-init-trace.patch` a `scratch/diagnostic-patches/` (fuera del árbol de parches) para un build "silencioso". Pendiente medir cada fase con cronómetro y UART con marcas de tiempo.
+- **Hallazgo nuevo (6-oct-2026): un `reboot` por SSH no arranca el stick2; hubo que cortar la energía.** Sin registro de la consola del reinicio fallido. Hipótesis sin confirmar: (a) tras Linux la eMMC queda en 8 bits/high-speed/50 MHz o con una operación en segundo plano y el BROM o el SPL no la ve en estado limpio; (b) falla el BROM al leer el SPL (el banner nunca aparece) o falla el propio SPL (el banner aparece y luego se cuelga). Para separar (b) hace falta capturar la UART durante un `reboot`. Comparar también con stick1 (`reboot` desde Linux). Este fallo es crítico para un nodo Edge que debe reiniciar solo.
+- Bisección de la pausa: `P6adb` = 500 ms OK. Siguiente build: **100 ms** (`[SETTLE 100ms]`). Si arranca, probar 30 ms; si falla, 250 ms. Una sola variable por build; anotar cada resultado aquí.
+- Siguiente build: se quita el desplazamiento de sectores y el buffer vuelve a `0x41000000`; se sustituye el reposo de 2 s por una pausa de 500 ms (`[SETTLE 500ms]`) y se añade `mmc-sunxi-spl-wait-card-busy.patch` (espera a que DAT0 quede libre antes de cada comando de datos; imprime `B` una vez si vio la tarjeta ocupada). Si arranca, se baja la pausa por bisección y se comprueba si basta la espera de busy sin pausa. Se eliminó `mmc-sunxi-spl-wdt.patch` (hipótesis refutada).
+- `P04c9` (sector desplazado 4 MiB + buffer del FIT en `0x42000000`, en stick2): **muere igual en `#7`, esta vez a mitad de un `printf`** (`[TRACE] #7 cmd1`). Descartados: el sector físico de la eMMC y la dirección de DRAM del buffer. Que muera durante una impresión (CPU en la UART, no esperando a la eMMC) sugiere un bloqueo o corte global del SoC y no una espera de datos. Con el reinicio por watchdog también descartado, y sin que se repita el banner, es más bien un bloqueo que un reinicio (inferencia).
+- Siguiente build (sin validar): prueba de reposo de 2 s tras `mmc init ok` (`[IDLE] start`, `i0 i1 ...`, `[IDLE] ok`) sin tocar la eMMC. Si muere en el reposo, el problema es independiente de las lecturas (tiempo o hardware global); si lo supera y muere al leer, está ligado a las transferencias de datos.
+- Descartado: FIT corrupto (la eMMC coincide byte a byte con el `.deb` y Linux la lee completa).
+- `P5395` (con `mmc-sunxi-spl-fifo-word-read.patch`): **mismo cuelgue en `#7`**. La hipótesis del nivel del FIFO queda debilitada: leer una palabra por comprobación no cambió nada. Nueva hipótesis (sin confirmar): el eMMC deja de entregar datos en ese bloque y el cuelgue silencioso lo causa el propio `printf` de diagnóstico con 5 especificadores (límite de tiny-printf). Los prints de `fifo slow`/`timeout` se dividieron en impresiones cortas (`[TR] ...`) con el valor de `rint` para ver el error real del controlador.
+- Siguiente: leer `[TR] rint=` en el próximo log; sus bits de error (data timeout, CRC, start-bit) indican por qué el eMMC dejó de enviar datos.
+
+## 1. Estado del Problema (anterior a la regresión)
+- El SPL inicializa la eMMC en MMC2 a 20MHz, modo 8-bit.
+- Lee el primer sector (cabecera FIT) en `0x49ffffc0`.
+- `spl_fit.c` determina FIT de 870,400 bytes (1,700 sectores) y los lee al buffer estático `0x42000000` (DRAM).
+- Al iniciar esa lectura, la salida UART se truncaba en `buf=0x42000`.
 
 ## 2. Hallazgos y Correcciones Aplicadas
-- **Fallo por Desbordamiento de Memoria (Heap Exhaustion):** `board_spl_fit_buffer_addr` intentaba alojar ~850KB usando `malloc_cache_aligned`. En SPL (`CONFIG_SPL_SYS_MALLOC_F_LEN=0x2000`, 8KB), esto fallaba. Se parcheó para retornar `CONFIG_SYS_LOAD_ADDR` (`0x42000000`), el cual apunta directamente a la DRAM DDR3 ya inicializada y verificada (1024 MiB).
-- **Desbordamiento / Limitación de tiny-printf:** En U-Boot SPL (`CONFIG_SPL_USE_TINY_PRINTF=y`), la implementación interna de `printf` usa un buffer de formateo muy pequeño. Al poner más de 4-5 especificadores en una sola llamada a `printf`, el formateo de números hexadecimales largos como `0x42000000` truncaba la salida o corrompía la pila. La solución es dividir los logs en impresiones breves.
-- **Modo Multi-bloque (CMD18) vs Single-block (CMD17):**
-  - Cuando `count > 1` (1,700 sectores), el subsistema MMC divide la lectura en lotes definidos por `cfg->b_max`.
-  - Con `b_max > 1`, el controlador Allwinner H5 (`sunxi_mmc.c`) emite `CMD18` y activa `SUNXI_MMC_CMD_AUTO_STOP`. En SPL (donde el controlador opera en modo PIO/CPU FIFO sin interrupciones DMA complejas), `AUTO_STOP` (`CMD12` automático) produce cuelgues o desincronización de FIFO.
-  - Al forzar `cfg->b_max = 1` en SPL para la eMMC (`sdc_no == 2`), todas las lecturas se realizan mediante `CMD17` (single block), que es 100% robusto y no utiliza `AUTO_STOP`. Como ya no hay prints ruidosos por cada comando `CMD17`, la transferencia de los 1,700 bloques toma apenas ~100-150ms.
+- **Heap exhaustion:** `board_spl_fit_buffer_addr` intentaba alojar ~850KB con `malloc_cache_aligned`; en SPL (`CONFIG_SPL_SYS_MALLOC_F_LEN=0x2000`, 8KB) fallaba. Se parcheó para retornar `CONFIG_SYS_LOAD_ADDR` (`0x42000000`, DRAM DDR3 ya inicializada).
+- **Límite de tiny-printf:** con `CONFIG_SPL_USE_TINY_PRINTF=y`, más de 4-5 especificadores por `printf` truncan o corrompen la salida. Divide los logs en impresiones breves.
+- **Multi-bloque (CMD18) vs single-block (CMD17):** con `b_max > 1`, `sunxi_mmc.c` emite `CMD18` con `SUNXI_MMC_CMD_AUTO_STOP`; en SPL (PIO/FIFO sin DMA) el `CMD12` automático cuelga o desincroniza el FIFO. Forzar `cfg->b_max = 1` en SPL para eMMC (`sdc_no == 2`) usa `CMD17` y la transferencia de 1,700 bloques toma ~100-150ms.
 
-## 3. Metodología de Trabajo y Flujo
-- **Trazabilidad:** Logs concisos en `common/spl/spl_mmc.c` y `common/spl/spl_fit.c`.
-- **Automatización CI/CD:** El script `scratch/auto_build_and_deploy.py <commit_sha>` espera la compilación en GitHub Actions, descarga los `.deb`/`.bin`, los transfiere vía SSH/SFTP al TV Stick (`192.168.128.114`) y los graba a la eMMC (`/dev/mmcblk2`).
-- **Flujo de Pruebas Manual:** Después de realizar cambios para solventar problemas de u-boot, hay que esperar a que el build del uboot en github termine, descargarlo e instalarlo en ssh `root@192.168.128.114` usando la contraseña `toor@100`.
+## 3. Metodología de Trabajo
+- **Trazabilidad:** logs concisos en `common/spl/spl_mmc.c` y `common/spl/spl_fit.c`.
+- **CI/CD:** `scratch/auto_build_and_deploy.py <commit_sha>` espera el build en GitHub Actions, descarga los artefactos y los despliega al dispositivo. Acceso SSH al dispositivo de pruebas: `root@192.168.128.114`, contraseña `toor@100` (decisión del usuario: se mantiene en este archivo; es un dispositivo de laboratorio).
+- **Criterio de éxito (pendiente de definir con dato):** arranque completo desde eMMC + microSD A2 detectada y estable. Falta registrar una métrica (modo/frecuencia de bus, velocidad de lectura) y documentarla en Confluence.
 
 ## 4. Reglas de Parcheo
-**CRÍTICO:** Los parches que modifican el código fuente de U-Boot **SIEMPRE** deben colocarse en `patch/u-boot/v2026.07-sunxi64/` (o la versión correspondiente). **NUNCA** utilices `userpatches/u-boot/u-boot-sunxi/` para estos cambios. Si utilizas `userpatches/`, Armbian los aplicará al final, lo cual sobrescribe o rompe parches oficiales del sistema (como soporte de SPI NAND, correcciones eMMC y DTB), causando un sistema inarrancable ("0 logs").
+**CRÍTICO:** Los parches al código fuente de U-Boot **SIEMPRE** van en `patch/u-boot/v2026.07-sunxi64/` (o la versión correspondiente). **NUNCA** en `userpatches/u-boot/u-boot-sunxi/`: Armbian los aplica al final y sobrescribe/rompe parches oficiales (SPI NAND, eMMC, DTB), dejando un sistema inarrancable ("0 logs").
 
+## 5. Lecciones Aprendidas
+- **Colisión de parches:** antes de crear un parche, revisa si Armbian ya modifica la misma región (ej. `mmc-sunxi-a523-emmc-fix.patch` ya toca `cfg->b_max = 1` para SPL; también `zz-mmc-spl-force-single-block.patch`). Si asumes código intacto, `patch` falla en los hunks siguientes y aborta el build.
+- **`dmb()` en ARM64:** en U-Boot v2026.07, `dmb();` en la lectura del FIFO da `implicit declaration of function dmb` con GCC reciente. Usa `mb();`.
+- **Desincronización del FIFO (bug HW Allwinner H5):** nunca confíes en que `SUNXI_MMC_STATUS_FIFO_LEVEL` sea ≤ `word_cnt - i`; pedir más palabras de las mapeadas causa un lockup duro del bus AHB. Clampea: `if (in_fifo > word_cnt - i) in_fifo = word_cnt - i;`.
 
-## 5. Lecciones Aprendidas de U-Boot eMMC (Octubre 2026)
-- **Colisión de Parches (Patch Collision):** Al crear parches para U-Boot en `patch/u-boot/v2026.07-sunxi64/`, es imperativo verificar si Armbian ya aplica modificaciones en la misma región del código (por ejemplo, `mmc-sunxi-a523-emmc-fix.patch` modifica `cfg->b_max = 1` para SPL). Si nuestro parche sobreescribe o asume que el código original está intacto, `patch` fallará en los hunks siguientes y abortará la compilación. Siempre revisa los parches vecinos.
-- **Error de compilación dmb():** En U-Boot v2026.07, el driver original `sunxi_mmc.c` utiliza `dmb();` en la rutina de lectura del FIFO. Sin embargo, para la arquitectura ARM64, `dmb()` arroja un error de declaración implícita (`implicit declaration of function dmb`) bajo GCC reciente. La barrera de memoria correcta e interoperable es `mb();`.
-- **Desincronización del FIFO (Bug Hardware Allwinner H5):** Nunca confíes en que `SUNXI_MMC_STATUS_FIFO_LEVEL` retornará un número de palabras menor o igual al restante del bloque (`word_cnt - i`). Si el controlador pide más palabras vacías que las mapeadas en la memoria, el bus AHB sufre un lockup irrecuperable (cuelgue duro). El nivel del FIFO debe ser "clampeado" estrictamente con `if (in_fifo > word_cnt - i) in_fifo = word_cnt - i;`.
+### Comparación de `EXT_CSD` (6-oct-2026, `mmc extcsd read /dev/mmcblk2`, 222 líneas cada una, 29 de diferencias)
+Diferencias relevantes (stick1 NCard → stick2 Samsung KLMAG2WEPD):
+| Campo | stick1 | stick2 |
+|---|---|---|
+| `CARD_TYPE` | `0x17` (hasta DDR 52 MHz) | `0x57` (añade **HS400 @200 MHz 1,8 V**) |
+| `DRIVER_STRENGTH` | `0x01` | `0x1f` (soporta todas las intensidades) |
+| `WR_REL_SET` | `0x00` | `0x1f` (protege datos ante corte de energía) |
+| `SEC_COUNT` | `0x01ce8000` | `0x01d1f000` |
+| `TRIM_MULT` / `ERASE_TIMEOUT_MULT` / `S_A_TIMEOUT` | `0x05` / `0x05` / `0x16` | `0x02` / `0x01` / `0x11` |
+| `MAX_ENH_SIZE_MULT` | `0x000100` | `0x00026d` |
+| Campos de fabricante | casi todos `0x00` | varios no nulos |
+
+- **Sin diferencias** en `BOOT_INFO`, `BOOT_SIZE_MULTI`, `PARTITION_CONFIG`, `HS_TIMING`, `BKOPS`, caché, `RST_n`: nada en los campos de arranque explica por sí solo el cuelgue.
+- **Lectura (hipótesis, no confirmada):** stick2 es un eMMC de gama más alta (HS400, otro firmware); el SPL lo trata en modo legacy sin pasar por la negociación que sí hace Linux. Ninguna diferencia de la tabla está probada como causa.
+
+### Firmware stock de stick2 (volcados de la eMMC original, 2-oct-2026)
+Archivos en la raíz del repo: `stock_boot0.bin` (128 KiB, cabecera `eGON.BT0`), `stock_uboot.bin` (1 MiB, paquete `sunxi-package`) y sus `.txt` (salida de `strings`). Son el cargador Android de Allwinner, que **sí arranca desde esa eMMC**; sirven de referencia de qué configura el fabricante.
+- **DRAM en la cabecera de `boot0` (offsets `0x38`...):** `dram_clk` = **576 MHz** (`0x240`), tipo **3 (DDR3)**, `dram_zq` = `0x3b3bf9`, `odt_en` = 1, `mr0` = `0x1c70`, `mr1` = `0x40`, `mr2` = `0x18`. El reloj, ZQ y ODT **coinciden con lo que fija el `.csc`** (576 + ODT), así que esos tres parámetros no son la diferencia con el stock. Los demás campos (`para1`, `para2`, `tpr*`) no se compararon contra el driver de DRAM de mainline.
+- **Pendiente (sin hacer):** extraer de `boot0` la secuencia de inicialización del MMC2 (divisor de reloj, ancho de bus, modo/fases de muestreo). Requiere desensamblar código ARM de 32 bits; es el dato más directo de qué hace distinto el stock.
+- **Aviso:** son blobs propietarios de Allwinner. Revisar si se pueden versionar en un repo público antes de hacer push (hoy **ya están versionados** en git: `git ls-files` los lista).
+
+## 6. Plan de diagnóstico para stick2 (KLMAG2WEPD) tras la comparación con stick1
+Hecho establecido: el mismo binario SPL (`Pe250`) arranca desde la eMMC en stick1 y se cuelga en el bloque 7 en stick2, aun con fuente 5V/2A. Lo que difiere es el chip eMMC (fabricante `0x15` Samsung frente a `0x88`) y el marcado del SoC; el núcleo es el mismo Cortex-A53 r0p4. Es una diferencia de hardware, aún sin causa identificada.
+1. **Build doble ya preparado (sin validar):** sector desplazado 4 MiB tras la cabecera del FIT + buffer del FIT en `0x42000000`. Si pasa el bloque 7, separar cuál de los dos fue con un build de un solo cambio. Si muere igual, ni el sector ni la dirección de DRAM importan.
+2. **Comparar `EXT_CSD` completo** (`mmc extcsd read /dev/mmcblk2`) de ambos sticks con Linux (stick2 desde la SD): buscar diferencias en `BOOT_*`, `HS_TIMING`, `BKOPS`, caché, `PARTITION_CONFIG`, clases de potencia.
+3. **Hacer en el SPL lo que Linux sí hace:** pasar a 8 bits y a high-speed tras el init, y/o esperar el fin de operaciones en segundo plano antes de leer. Una variable por build.
+4. **Probar la DRAM de stick2** si 1 apunta a la dirección: bajar `DRAM_CLK` (hoy 576 con ODT en el `.csc`).
+5. Registrar cada resultado como fila de la tabla "build → último print → conclusión" (sección 0b) y en Confluence.
+Cada punto necesita responsable y fecha en Jira o Monday.
+
+# Mejoras Pendientes (aplicar cuando U-Boot arranque desde eMMC)
+Acordadas con el equipo; **no tocar hasta que el SPL arranque estable**. Cada una necesita responsable y fecha en Jira o Monday antes de ejecutarse.
+
+1. **Quitar el trace diagnóstico:** eliminar `zz-mmc-spl-trace.patch`, `zzz-mmc-sunxi-init-trace.patch` y los `printf` de `spl-mmc-boot-debug.patch` / `zz-mmc-spl-force-single-block.patch`. Cada print retrasa el SPL y puede ocultar problemas de tiempos.
+2. **Subir el reloj de 4 MHz:** subir gradualmente (4 → 12 → 20 → 25 MHz, ya hay `max-frequency = 25000000` en el DTS) midiendo en cada paso la velocidad de lectura. Revertir al último valor estable si reaparece un cuelgue.
+3. **Limpiar el `.csc`:** el `sed` "Hard Reset eMMC" busca `mmc0 = sunxi_mmc_init`, que no existe en `board.c`, así que nunca se aplica; eliminarlo o moverlo a un parche real. Revisar también el `sed` que fuerza `f_max` y quita `MMC_MODE_4BIT`.
+4. **Validar la hipótesis A2 con dato:** medir velocidad de lectura de la microSD A2 (modo/frecuencia de bus, MB/s) antes y después del cambio, y definir el criterio de éxito numérico. Hoy la mejora con A2 no está respaldada por ninguna métrica.
+5. **Brownout en U-Boot proper:** `SLOT_EXTRA=2` inicializa ambos slots fuera del SPL; verificar que no reaparezca la caída de alimentación.
+6. **Mejorar `build-deploy-uboot.sh`/Docker:** pasar `SKIP_BUILD`, `REMOTE_HOST` etc. en `docker-compose.yml`; agregar `backups/` y `last-u-boot.log` al `.gitignore`; comprobar que el banner (hash `P....`) cambió entre builds antes de flashear.
+7. **Documentar en Confluence:** tabla "build → último print → conclusión" (la de arriba), el diagnóstico de la regresión de `SLOT_EXTRA`, y la verificación de contenido de la eMMC. Las decisiones sin documento no existen.
+8. **PR a Armbian:** separar los parches del trabajo local y revisar cuáles son aptos (los parches provisionales inyectan nodos en `sun50i-h5-orangepi-prime.dts`, lo que rompería las Orange Pi Prime originales; hace falta un `.dts` dedicado al `pbstvstick`).
+9. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
+
+# Seguridad en CI (Inyección de Credenciales)
+**CRÍTICO:** Nunca escribas contraseñas, Wi-Fi, root o tokens en texto plano en scripts ni en este archivo; al hacer *push* quedan expuestos en el historial de Git.
+1. **Placeholders** en los scripts (ej. `PRESET_NET_WIFI_SSID='REPLACE_WITH_SSID'`).
+2. **GitHub Secrets** en `Settings -> Secrets`.
+3. **Inyección al vuelo** con `sed` antes de compilar:
+   `sed -i "s/REPLACE_WITH_SSID/${{ secrets.WIFI_SSID }}/g" userpatches/customize-image.sh`
+
+**Leak:** si se empujan credenciales, **cambia de inmediato la contraseña** del dispositivo/servicio afectado; reescribir historia (`git push --force`) no garantiza que no hayan sido copiadas.
