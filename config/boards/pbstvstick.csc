@@ -68,9 +68,11 @@ local node_content='
 };
 '
 	if [ -f "arch/arm/dts/sun50i-h5-orangepi-prime.dts" ]; then
+		sed -i 's/model = "Xunlong Orange Pi Prime";/model = "PBST314";/g' arch/arm/dts/sun50i-h5-orangepi-prime.dts
 		echo "$node_content" >> arch/arm/dts/sun50i-h5-orangepi-prime.dts
 	fi
 	if [ -f "dts/upstream/src/arm64/allwinner/sun50i-h5-orangepi-prime.dts" ]; then
+		sed -i 's/model = "Xunlong Orange Pi Prime";/model = "PBST314";/g' dts/upstream/src/arm64/allwinner/sun50i-h5-orangepi-prime.dts
 		echo "$node_content" >> dts/upstream/src/arm64/allwinner/sun50i-h5-orangepi-prime.dts
 	fi
 }
