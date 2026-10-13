@@ -30,7 +30,7 @@ services:
       - COUNT=20
       # - PAUSE=120
       # - REMOTE_HOST=192.168.128.15
-    command: ["/bin/bash", "reboot-stick.sh"]
+    command: ["/bin/bash", "userpatches/reboot-stick.sh"]
 
 volumes:
   armbian-cache:
