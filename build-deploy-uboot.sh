@@ -130,6 +130,20 @@ ssh_run "mkdir -p /mnt/emmc && \
          sync && \
          (umount /mnt/emmc 2>/dev/null || true)"
 
+# Flashear y sincronizar también en la microSD si está insertada
+ssh_run "if [ -b /dev/mmcblk0 ]; then \
+         echo -e '\n>>> Flasheando también en la microSD (/dev/mmcblk0)...' && \
+         dd if=${UBOOT_BIN_PATH} of=/dev/mmcblk0 bs=1024 seek=${SPL_SEEK_KB} conv=fsync && \
+         SZ=\$(stat -c %s ${UBOOT_BIN_PATH}) && \
+         dd if=/dev/mmcblk0 bs=1024 skip=${SPL_SEEK_KB} 2>/dev/null | head -c \$SZ | cmp - ${UBOOT_BIN_PATH} && \
+         echo 'VERIFICACION OK: microSD == binario' && \
+         mkdir -p /mnt/sd && \
+         (mount /dev/mmcblk0p1 /mnt/sd 2>/dev/null || true) && \
+         (rsync -aHAXx /usr/lib/linux-u-boot-current-pbstvstick/ /mnt/sd/usr/lib/linux-u-boot-current-pbstvstick/ 2>/dev/null || true) && \
+         sync && \
+         (umount /mnt/sd 2>/dev/null || true); \
+         fi"
+
 echo -e "\n******************************************"
 echo "***        eMMC FLASH COMPLETE         ***"
 echo "***        Tiempo total: $(elapsed)"

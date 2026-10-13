@@ -12,8 +12,25 @@ services:
       - /dev:/dev
     environment:
       - FORCE_CHECKOUT=no
-      # - REMOTE_HOST=192.168.128.15
       # - SKIP_BUILD=1
+      # - REMOTE_HOST=192.168.128.15
+
+  # Prueba de reinicios del stick (no arranca con "docker compose up"; ver reboot-stick.sh)
+  #   docker compose run --rm -e MODE=sysrq -e COUNT=10 reboot-stick
+  reboot-stick:
+    profiles: ["tools"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: host
+    volumes:
+      - .:/workspace
+    environment:
+      - MODE=reboot
+      - COUNT=20
+      # - PAUSE=120
+      # - REMOTE_HOST=192.168.128.15
+    command: ["/bin/bash", "reboot-stick.sh"]
 
 volumes:
   armbian-cache:

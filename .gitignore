@@ -40,3 +40,6 @@ Dockerfile
 
 # Runtime symlink created by extensions/seeed-rk.sh (points into cache/sources)
 extensions/seeed_armbian_extension
+
+# Resultados de las pruebas de reinicio del stick
+/reboot-tests/

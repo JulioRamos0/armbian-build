@@ -17,8 +17,8 @@ SERIALCON="ttyS0,ttyGS0"
 PACKAGE_LIST_BOARD="mmc-utils"
 
 function post_config_uboot_target__pbstvstick() {
-	display_alert "$BOARD" "u-boot: DRAM tune (576/ODT) + eMMC boot" "info"
-	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "576"
+	display_alert "$BOARD" "u-boot: DRAM tune (432/ODT) + eMMC boot" "info"
+	run_host_command_logged scripts/config --set-val CONFIG_DRAM_CLK "432"
 	run_host_command_logged scripts/config --enable CONFIG_DRAM_ODT_EN
 	run_host_command_logged scripts/config --disable CONFIG_SPL_SPI_SUNXI
 	run_host_command_logged scripts/config --disable CONFIG_SUPPORT_EMMC_BOOT
@@ -31,7 +31,7 @@ function post_config_uboot_target__pbstvstick() {
 	run_host_command_logged scripts/config --set-val CONFIG_MMC_SUNXI_SLOT_EXTRA 2
 	
 	sed -i '/mmc0 = sunxi_mmc_init/i \    /* Hard Reset eMMC */\n    sunxi_gpio_set_cfgpin(SUNXI_GPC(14), 1);\n    sunxi_gpio_set_value(SUNXI_GPC(14), 0);\n    mdelay(10);' board/sunxi/board.c
-	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 4000000;/g' drivers/mmc/sunxi_mmc.c
+	sed -i 's/cfg->f_max = 52000000;/cfg->f_max = 12000000;/g' drivers/mmc/sunxi_mmc.c
 	sed -i 's/MMC_MODE_4BIT/0/g' drivers/mmc/sunxi_mmc.c
 	
 
