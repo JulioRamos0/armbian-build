@@ -13,7 +13,7 @@ diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-pbstvstick.dts b/arch/arm64
 new file mode 100644
 --- /dev/null
 +++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-pbstvstick.dts
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,49 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (C) 2026
@@ -23,15 +23,18 @@ new file mode 100644
 +
 +/ {
 +	model = "PBS TV Stick";
-+	compatible = "xunlong,pbstvstick", "allwinner,sun50i-h5";
++	compatible = "shaghal,pbstvstick", "allwinner,sun50i-h5";
 +
 +	leds {
 +		led-0 {
++			label = "pbstvstick:blue:pwr";
 +			gpios = <&pio 0 15 GPIO_ACTIVE_HIGH>;
 +			default-state = "on";
 +		};
 +	};
 +};
++
++/delete-node/ &wifi_pwrseq;
 +
 +&mmc0 {
 +	vmmc-supply = <&reg_vcc3v3>;
@@ -41,6 +44,11 @@ new file mode 100644
 +	disable-wp;
 +	no-1-8-v;
 +	status = "okay";
++};
++
++&mmc1 {
++	status = "disabled";
++	/delete-property/ mmc-pwrseq;
 +};
 +
 +&mmc2 {
