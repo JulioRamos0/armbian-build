@@ -14,6 +14,7 @@ services:
       - FORCE_CHECKOUT=no
       # - SKIP_BUILD=1
       # - REMOTE_HOST=192.168.128.15
+    command: ["/bin/bash", "userpatches/build-deploy-uboot.sh"]
 
   # Prueba de reinicios del stick (no arranca con "docker compose up"; ver reboot-stick.sh)
   #   docker compose run --rm -e MODE=sysrq -e COUNT=10 reboot-stick
