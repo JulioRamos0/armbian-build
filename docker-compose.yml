@@ -16,6 +16,23 @@ services:
       # - REMOTE_HOST=192.168.128.15
     command: ["/bin/bash", "userpatches/build-deploy-uboot.sh"]
 
+  build-dtb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: armbian-build-dtb
+    privileged: true
+    network_mode: host
+    volumes:
+      - .:/workspace
+      - armbian-cache:/workspace/cache
+      - /dev:/dev
+    environment:
+      - FORCE_CHECKOUT=no
+      # - SKIP_BUILD=1
+      # - REMOTE_HOST=192.168.128.115
+    command: ["/bin/bash", "userpatches/build-deploy-dtb.sh"]
+
   # Prueba de reinicios del stick (no arranca con "docker compose up"; ver reboot-stick.sh)
   #   docker compose run --rm -e MODE=sysrq -e COUNT=10 reboot-stick
   reboot-stick:
