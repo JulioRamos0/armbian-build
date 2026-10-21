@@ -17,7 +17,7 @@
 		};
 	};
 
-	reg_vdd_cpux: vdd-cpux {
+	reg_vdd_cpux_fixed: vdd-cpux {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd-cpux";
 		regulator-min-microvolt = <1100000>;
@@ -27,8 +27,10 @@
 	};
 };
 
+/delete-node/ &reg_vdd_cpux;
+
 &cpu0 {
-	cpu-supply = <&reg_vdd_cpux>;
+	cpu-supply = <&reg_vdd_cpux_fixed>;
 };
 
 &r_i2c {
