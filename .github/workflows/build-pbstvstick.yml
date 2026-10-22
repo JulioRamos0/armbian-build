@@ -88,7 +88,8 @@ jobs:
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
             KERNEL_GIT=shallow \
-            EXTRAWIFI=yes
+            EXTRAWIFI=no
+
 
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
