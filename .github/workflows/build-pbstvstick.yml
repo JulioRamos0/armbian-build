@@ -96,7 +96,5 @@ jobs:
           name: armbian-pbstvstick-bookworm
           path: |
             output/images/*
-            output/debs/linux-u-boot-*.deb
-            output/debug/uboot/*
           retention-days: 7
 
