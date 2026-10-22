@@ -78,8 +78,11 @@ jobs:
           sudo ./compile.sh kernel \
             BOARD=pbstvstick \
             BRANCH=current \
-            KERNEL_GIT=shallow \
-            KERNEL_CONFIGURE=no
+            BUILD_MINIMAL=yes \
+            KERNEL_BTF=no \
+            KERNEL_CONFIGURE=no \
+            KERNEL_GIT=shallow
+
 
       - name: Upload Kernel & DTB Artifacts
         uses: actions/upload-artifact@v7
@@ -128,7 +131,7 @@ jobs:
             KERNEL_CONFIGURE=no \
             RELEASE=trixie \
             KERNEL_GIT=shallow \
-            EXTRAWIFI=yes
+            CLEAN_LEVEL=make,cache,sources
 
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
