@@ -121,7 +121,7 @@ jobs:
           sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
 
       - name: Build Armbian Image
-         run: |
+        run: |
           sudo ./compile.sh build \
             BOARD=pbstvstick \
             BRANCH=current \
