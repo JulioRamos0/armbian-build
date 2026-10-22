@@ -121,7 +121,7 @@ jobs:
           sed -i "s/REPLACE_WITH_ROOT_PW/${{ secrets.ROOT_PASSWORD }}/g" userpatches/customize-image.sh
 
       - name: Build Armbian Image
-        run: |
+         run: |
           sudo ./compile.sh build \
             BOARD=pbstvstick \
             BRANCH=current \
@@ -129,9 +129,9 @@ jobs:
             BUILD_MINIMAL=yes \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
-            RELEASE=trixie \
+            RELEASE=bookworm \
             KERNEL_GIT=shallow \
-            CLEAN_LEVEL=make,cache,sources
+            EXTRAWIFI=yes
 
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
