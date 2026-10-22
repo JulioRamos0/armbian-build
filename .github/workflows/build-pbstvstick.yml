@@ -4,46 +4,44 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: 'Target to build (all = parallel kernel and full image, kernel = only kernel/dtb, image = only full image)'
+        description: 'Target to build (both = parallel uboot and full image, uboot = only u-boot, image = only full image)'
         required: true
-        default: 'all'
+        default: 'both'
         type: choice
         options:
-          - all
-          - kernel
-          - image
+          - both
           - uboot
-
+          - image
   push:
 
 jobs:
   build-uboot:
     name: Build U-Boot
-    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'all' || github.event.inputs.target == 'both' || github.event.inputs.target == 'uboot' }}
+    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'uboot' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
-  
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-  
+
       - name: Free up disk space
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-  
+
       - name: Build U-Boot
         run: |
           sudo ./compile.sh uboot \
             BOARD=pbstvstick \
             BRANCH=current \
             KERNEL_GIT=shallow
-  
+
       - name: Upload U-Boot Artifact
         uses: actions/upload-artifact@v7
         with:
@@ -53,55 +51,9 @@ jobs:
             output/debug/uboot/*
           retention-days: 7
 
-  build-kernel:
-    name: Build Kernel & DTB
-    if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'kernel' }}
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Free up disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-
-      - name: Build Kernel
-        run: |
-          sudo ./compile.sh kernel \
-            BOARD=pbstvstick \
-            BRANCH=current \
-            BUILD_DESKTOP=no \
-            BUILD_MINIMAL=no \
-            KERNEL_BTF=no \
-            KERNEL_CONFIGURE=no \
-            RELEASE=bookworm \
-            KERNEL_GIT=shallow \
-            EXTRAWIFI=no \
-            CLEAN_LEVEL=make,cache,sources
-
-
-      - name: Upload Kernel & DTB Artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: armbian-pbstvstick-kernel-dtb
-          path: |
-            output/debs/linux-image-*.deb
-            output/debs/linux-dtb-*.deb
-          retention-days: 7
-
   build-image:
-    name: Build Full Image (Trixie)
-    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'all' || github.event.inputs.target == 'both' || github.event.inputs.target == 'image' }}
-
+    name: Build Full Image (Bookworm)
+    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'image' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -131,22 +83,20 @@ jobs:
             BOARD=pbstvstick \
             BRANCH=current \
             BUILD_DESKTOP=no \
-            BUILD_MINIMAL=no \
+            BUILD_MINIMAL=yes \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
             KERNEL_GIT=shallow \
-            EXTRAWIFI=no \
-            CLEAN_LEVEL=make,cache,sources
+            EXTRAWIFI=yes
 
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
         with:
           name: armbian-pbstvstick-bookworm
-
           path: |
             output/images/*
+            output/debs/linux-u-boot-*.deb
+            output/debug/uboot/*
           retention-days: 7
-
-
 
