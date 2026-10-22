@@ -55,8 +55,9 @@ jobs:
 
   build-kernel:
     name: Build Kernel & DTB
-    if: ${{ github.event_name == 'push' || github.event.inputs.target == 'all' || github.event.inputs.target == 'both' || github.event.inputs.target == 'kernel' }}
+    if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'kernel' }}
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
 
@@ -78,10 +79,14 @@ jobs:
           sudo ./compile.sh kernel \
             BOARD=pbstvstick \
             BRANCH=current \
-            BUILD_MINIMAL=yes \
+            BUILD_DESKTOP=no \
+            BUILD_MINIMAL=no \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
-            KERNEL_GIT=shallow
+            RELEASE=bookworm \
+            KERNEL_GIT=shallow \
+            EXTRAWIFI=no \
+            CLEAN_LEVEL=make,cache,sources
 
 
       - name: Upload Kernel & DTB Artifacts
@@ -126,17 +131,19 @@ jobs:
             BOARD=pbstvstick \
             BRANCH=current \
             BUILD_DESKTOP=no \
-            BUILD_MINIMAL=yes \
+            BUILD_MINIMAL=no \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
             KERNEL_GIT=shallow \
-            EXTRAWIFI=yes
+            EXTRAWIFI=no \
+            CLEAN_LEVEL=make,cache,sources
 
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: armbian-pbstvstick-trixie
+          name: armbian-pbstvstick-bookworm
+
           path: |
             output/images/*
           retention-days: 7
