@@ -27,8 +27,6 @@
 	};
 };
 
-/delete-node/ &reg_vdd_cpux;
-
 &cpu0 {
 	cpu-supply = <&reg_vdd_cpux_fixed>;
 };
