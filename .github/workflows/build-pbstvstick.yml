@@ -88,7 +88,9 @@ jobs:
             KERNEL_CONFIGURE=no \
             RELEASE=bookworm \
             KERNEL_GIT=shallow \
+            KERNELBRANCH='tag:v6.18' \
             EXTRAWIFI=no
+
 
 
       - name: Upload Full Image Artifact
