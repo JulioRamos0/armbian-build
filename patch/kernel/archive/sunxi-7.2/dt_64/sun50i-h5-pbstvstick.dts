@@ -68,5 +68,6 @@
 	no-1-8-v;
 	non-removable;
 	cap-mmc-hw-reset;
+	no-cache;
 	status = "okay";
 };
