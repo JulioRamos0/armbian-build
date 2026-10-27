@@ -5,6 +5,8 @@
 
 #include "sun50i-h5-orangepi-prime.dts"
 
+/delete-node/ &reg_vdd_cpux;
+
 / {
 	model = "PBS TV Stick";
 	compatible = "shaghal,pbstvstick", "allwinner,sun50i-h5";

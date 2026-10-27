@@ -33,6 +33,38 @@ services:
       # - REMOTE_HOST=192.168.128.115
     command: ["/bin/bash", "userpatches/build-deploy-dtb.sh"]
 
+  build-image:
+    profiles: ["image"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: armbian-build-image
+    privileged: true
+    network_mode: host
+    volumes:
+      - .:/workspace
+      - armbian-cache:/workspace/cache
+      - /dev:/dev
+    environment:
+      - FORCE_CHECKOUT=no
+      - ALLOW_ROOT=yes
+      - PRE_PREPARED_HOST=yes
+      - PESTER_TERMINAL=no
+      - WT_SESSION=1
+    command:
+      - ./compile.sh
+      - build
+      - BOARD=pbstvstick
+      - BRANCH=current
+      - BUILD_DESKTOP=no
+      - BUILD_MINIMAL=yes
+      - KERNEL_BTF=no
+      - KERNEL_CONFIGURE=no
+      - RELEASE=bookworm
+      - KERNEL_GIT=shallow
+      - EXTRAWIFI=no
+      - CLEAN_LEVEL=make,cache,sources
+
   # Prueba de reinicios del stick (no arranca con "docker compose up"; ver reboot-stick.sh)
   #   docker compose run --rm -e MODE=sysrq -e COUNT=10 reboot-stick
   reboot-stick:
