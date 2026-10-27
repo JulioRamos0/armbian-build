@@ -52,7 +52,7 @@ jobs:
           retention-days: 7
 
   build-image:
-    name: Build Full Image (Bookworm)
+    name: Build Full Image (trixie)
     if: ${{ github.event_name == 'push' || github.event.inputs.target == 'both' || github.event.inputs.target == 'image' }}
     runs-on: ubuntu-latest
     permissions:
@@ -86,7 +86,7 @@ jobs:
             BUILD_MINIMAL=yes \
             KERNEL_BTF=no \
             KERNEL_CONFIGURE=no \
-            RELEASE=bookworm \
+            RELEASE=trixie \
             KERNEL_GIT=shallow \
             EXTRAWIFI=no
 
@@ -95,7 +95,7 @@ jobs:
       - name: Upload Full Image Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: armbian-pbstvstick-bookworm
+          name: armbian-pbstvstick-trixie
           path: |
             output/images/*
           retention-days: 7
