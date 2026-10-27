@@ -52,7 +52,7 @@ services:
       - PESTER_TERMINAL=no
       - WT_SESSION=1
     command:
-      - ./compile.sh
+      - ./compile.sh 
       - build
       - BOARD=pbstvstick
       - BRANCH=current
@@ -60,10 +60,9 @@ services:
       - BUILD_MINIMAL=yes
       - KERNEL_BTF=no
       - KERNEL_CONFIGURE=no
-      - RELEASE=bookworm
+      - RELEASE=trixie
       - KERNEL_GIT=shallow
       - EXTRAWIFI=no
-      - CLEAN_LEVEL=make,cache,sources
 
   # Prueba de reinicios del stick (no arranca con "docker compose up"; ver reboot-stick.sh)
   #   docker compose run --rm -e MODE=sysrq -e COUNT=10 reboot-stick
