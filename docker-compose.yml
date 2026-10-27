@@ -52,7 +52,7 @@ services:
       - PESTER_TERMINAL=no
       - WT_SESSION=1
     command:
-      - ./compile.sh 
+      - ./compile.sh
       - build
       - BOARD=pbstvstick
       - BRANCH=current
