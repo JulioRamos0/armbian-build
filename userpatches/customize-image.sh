@@ -38,8 +38,6 @@ Main() {
 	esac
 	
 	AutoConfigureFirstRun
-
-	echo "extraargs=cma=16M" >> /boot/armbianEnv.txt
 } # Main
 
 AutoConfigureFirstRun() {
