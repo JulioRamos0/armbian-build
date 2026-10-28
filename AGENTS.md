@@ -277,6 +277,23 @@ Archivos en la raíz del repo: `stock_boot0.bin` (128 KiB, cabecera `eGON.BT0`),
 - **Hipótesis (sin confirmar) para el `reboot` colgado:** como RST_n está deshabilitada, un reinicio de software no resetea la eMMC; solo la resetea un `CMD0` o cortar la energía. Linux, al apagar, envía notificación de apagado (`POWER_OFF_SHORT/LONG`) y flushea la caché, y la eMMC podría no estar en estado limpio para el siguiente init. Prueba barata: comparar `sync; echo b > /proc/sysrq-trigger` (reinicio inmediato, sin notificación de apagado) con `reboot` normal, ≥ 5 veces cada uno.
 - **Valores genéricos "seguros" que circulan** (power-up 10 ms, reset/CMD0 2 ms, CMD1 hasta 1000 ms, CMD6 100–250 ms, datos 500 ms): no tienen fuente citada. El único comprobado contra el chip es `CMD6` = 100 ms. Pendiente citar el datasheet del KLMAG2WEPD y JESD84-B51.
 
+### 0d. Estabilidad en Runtime de Linux y Diagnóstico de Congelamientos (27-oct-2026)
+Tras lograr que ambos sticks (`pbs-may` 192.168.128.64 y `pbs-june` 192.168.128.132) arranquen e inicien Armbian Linux, se investigó la causa de los cuelgues del sistema operativo tras periodos de 30 minutos a 5 horas de funcionamiento:
+
+1. **Fallo en escalado CPU (`cpufreq-dt: deferred probe pending`):**
+   - **Causa:** El kernel no inicializaba `cpufreq-dt` porque los núcleos secundarios `cpu1..cpu3` intentaban asociarse a un regulador I2C no existente heredado del Device Tree de Orange Pi Prime. Esto impedía todo escalado dinámico de frecuencia y thermal throttling.
+   - **Solución implementada en DTS (`sun50i-h5-pbstvstick.dts` para sunxi-6.18 y sunxi-7.2):** Se eliminó la colisión del nodo regulador (`/delete-node/ &reg_vdd_cpux;`), se definió el regulador fijo a 1.1V y se asignó explícitamente `cpu-supply = <&reg_vdd_cpux>;` en `&cpu0`, `&cpu1`, `&cpu2` y `&cpu3`.
+2. **Impacto térmico y caída de tensión (*vdrop*):**
+   - Con la instalación de un disipador pasivo de aluminio sobre el SoC Allwinner H5, las temperaturas bajaron a 46–51 °C sostenidas, eliminando reinicios bruscos por picos térmicos.
+3. **Caché Volátil del eMMC Samsung KLMAG2WEPD (Stick Mayo):**
+   - **Causa:** El chip Samsung (`AWPD3R`) tiene habilitada por defecto en Linux la caché volátil interna de escritura (`CACHE_CTRL=1`). En operaciones de E/S sostenidas o flush, la eMMC mantiene la línea `DAT0` ocupada por periodos prolongados con picos de corriente que provocaban bloqueos en el stick de mayo a los 30-40 minutos.
+   - **Solución implementada:** Se añadió `no-cache;` en el nodo `&mmc2` del Device Tree para desactivar la caché volátil en eMMC tanto en `sunxi-6.18` como en `sunxi-7.2`. Esto extendió la estabilidad continua de Mayo a ~5 horas.
+4. **Causa del congelamiento a las 4-5 horas (`armbian-ramlog` y vaciado de logs):**
+   - **Diagnóstico:** Los registros del journal persistente antes del congelamiento a las `00:34:52` demostraron que el cuelgue coincidía con la ejecución de `logrotate.service` invocando `armbian-ramlog` (un `rsync` masivo de logs desde RAM hacia la partición raíz de la eMMC). Al sincronizar ráfagas intensivas en `kern.log`, el bus de la eMMC saturó el controlador congelando el SoC instantáneamente.
+   - **Acción preventiva:** Deshabilitar `armbian-ramlog` y sincronizaciones periódicas masivas a la eMMC (`RAMLOG=no` o detener `armbian-ramlog.service` y `logrotate.timer`) para dispositivos embebidos en producción continua.
+5. **Criterio de Aceptación para Pull Requests upstream de Armbian:**
+   - **Regla estricta:** No colocar código ejecutable bash ni hooks propietarios en `config/boards/pbstvstick.csc`. Todas las configuraciones de hardware deben implementarse exclusivamente en parches estándar de Device Tree (`.dts`) o configuraciones declarativas (`config/bootenv/pbstvstick.txt`).
+
 ### Prueba automática de reinicios (`reboot-stick.sh`)
 Script que corre dentro del contenedor (servicio `reboot-stick` del `docker-compose.yml`, perfil `tools`, no arranca con `docker compose up`). Reinicia el stick por SSH y comprueba que vuelve a responder.
 ```bash
