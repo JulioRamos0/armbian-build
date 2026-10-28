@@ -342,7 +342,17 @@ Acordadas con el equipo; **no tocar hasta que el SPL arranque estable**. Cada un
 6. **Mejorar `build-deploy-uboot.sh`/Docker:** pasar `SKIP_BUILD`, `REMOTE_HOST` etc. en `docker-compose.yml`; agregar `backups/` y `last-u-boot.log` al `.gitignore`; comprobar que el banner (hash `P....`) cambió entre builds antes de flashear.
 7. **Documentar en Confluence:** tabla "build → último print → conclusión" (la de arriba), el diagnóstico de la regresión de `SLOT_EXTRA`, y la verificación de contenido de la eMMC. Las decisiones sin documento no existen.
 8. **PR a Armbian:** separar los parches del trabajo local y revisar cuáles son aptos (los parches provisionales inyectan nodos en `sun50i-h5-orangepi-prime.dts`, lo que rompería las Orange Pi Prime originales; hace falta un `.dts` dedicado al `pbstvstick`).
-9. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
+9. **Deshabilitación de fábrica de `armbian-ramlog` y `logrotate` (Pendiente):**
+   - **Hallazgo:** El archivo `50-pbstvstick.preset` en `/lib/systemd/system-preset/` no es suficiente porque el script central de creación de imágenes de Armbian (`lib/functions/rootfs/distro-agnostic.sh:477`) ejecuta imperativamente `chroot_sdcard systemctl --no-reload enable armbian-ramlog.service` al final de la construcción de la imagen, ignorando el preset.
+   - **Solución pendiente para el PR:** Implementar el hook oficial de Armbian en `config/boards/pbstvstick.csc`:
+     ```bash
+     function post_family_tweaks__pbstvstick_disable_ramlog() {
+         display_alert "$BOARD" "Disabling armbian-ramlog and logrotate services" "info"
+         chroot_sdcard systemctl --no-reload disable armbian-ramlog.service logrotate.timer 2> /dev/null || true
+     }
+     ```
+   - **Flujo estricto:** El cambio debe nacer en la rama `PBST314` y posteriormente incorporarse a `build`.
+10. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
 
 # Seguridad en CI (Inyección de Credenciales)
 **CRÍTICO:** Nunca escribas contraseñas, Wi-Fi, root o tokens en texto plano en scripts ni en este archivo; al hacer *push* quedan expuestos en el historial de Git.
