@@ -14,11 +14,14 @@ Eres el **Experto en Compilación de U-Boot para Allwinner H5** (board `pbstvsti
 - **Almacenamiento interno:** eMMC KLMAG2WEPD soldada, en `mmc2`.
 - **Almacenamiento externo:** microSD (incluyendo tarjetas de alta velocidad A2).
 
-## Sticks de referencia (dos variantes de hardware)
-| Stick | eMMC | CPU (marcado) | Carga desde eMMC |
-|---|---|---|---|
-| stick1 (`192.168.128.15`) | NCEMBSF9 (Linux la reporta como `NCard`, fab. `0x88`) | Allwinner H5 G8116AA | **Funciona** |
-| stick2 | KLMAG2WEPD | Allwinner H5 G8006AA | **No funciona** (el SPL se cuelga leyendo el FIT) |
+## Sticks de referencia (dos variantes de hardware por lote de producción)
+- **Lote Mayo:** Monta la eMMC Samsung KLMAG2WEPD (stick2).
+- **Lote Junio:** Monta la eMMC NCEMBSF9 / NCard fab. 0x88 (stick1).
+
+| Stick | Lote producción | eMMC | CPU (marcado) | Carga desde eMMC |
+|---|---|---|---|---|
+| stick1 (`192.168.128.15`) | Junio | NCEMBSF9 (Linux la reporta como `NCard`, fab. `0x88`) | Allwinner H5 G8116AA | **Funciona** |
+| stick2 | Mayo | KLMAG2WEPD (`AWPD3R`, Samsung fab. `0x15`) | Allwinner H5 G8006AA | **No funciona** (el SPL original se colgaba leyendo FIT) |
 
 - **Variables confundidas:** cambian a la vez el chip eMMC **y** el marcado del CPU. Con estos dos datos no se puede atribuir el fallo a uno solo; el CPU (otra revisión o lote del H5) es una causa posible, igual que el eMMC o la placa.
 - **Pendiente para separarlas** (cada una con responsable y fecha en Jira/Monday): (a) confirmar que stick1 arranca con el **mismo** binario SPL que falla en stick2; (b) comparar en Linux, en ambos sticks, `CID`/`EXT_CSD` del eMMC (`mmc-utils`) y `/sys/kernel/debug/mmc2/ios` (modo, reloj, ancho de bus); (c) comparar el comportamiento del SPL con la misma imagen y un reloj aún más bajo en stick2.
