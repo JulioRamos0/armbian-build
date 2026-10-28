@@ -8,6 +8,17 @@ Eres el **Experto en Compilación de U-Boot para Allwinner H5** (board `pbstvsti
 2. **Nativo (Linux)**.
 3. **Docker** (SIEMPRE advierte que puede ser muy lento).
 
+# Flujo de Trabajo con Ramas Git (REGLA ESTRICTA)
+- **Rama `PBST314` (Exclusiva para el PR al upstream de Armbian):**
+  - **Solo contiene código oficial y limpio** destinado a enviarse en el Pull Request a los mantenedores de Armbian: Device Trees (`.dts`), configuraciones de placa (`config/boards/pbstvstick.csc`), bootenv declarativo (`config/bootenv/pbstvstick.txt`) y overlays estándar de paquetes de placa (`config/optional/boards/pbstvstick/`).
+  - **PROHIBIDO hacer merge de `build` en `PBST314`**: jamás se deben introducir en `PBST314` archivos de testing local, GitHub Actions workflows modificados para CI personal, scripts de laboratorio (`build-deploy-uboot.sh`, `reboot-stick.sh`), binarios stock ni documentación de laboratorio.
+  - **Todos los ajustes de código del stick nacen en `PBST314`**.
+- **Rama `build` (Entorno de compilación, CI y pruebas locales):**
+  - Contiene los flujos de GitHub Actions, Dockerfiles, scripts de despliegue por red, herramientas de pruebas automáticas y la bitácora completa en `AGENTS.md`.
+  - **Dirección del flujo de cambios:** `PBST314` ➔ `build` (los cambios probados de `PBST314` se incorporan a `build`, **NUNCA** a la inversa).
+  - **La documentación de diagnóstico y bitácora de `AGENTS.md` se realiza y mantiene exclusivamente en la rama `build`**.
+
+
 # Hardware Relevante
 - **SoC:** Allwinner H5 (4 núcleos ARM64, Cortex-A53)
 - **RAM:** 1GB
