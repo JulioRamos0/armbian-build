@@ -342,18 +342,21 @@ Acordadas con el equipo; **no tocar hasta que el SPL arranque estable**. Cada un
 6. **Mejorar `build-deploy-uboot.sh`/Docker:** pasar `SKIP_BUILD`, `REMOTE_HOST` etc. en `docker-compose.yml`; agregar `backups/` y `last-u-boot.log` al `.gitignore`; comprobar que el banner (hash `P....`) cambió entre builds antes de flashear.
 7. **Documentar en Confluence:** tabla "build → último print → conclusión" (la de arriba), el diagnóstico de la regresión de `SLOT_EXTRA`, y la verificación de contenido de la eMMC. Las decisiones sin documento no existen.
 8. **PR a Armbian:** separar los parches del trabajo local y revisar cuáles son aptos (los parches provisionales inyectan nodos en `sun50i-h5-orangepi-prime.dts`, lo que rompería las Orange Pi Prime originales; hace falta un `.dts` dedicado al `pbstvstick`).
-9. **Deshabilitación de fábrica de `armbian-ramlog` y `logrotate` (IMPLEMENTADO - 28/29-oct-2026):**
-   - **Causa demostrada en hardware:** Los sticks con `armbian-ramlog` activo sufrieron cuelgues a las ~2.5 horas al activarse las sincronizaciones de `armbian-truncate-logs`/rotación, mientras que `pbs-june` (con `armbian-ramlog` apagado) superó las **7.5 horas continuas**.
-   - **Solución implementada:** Se integró el hook estándar de Armbian en `config/boards/pbstvstick.csc` en la fase final de imagen (`pre_umount_final_image`) eliminando los symlinks de autoinicio:
+9. **Deshabilitación de fábrica de `armbian-ramlog`, `logrotate` y `armbian-truncate-logs` (IMPLEMENTADO - 28/29-oct-2026):**
+   - **Causa demostrada en hardware:** Los sticks sufrieron congelamientos a las ~2-5 horas debido a que `/etc/cron.d/armbian-truncate-logs` ejecutaba tareas de fondo cada 15 minutos concurrentemente con `fake-hwclock-save` en los minutos `:00`, colisionando con el bus de almacenamiento.
+   - **Hito alcanzado:** `pbs-june` alcanzó el récord de **24 horas y 8 minutos continuos** de uptime.
+   - **Solución implementada:** Se integró en `config/boards/pbstvstick.csc` en el hook `pre_umount_final_image`:
      ```bash
      function pre_umount_final_image__pbstvstick_disable_ramlog() {
-         display_alert "$BOARD" "Permanently disabling armbian-ramlog and logrotate" "info"
+         display_alert "$BOARD" "Permanently disabling armbian-ramlog and truncate cron" "info"
          chroot_sdcard systemctl --no-reload disable armbian-ramlog.service logrotate.timer 2> /dev/null || true
          rm -f "${MOUNT}"/etc/systemd/system/sysinit.target.wants/armbian-ramlog.service
          rm -f "${MOUNT}"/etc/systemd/system/timers.target.wants/logrotate.timer
+         rm -f "${MOUNT}"/etc/cron.d/armbian-truncate-logs
+         rm -f "${MOUNT}"/etc/cron.daily/armbian-ram-logging
      }
      ```
-   - **Trazabilidad de ramas:** Implementado en `PBST314` (commit `efcdd50`) y fusionado a `build` (commit `69e962b`).
+   - **Trazabilidad de ramas:** Implementado en `PBST314` (commit `7bdfe74`) y fusionado a `build` (commit `8d2ba4d`).
 10. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
 
 # Seguridad en CI (Inyección de Credenciales)
