@@ -19,8 +19,10 @@ BOOTENV_FILE="pbstvstick.txt"
 GOVERNOR="performance"
 
 function pre_umount_final_image__pbstvstick_disable_ramlog() {
-	display_alert "$BOARD" "Permanently disabling armbian-ramlog and logrotate" "info"
+	display_alert "$BOARD" "Permanently disabling armbian-ramlog and truncate cron" "info"
 	chroot_sdcard systemctl --no-reload disable armbian-ramlog.service logrotate.timer 2> /dev/null || true
 	rm -f "${MOUNT}"/etc/systemd/system/sysinit.target.wants/armbian-ramlog.service
 	rm -f "${MOUNT}"/etc/systemd/system/timers.target.wants/logrotate.timer
+	rm -f "${MOUNT}"/etc/cron.d/armbian-truncate-logs
+	rm -f "${MOUNT}"/etc/cron.daily/armbian-ram-logging
 }
