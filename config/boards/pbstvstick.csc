@@ -25,4 +25,13 @@ function pre_umount_final_image__pbstvstick_disable_ramlog() {
 	rm -f "${MOUNT}"/etc/systemd/system/timers.target.wants/logrotate.timer
 	rm -f "${MOUNT}"/etc/cron.d/armbian-truncate-logs
 	rm -f "${MOUNT}"/etc/cron.daily/armbian-ram-logging
+
+	display_alert "$BOARD" "Enabling hardware watchdog auto-reboot in systemd" "info"
+	mkdir -p "${MOUNT}"/etc/systemd/system.conf.d
+	cat <<-EOF > "${MOUNT}"/etc/systemd/system.conf.d/01-watchdog.conf
+		[Manager]
+		RuntimeWatchdogSec=14s
+		RebootWatchdogSec=30s
+		WatchdogDevice=/dev/watchdog
+	EOF
 }
