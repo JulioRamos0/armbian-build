@@ -17,3 +17,8 @@ SERIALCON="ttyGS0,ttyS0"
 PACKAGE_LIST_BOARD="mmc-utils"
 BOOTENV_FILE="pbstvstick.txt"
 GOVERNOR="performance"
+
+function post_family_tweaks__pbstvstick_disable_ramlog() {
+	display_alert "$BOARD" "Disabling armbian-ramlog and logrotate services" "info"
+	chroot_sdcard systemctl --no-reload disable armbian-ramlog.service logrotate.timer 2> /dev/null || true
+}
