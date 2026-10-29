@@ -357,7 +357,13 @@ Acordadas con el equipo; **no tocar hasta que el SPL arranque estable**. Cada un
      }
      ```
    - **Trazabilidad de ramas:** Implementado en `PBST314` (commit `7bdfe74`) y fusionado a `build` (commit `8d2ba4d`).
-10. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
+10. **Auto-Reinicio por Hardware Watchdog (`sunxi-wdt`) y `panic=5` (IMPLEMENTADO - 29-oct-2026):**
+    - **Objetivo:** Evitar que los sticks queden congelados silenciosamente con el LED encendido ante bloqueos de bus I/O o pánicos de kernel.
+    - **Solución implementada:**
+      - En `config/bootenv/pbstvstick.txt`: se inyecta `panic=5` en `extraargs` para forzar reboot a los 5 segundos de cualquier fallo crítico de kernel.
+      - En `config/boards/pbstvstick.csc`: en el hook `pre_umount_final_image`, se crea `/etc/systemd/system.conf.d/01-watchdog.conf` configurando `RuntimeWatchdogSec=14s` sobre `/dev/watchdog` (`sunxi-wdt` del SoC H5). Si el sistema se congela y no alimenta el watchdog por 14 segundos, el chip físico reinicia el SoC por hardware.
+    - **Trazabilidad de ramas:** Implementado en `PBST314` (commit `90a8c3c`) y fusionado a `build` (commit `5cbcf31`).
+11. **Seguridad:** la contraseña root del stick está en este archivo y en `build-deploy-uboot.sh` (decisión del equipo para el laboratorio). Revisar antes de cualquier push a un repo público.
 
 # Seguridad en CI (Inyección de Credenciales)
 **CRÍTICO:** Nunca escribas contraseñas, Wi-Fi, root o tokens en texto plano en scripts ni en este archivo; al hacer *push* quedan expuestos en el historial de Git.
