@@ -13,5 +13,25 @@ INTRODUCED="2016"
 KERNEL_TARGET="current,edge"
 KERNEL_TEST_TARGET="current"
 MODULES="g_serial"
-SERIALCON="ttyS0,ttyGS0"
+SERIALCON="ttyGS0,ttyS0"
 PACKAGE_LIST_BOARD="mmc-utils"
+BOOTENV_FILE="pbstvstick.txt"
+GOVERNOR="performance"
+
+function pre_umount_final_image__pbstvstick_disable_ramlog() {
+	display_alert "$BOARD" "Permanently disabling armbian-ramlog and truncate cron" "info"
+	chroot_sdcard systemctl --no-reload disable armbian-ramlog.service logrotate.timer 2> /dev/null || true
+	rm -f "${MOUNT}"/etc/systemd/system/sysinit.target.wants/armbian-ramlog.service
+	rm -f "${MOUNT}"/etc/systemd/system/timers.target.wants/logrotate.timer
+	rm -f "${MOUNT}"/etc/cron.d/armbian-truncate-logs
+	rm -f "${MOUNT}"/etc/cron.daily/armbian-ram-logging
+
+	display_alert "$BOARD" "Enabling hardware watchdog auto-reboot in systemd" "info"
+	mkdir -p "${MOUNT}"/etc/systemd/system.conf.d
+	cat <<-EOF > "${MOUNT}"/etc/systemd/system.conf.d/01-watchdog.conf
+		[Manager]
+		RuntimeWatchdogSec=14s
+		RebootWatchdogSec=30s
+		WatchdogDevice=/dev/watchdog
+	EOF
+}

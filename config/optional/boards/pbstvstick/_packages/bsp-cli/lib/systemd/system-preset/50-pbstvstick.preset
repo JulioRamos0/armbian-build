@@ -1,0 +1,2 @@
+disable armbian-ramlog.service
+disable logrotate.timer
